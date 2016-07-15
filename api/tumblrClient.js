@@ -1,4 +1,4 @@
-import config from '../src/config';
+// import config from '../src/config';
 import tumblr from 'tumblr.js';
 import local from '../local';
 const {

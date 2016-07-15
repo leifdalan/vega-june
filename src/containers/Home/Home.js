@@ -76,7 +76,7 @@ export default class Home extends Component {
     return (
       <div className="container">
         {user ?
-          <div style={{width: '300px'}}>
+          <div style={{ width: '300px' }}>
             <Helmet title="Home" />
             {typeof window !== 'undefined' &&
               <Infinite
@@ -95,6 +95,7 @@ export default class Home extends Component {
                       paddingBottom: `${imageRatios[index] * 100}%`
                     }}>
                     <img
+                      alt={'something'}
                       style={{
                         position: 'absolute',
                         height: '100%'

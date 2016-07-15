@@ -1,42 +1,42 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
-import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+// import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
-export default (store) => {
-  function checkAuth(logged, replace, cb) {
-    const { auth: { user } } = store.getState();
-    if (!!user === !logged) replace('/');
-    cb();
-  }
+// export default (/* store */) => {
+  // function checkAuth(logged, replace, cb) {
+  //   const { auth: { user } } = store.getState();
+  //   if (!!user === !logged) replace('/');
+  //   cb();
+  // }
 
-  const requireLogin = (nextState, replace, cb) => {
-    if (!isAuthLoaded(store.getState())) {
-      store.dispatch(loadAuth()).then(() => checkAuth(true, replace, cb));
-    } else {
-      checkAuth(true, replace, cb);
-    }
-  };
-
-  const requireNotLogged = (nextState, replace, cb) => {
-    if (!isAuthLoaded(store.getState())) {
-      store.dispatch(loadAuth()).then(() => checkAuth(false, replace, cb));
-    } else {
-      checkAuth(false, replace, cb);
-    }
-  };
+  // const requireLogin = (nextState, replace, cb) => {
+  //   if (!isAuthLoaded(store.getState())) {
+  //     store.dispatch(loadAuth()).then(() => checkAuth(true, replace, cb));
+  //   } else {
+  //     checkAuth(true, replace, cb);
+  //   }
+  // };
+  //
+  // const requireNotLogged = (nextState, replace, cb) => {
+  //   if (!isAuthLoaded(store.getState())) {
+  //     store.dispatch(loadAuth()).then(() => checkAuth(false, replace, cb));
+  //   } else {
+  //     checkAuth(false, replace, cb);
+  //   }
+  // };
   /**
    * Please keep routes in alphabetical order
    */
-  //const syncLoad = (typeof require.ensure !== 'function' || __DEVELOPMENT__);
-  return (
-    <Route path="/" component={require('./containers/App/App')}>
-      {/* Home (main) route */}
-      <IndexRoute component={require('./containers/Home/Home')} />
-
-      {/* Routes disallow login */}
-      <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
-    </Route>
-  )
+  // const syncLoad = (typeof require.ensure !== 'function' || __DEVELOPMENT__);
+  // return (
+  //   <Route path="/" component={require('./containers/App/App')}>
+  //     {/* Home (main) route */}
+  //     <IndexRoute component={require('./containers/Home/Home')} />
+  //
+  //     {/* Routes disallow login */}
+  //     <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+  //   </Route>
+  // );
   // if (typeof require.ensure !== 'function' || __DEVELOPMENT__) require.ensure = (deps, cb) => cb(require);
   // return {
   //   path: '/',
@@ -121,4 +121,14 @@ export default (store) => {
   //     }
   //   }]
   // };
-};
+// };
+//
+export default () => (
+  <Route path="/" component={require('./containers/App/App')}>
+    {/* Home (main) route */}
+    <IndexRoute component={require('./containers/Home/Home')} />
+
+    {/* Routes disallow login */}
+    <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+  </Route>
+);

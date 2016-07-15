@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
@@ -13,10 +12,13 @@ import {
 } from 'redux/modules/info';
 import {
   isLoaded as isAuthLoaded,
-  load as loadAuth, logout
+  load as loadAuth
 } from 'redux/modules/auth';
 import { Notifs } from 'components';
-import { push } from 'react-router-redux';
+import {
+  mapStateToProps,
+  boundActions
+} from './AppSelectors';
 import config from 'config';
 import { asyncConnect } from 'redux-connect';
 import Radium from 'radium';
@@ -39,15 +41,7 @@ import {
     return Promise.all(promises);
   }
 }])
-@connect(
-  state => ({
-    notifs: state.notifs,
-    user: state.auth.user
-  }), {
-    logout,
-    pushState: push
-  }
-)
+@connect(mapStateToProps, boundActions)
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
