@@ -2,6 +2,7 @@ import { createStore as _createStore, applyMiddleware, compose } from 'redux';
 import createMiddleware from './middleware/clientMiddleware';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import devTools from 'remote-redux-devtools';
 
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
@@ -15,7 +16,12 @@ export default function createStore(history, client, data) {
     const DevTools = require('../containers/DevTools/DevTools');
     finalCreateStore = compose(
       applyMiddleware(...middleware),
-      window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
+      devTools({
+        name: 'farts',
+        hostname: 'localhost',
+        port: 8000,
+        realtime: true,
+      }),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(_createStore);
   } else {

@@ -49,9 +49,9 @@ export default class Home extends Component {
     data: pt.object.isRequired,
     pages: pt.object.isRequired,
     imageRatios: pt.array.isRequired,
-    nextPage: pt.object.isRequired,
+    nextPage: pt.number.isRequired,
     loadInfo: pt.func.isRequired,
-    user: pt.object.isRequired,
+    user: pt.object,
   }
 
   handleInfiniteLoad = () => {
@@ -74,7 +74,7 @@ export default class Home extends Component {
     const isLoading = pages[nextPage] && pages[nextPage].loading;
 
     return (
-      <div>
+      <div className="container">
         {user ?
           <div style={{width: '300px'}}>
             <Helmet title="Home" />
@@ -94,13 +94,15 @@ export default class Home extends Component {
                       position: 'relative',
                       paddingBottom: `${imageRatios[index] * 100}%`
                     }}>
-                    <img style={{
+                    <img
+                      style={{
                         position: 'absolute',
                         height: '100%'
-                      }}src={item.photos[0].original_size.url} />
-                      {`${moment(item.date).month()} ${moment(item.date).date()}`}
+                      }}
+                      src={item.photos[0].original_size.url}
+                    />
+                    {`${moment(item.date).month()} ${moment(item.date).date()}`}
                   </div>
-
                 )}
               </Infinite>
             }
