@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import moment from 'moment';
 import keyBy from 'lodash/keyBy';
 import map from 'lodash/map';
 import get from 'lodash/get';
@@ -69,8 +68,10 @@ export function isLoaded(globalState) {
 
 export function load(offset = 0) {
   return (dispatch, getState) => {
-    if (getState().info.pages[offset] || offset > 5) return {
-      type: 'NOOP'
+    if (getState().info.pages[offset] || offset > 5) {
+      return {
+        type: 'NOOP'
+      };
     }
     return dispatch({
       types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
@@ -79,22 +80,22 @@ export function load(offset = 0) {
       }),
       page: offset,
     });
-  }
+  };
 }
 
 export const getDataSelector = createSelector(
   state => get(state, 'info.data'),
   data => data
-)
+);
 export const getPagesSelector = createSelector(
   state => get(state, 'info.pages'),
   data => data
-)
+);
 
 export const getPostsByDateSelector = createSelector(
   getDataSelector,
   fOrderBy('date', 'desc')
-)
+);
 export const getNextPageSelector = createSelector(
   getPagesSelector,
   pages => {
@@ -103,9 +104,9 @@ export const getNextPageSelector = createSelector(
     const nextPage = max(numbers) + 1;
     return nextPage;
   }
-)
+);
 
 export const getImageRatiosSelector = createSelector(
   getPostsByDateSelector,
   fMap(post => post.photos[0].original_size.height / post.photos[0].original_size.width)
-)
+);
