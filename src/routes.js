@@ -33,24 +33,7 @@ export default (store) => {
       {/* Home (main) route */}
       <IndexRoute component={require('./containers/Home/Home')} />
 
-      {/* Routes requiring login */}
-      <Route onEnter={requireLogin}>
-        <Route path="chat" component={require('./containers/Chat/Chat')} />
-        <Route path="loginSuccess" component={require('./containers/LoginSuccess/LoginSuccess')} />
-      </Route>
-
       {/* Routes disallow login */}
-      <Route onEnter={requireNotLogged}>
-        <Route path="register" component={require('./containers/Register/Register')} />
-      </Route>
-
-      {/* Routes */}
-      <Route path="login" component={require('./containers/Login/Login')} />
-      <Route path="about" component={require('./containers/About/About')} />
-      <Route path="survey" component={require('./containers/Survey/Survey')} />
-      <Route path="widgets" component={require('./containers/Widgets/Widgets')} />
-
-      {/* Catch all route */}
       <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
     </Route>
   )
