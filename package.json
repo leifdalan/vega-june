@@ -114,6 +114,7 @@
     "compression": "^1.6.0",
     "config": "^1.21.0",
     "connect-redis": "^3.1.0",
+    "concurrently": "^2.1.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
@@ -162,6 +163,7 @@
     "tumblr.js": "^1.1.0",
     "url-loader": "^0.5.7",
     "warning": "^3.0.0",
+    "webpack": "^1.12.9",
     "webpack-isomorphic-tools": "^2.2.18"
   },
   "devDependencies": {
@@ -172,7 +174,6 @@
     "bootstrap-sass-loader": "^1.0.9",
     "chai": "^3.3.0",
     "clean-webpack-plugin": "^0.1.6",
-    "concurrently": "^2.1.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.13.1",
     "eslint-config-airbnb": "^9.0.1",
@@ -208,7 +209,6 @@
     "strip-loader": "^0.1.0",
     "style-loader": "^0.13.0",
     "timekeeper": "^0.1.1",
-    "webpack": "^1.12.9",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.5.0"
   },
