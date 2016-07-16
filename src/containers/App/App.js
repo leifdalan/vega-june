@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
-import Helmet from 'react-helmet';
+// import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,
   load as loadInfo
@@ -19,7 +19,7 @@ import {
   mapStateToProps,
   boundActions
 } from './AppSelectors';
-import config from 'config';
+// import config from 'config';
 import { asyncConnect } from 'redux-connect';
 import Radium from 'radium';
 import {
@@ -64,7 +64,7 @@ export default class App extends Component {
     const { notifs, logout } = this.props;
     return (
       <div>
-        <Helmet {...config.app.head} />
+        {/*<Helmet {...config.app.head} />*/}
         <Navbar>
           <Navbar.Toggle />
           <Navbar.Collapse eventKey={0}>

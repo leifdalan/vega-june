@@ -2,14 +2,14 @@ require('babel-polyfill');
 var Express = require('express');
 var webpack = require('webpack');
 
-var config = require('../src/config');
+var config = require('config');
 var webpackConfig = require('./dev.config');
 var compiler = webpack(webpackConfig);
 
 var host = config.host || 'localhost';
 var port = (Number(config.port) + 1) || 3001;
 var serverOptions = {
-  contentBase: 'http://' + host + ':' + port,
+  contentBase: 'http://localhost:3001',
   quiet: true,
   noInfo: true,
   hot: true,
