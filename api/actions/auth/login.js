@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from 'config';
 import jwt from 'jsonwebtoken';
 
 export default function login(req) {
@@ -8,7 +8,7 @@ export default function login(req) {
         id: 1,
         name: 'anyone',
       };
-      const token = jwt.sign(user, config.secret, {
+      const token = jwt.sign(user, config.authSecret, {
         expiresIn: 60000
       });
       const userLogged = Object.assign(user, { token });

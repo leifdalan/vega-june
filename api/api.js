@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
-import config from '../src/config';
+import config from 'config';
 // import apiConfig from './config';
 import * as actions from './actions';
 import { mapUrl } from './utils/url.js';
@@ -14,7 +14,7 @@ import * as helpers from './helpers';
 // import * as database from './database';
 import redis from 'connect-redis';
 // const { auth } = helpers;
-
+console.error('co', config);
 const RedisStore = redis(session);
 const pretty = new PrettyError();
 const app = express();
@@ -23,8 +23,14 @@ const server = new http.Server(app);
 
 const io = new SocketIo(server);
 io.path('/ws');
+const {
+  authSecret,
+  redisSecret,
+  redisHost,
+  redisPort
+} = config;
 
-// auth.initialize(apiConfig.secret);
+// auth.initialize(authSecret);
 
 app.use(morgan('dev'));
 app.use(session({

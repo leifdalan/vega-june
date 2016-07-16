@@ -1,7 +1,7 @@
 import tumblrClient from '../tumblrClient';
 
 export default function loadInfo(req) {
-  const offset = req.query && req.query.offset
+  const offset = req && req.query && req.query.offset
     ? req.query.offset
     : 0;
   return new Promise((resolve, reject) => {
