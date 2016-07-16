@@ -19,7 +19,7 @@ if (__DEVELOPMENT__) {
     return;
   }
 }
-
+console.log('global.__DEVELOPMENT__', global.__DEVELOPMENT__);
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../webpack/webpack-isomorphic-tools'))
