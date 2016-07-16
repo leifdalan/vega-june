@@ -1,5 +1,5 @@
 {
-  "name": "Vega June Tumblr wrapper",
+  "name": "vega-june-tumblr-wrapper",
   "description": "Example of an isomorphic (universal) webapp using react redux and hot reloading",
   "author": "Leif Dalan",
   "license": "MIT",
