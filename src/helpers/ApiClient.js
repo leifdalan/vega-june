@@ -1,11 +1,12 @@
 import superagent from 'superagent';
-import config from '../config';
+// import config from 'config';
 
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? `/${path}` : path;
   if (__SERVER__) {
+    const config = require('config');
     // Prepend host and port of the API server to the path.
     return `http://${config.apiHost}:${config.apiPort + adjustedPath}`;
   }

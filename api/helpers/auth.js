@@ -1,8 +1,9 @@
 import passport from 'passport';
-import passportJwt from 'passport-jwt';
+// import passportJwt from 'passport-jwt';
 // import { User } from '../database';
 
-const { ExtractJwt, Strategy } = passportJwt;
+// const { ExtractJwt, Strategy } = passportJwt;
+
 
 // export function initialize(secret) {
 //   function tokenExtractor(req) {

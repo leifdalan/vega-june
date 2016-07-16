@@ -1,23 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
-import Helmet from 'react-helmet';
+// import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,
   load as loadInfo
 } from 'redux/modules/info';
 import {
   isLoaded as isAuthLoaded,
-  load as loadAuth, logout
+  load as loadAuth
 } from 'redux/modules/auth';
 import { Notifs } from 'components';
-import { push } from 'react-router-redux';
-import config from 'config';
+import {
+  mapStateToProps,
+  boundActions
+} from './AppSelectors';
+// import config from 'config';
 import { asyncConnect } from 'redux-connect';
 import Radium from 'radium';
 import {
@@ -39,15 +41,7 @@ import {
     return Promise.all(promises);
   }
 }])
-@connect(
-  state => ({
-    notifs: state.notifs,
-    user: state.auth.user
-  }), {
-    logout,
-    pushState: push
-  }
-)
+@connect(mapStateToProps, boundActions)
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -70,7 +64,7 @@ export default class App extends Component {
     const { notifs, logout } = this.props;
     return (
       <div>
-        <Helmet {...config.app.head} />
+        {/*<Helmet {...config.app.head} />*/}
         <Navbar>
           <Navbar.Toggle />
           <Navbar.Collapse eventKey={0}>

@@ -1,19 +1,10 @@
 require('babel-polyfill');
-const local = require('../local');
-const environment = {
-  development: {
-    isProduction: false
-  },
-  production: {
-    isProduction: true
-  }
-}[process.env.NODE_ENV || 'development'];
 
-const exporter = Object.assign({
-  host: process.env.HOST || 'localhost',
-  port: process.env.PORT,
-  apiHost: process.env.APIHOST || 'localhost',
-  apiPort: process.env.APIPORT,
+module.exports = {
+  host: 'localhost',
+  port: 3000,
+  apiHost: 'localhost',
+  apiPort: 3030,
   app: {
     title: 'React Redux Example',
     description: 'All the modern best practices in one example.',
@@ -35,18 +26,8 @@ const exporter = Object.assign({
       ]
     }
   },
-}, environment);
-
-Object.keys(local).forEach((key) => {
-  Object.assign({
-    [key]: local[key]
-  }, exporter);
-});
-
-Object.keys(process.env).forEach((key) => {
-  Object.assign({
-    [key]: process.env[key]
-  }, exporter);
-});
-
-module.exports = exporter;
+  redisHost: 'localhost',
+  redisPort: '6379',
+  authSecret: 'secret',
+  redisSecret: 'secret'
+};
