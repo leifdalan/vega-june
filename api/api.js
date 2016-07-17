@@ -19,7 +19,7 @@ console.error('co', config);
 const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();
-
+var redisClient = redis.createClient(config.REDIS_URL);
 const server = new http.Server(app);
 
 const io = new SocketIo(server);
@@ -40,10 +40,7 @@ console.error('redisPort', redisPort);
 app.use(morgan('dev'));
 app.use(session({
   store: new RedisStore({
-    host: redisHost,
-    port: redisPort,
-    db: redisDb,
-    pass: redisPass
+    client: redisClient
   }),
   secret: redisSecret,
   resave: true,
