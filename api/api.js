@@ -77,6 +77,7 @@ const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
 
+const port = process.env.NODE_ENV === 'production' ? config.port : config.apiPort;
 if (config.apiPort) {
   const runnable = app.listen(config.apiPort, (err) => {
     if (err) {
