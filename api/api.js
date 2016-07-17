@@ -12,10 +12,11 @@ import SocketIo from 'socket.io';
 import passport from 'passport';
 import * as helpers from './helpers';
 // import * as database from './database';
-import redis from 'connect-redis';
+import connectRedis from 'connect-redis';
 // const { auth } = helpers;
+import redis from 'redis';
 console.error('co', config);
-const RedisStore = redis(session);
+const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();
 
@@ -27,16 +28,22 @@ const {
   authSecret,
   redisSecret,
   redisHost,
-  redisPort
+  redisPort,
+  redisDb,
+  redisPass
 } = config;
 
 // auth.initialize(authSecret);
-
+console.error('redisSecret', redisSecret);
+console.error('redisHost', redisHost);
+console.error('redisPort', redisPort);
 app.use(morgan('dev'));
 app.use(session({
   store: new RedisStore({
     host: redisHost,
-    port: redisPort
+    port: redisPort,
+    db: redisDb,
+    pass: redisPass
   }),
   secret: redisSecret,
   resave: true,
