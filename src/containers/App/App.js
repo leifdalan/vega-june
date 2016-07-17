@@ -64,7 +64,7 @@ export default class App extends Component {
     const { notifs, logout } = this.props;
     return (
       <div>
-        {/*<Helmet {...config.app.head} />*/}
+        {/* <Helmet {...config.app.head} />*/}
         <Navbar>
           <Navbar.Toggle />
           <Navbar.Collapse eventKey={0}>

@@ -19,24 +19,16 @@ console.error('co', config);
 const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();
-var redisClient = redis.createClient(config.redisUrl);
+const redisClient = redis.createClient(config.redisUrl);
 const server = new http.Server(app);
 
 const io = new SocketIo(server);
 io.path('/ws');
 const {
-  authSecret,
   redisSecret,
-  redisHost,
-  redisPort,
-  redisDb,
-  redisPass
 } = config;
 
 // auth.initialize(authSecret);
-console.error('redisSecret', redisSecret);
-console.error('redisHost', redisHost);
-console.error('redisPort', redisPort);
 app.use(morgan('dev'));
 app.use(session({
   store: new RedisStore({
@@ -81,7 +73,6 @@ const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
 
-const port = process.env.NODE_ENV === 'production' ? config.port : config.apiPort;
 if (config.apiPort) {
   const runnable = app.listen(config.apiPort, (err) => {
     if (err) {
