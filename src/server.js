@@ -116,6 +116,7 @@ app.use((req, res) => {
   });
 });
 
+console.log(config.port, 'config.port');
 if (config.port) {
   server.listen(config.port, (err) => {
     if (err) {
