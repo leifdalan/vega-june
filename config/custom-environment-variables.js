@@ -8,5 +8,10 @@ module.exports = {
   redisHost: 'REDIS_HOST',
   redisPort: 'REDIS_PORT',
   authSecret: 'AUTH_SECRET',
-  redisSecret: 'REDIS_SECRET'
+  redisSecret: 'REDIS_SECRET',
+  consumer_key: 'CONSUMER_KEY',
+  consumer_secret: 'CONSUMER_SECRET',
+  token: 'TOKEN',
+  token_secret: 'TOKEN_SECRET',
+  password: 'PASSWORD',
 };
