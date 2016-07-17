@@ -15,5 +15,6 @@ module.exports = {
   token_secret: 'TOKEN_SECRET',
   password: 'PASSWORD',
   redisDb: 'REDIS_DB',
-  redisPass: 'REDIS_PASS'
+  redisPass: 'REDIS_PASS',
+  redisUrl: 'REDIS_URL'
 };

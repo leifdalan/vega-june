@@ -19,7 +19,7 @@ console.error('co', config);
 const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();
-var redisClient = redis.createClient(config.REDIS_URL);
+var redisClient = redis.createClient(config.redisUrl);
 const server = new http.Server(app);
 
 const io = new SocketIo(server);
