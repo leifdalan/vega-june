@@ -24,12 +24,11 @@
   ],
   "main": "bin/server.js",
   "scripts": {
-    "start": "concurrently --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
+    "start": "concurrently --kill-others \"npm run build\" \"npm run build-dlls\" \"npm run start-prod\" \"npm run start-prod-api\"",
     "start-prod": "better-npm-run start-prod",
     "start-prod-api": "better-npm-run start-prod-api",
     "build": "better-npm-run build",
     "build-dlls": "webpack --verbose --colors --display-error-details --config webpack/vendor.config.js",
-    "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
     "lint": "eslint -c .eslintrc src api",
     "start-dev": "better-npm-run start-dev",
     "start-dev-api": "better-npm-run start-dev-api",
