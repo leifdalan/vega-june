@@ -35,10 +35,10 @@ const {
 app.use(morgan('dev'));
 app.use(session({
   store: new RedisStore({
-    host: 'localhost',
-    port: 6379
+    host: redisHost,
+    port: redisPort
   }),
-  secret: 'hey you',
+  secret: redisSecret,
   resave: true,
   saveUninitialized: true,
 }));
