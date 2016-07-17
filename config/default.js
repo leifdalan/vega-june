@@ -29,5 +29,6 @@ module.exports = {
   redisHost: 'localhost',
   redisPort: '6379',
   authSecret: 'secret',
-  redisSecret: 'secret'
+  redisSecret: 'secret',
+  redisUrl: 'redis://localhost:6379'
 };
