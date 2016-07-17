@@ -20,7 +20,6 @@ addons:
 sudo: required
 
 script:
-  - npm run lint
   - npm test
 
 env:
