@@ -114,9 +114,9 @@
     "bootstrap-sass-loader": "^1.0.9",
     "clean-webpack-plugin": "^0.1.6",
     "compression": "^1.6.0",
+    "concurrently": "^2.1.0",
     "config": "^1.21.0",
     "connect-redis": "^3.1.0",
-    "concurrently": "^2.1.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
@@ -155,6 +155,7 @@
     "react-router": "^2.5.1",
     "react-router-bootstrap": "^0.23.0",
     "react-router-redux": "^4.0.0",
+    "redis": "^2.6.2",
     "redux": "^3.0.4",
     "redux-connect": "^2.4.0",
     "redux-form": "^5.2.5",
@@ -204,9 +205,7 @@
     "redux-devtools": "^3.0.0-beta-3",
     "redux-devtools-dock-monitor": "^1.0.0-beta-3",
     "redux-devtools-log-monitor": "^1.0.0-beta-3",
-
     "remotedev-server": "^0.1.2",
-
     "sinon": "^1.17.2",
     "style-loader": "^0.13.0",
     "timekeeper": "^0.1.1",
