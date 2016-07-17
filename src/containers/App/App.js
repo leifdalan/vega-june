@@ -74,7 +74,7 @@ export default class App extends Component {
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
-          <div onClick={logout}>loggy</div>
+          <div onClick={logout}>loggyz</div>
         </Navbar>
 
         <div style={APP_CONTENT}>
