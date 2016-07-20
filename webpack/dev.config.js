@@ -12,7 +12,7 @@ var helpers = require('./helpers');
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
-
+console.error('port', port);
 var babelrc = fs.readFileSync('./.babelrc');
 var babelrcObject = {};
 

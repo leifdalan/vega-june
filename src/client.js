@@ -23,6 +23,15 @@ const history = syncHistoryWithStore(_browserHistory, store);
 
 function initSocket() {
   const socket = io.connect('', { path: '/ws', transports: ['websocket'] });
+  socket.on('connect', () => {
+    console.error('socket.id', socket.id);
+    const nsp = io(`/${socket.id}`, {
+      path: '/ws',
+      transports: ['websocket']
+    });
+    global.nsp = nsp;
+  });
+
   socket.on('news', (data) => {
     console.log(data);
     socket.emit('my other evfent', { my: 'data from client' });

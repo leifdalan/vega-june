@@ -42,6 +42,7 @@ app.use('/ws', (req, res) => {
 });
 
 server.on('upgrade', (req, socket, head) => {
+  console.log('upgrading...', req.url, req.headers.origin);
   proxy.ws(req, socket, head);
 });
 

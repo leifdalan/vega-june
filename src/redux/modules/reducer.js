@@ -5,6 +5,7 @@ import { reducer as form } from 'redux-form';
 import auth from './auth';
 import notifs from './notifs';
 import info from './info';
+import browser from './browser';
 
 export default combineReducers({
   routing: routerReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   form,
   auth,
   info,
+  browser
 });

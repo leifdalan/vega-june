@@ -10,11 +10,12 @@ var host = config.host || 'localhost';
 var port = (Number(config.port) + 1) || 3001;
 var serverOptions = {
   contentBase: 'http://localhost:3001',
-  quiet: true,
+  quiet: false,
   noInfo: true,
   hot: true,
   inline: true,
   lazy: false,
+  progress: true,
   publicPath: webpackConfig.output.publicPath,
   headers: { 'Access-Control-Allow-Origin': '*' },
   stats: { colors: true }

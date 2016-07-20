@@ -1,6 +1,6 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { userSelector } from 'redux/modules/auth';
-import Infinite from 'react-infinite';
+
 import {
   getNextPageSelector,
   getPostsByDateSelector,
@@ -9,12 +9,16 @@ import {
   getDataSelector,
   load as loadInfo,
 } from 'redux/modules/info';
+import {
+  getDistanceFromBottomSelector
+} from 'redux/modules/browser';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
 import Helmet from 'react-helmet';
-import moment from 'moment';
+
 import { createSelector } from 'reselect';
 import { Login } from 'containers';
+
 
 const mapStateToProps = createSelector(
   getPostsByDateSelector,
@@ -22,13 +26,15 @@ const mapStateToProps = createSelector(
   getImageRatiosSelector,
   getDataSelector,
   getPagesSelector,
-  userSelector, (
+  userSelector,
+  getDistanceFromBottomSelector, (
     posts,
     nextPage,
     imageRatios,
     data,
     pages,
     user,
+    distanceFromBottom
   ) => ({
     posts,
     nextPage,
@@ -36,6 +42,7 @@ const mapStateToProps = createSelector(
     data,
     pages,
     user,
+    distanceFromBottom,
   })
 );
 
@@ -52,6 +59,25 @@ export default class Home extends Component {
     nextPage: pt.number.isRequired,
     loadInfo: pt.func.isRequired,
     user: pt.object,
+    distanceFromBottom: pt.number,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      pages,
+      nextPage,
+      distanceFromBottom,
+    } = nextProps;
+    const isLoading = pages[nextPage] && pages[nextPage].loading;
+    console.error('isLoading', pages, nextPage);
+    console.error('distanceFromBottom', distanceFromBottom);
+    if (distanceFromBottom < 100 && !isLoading) {
+      this.props.loadInfo(nextPage);
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
   }
 
   handleInfiniteLoad = () => {
@@ -60,53 +86,65 @@ export default class Home extends Component {
 
   loadingSpinner = () => <div>Loading...</div>
 
+  handleScroll = () => {
+    console.log('scrolling');
+    const [firstVisibleIndex, lastVisibleIndex] = this.list.getVisibleRange();
+    console.log(firstVisibleIndex, lastVisibleIndex);
+    if (lastVisibleIndex < this.props.posts.length - 3) this.props.loadInfo(this.props.nextPage);
+  }
+
   render() {
     const {
       props: {
         pages,
         posts,
         nextPage,
-        imageRatios,
         user,
+        imageRatios
       },
     } = this;
 
     const isLoading = pages[nextPage] && pages[nextPage].loading;
-
+    console.log('is rendering', user);
     return (
-      <div className="container">
+      <div>
+        <Helmet title="Home" />
         {user ?
-          <div style={{ width: '300px' }}>
-            <Helmet title="Home" />
-            {typeof window !== 'undefined' &&
-              <Infinite
-                useWindowAsScrollContainer
-                elementHeight={imageRatios.map(imgRatio => 300 * imgRatio)}
-                onInfiniteLoad={this.handleInfiniteLoad}
-                infiniteLoadBeginEdgeOffset={300}
-                isInfiniteLoading={isLoading}
-                loadingSpinnerDelegate={this.loadingSpinner()}
-                >
-                {posts.map((item, index) =>
-                  <div
+          <div>
+            {posts.map((post, index) => (
+              <div>
+                <figure
+                  style={{
+                    width: '100%',
+                    paddingBottom: imageRatios[index] * 600,
+                    position: 'relative',
+                    background: 'red'
+                  }}
+                  key={post.id}
+                  >
+                  <img
+                    alt={'something'}
                     style={{
-                      background: 'red',
-                      position: 'relative',
-                      paddingBottom: `${imageRatios[index] * 100}%`
-                    }}>
-                    <img
-                      alt={'something'}
-                      style={{
-                        position: 'absolute',
-                        height: '100%'
-                      }}
-                      src={item.photos[0].original_size.url}
-                    />
-                    {`${moment(item.date).month()} ${moment(item.date).date()}`}
-                  </div>
-                )}
-              </Infinite>
-            }
+                      width: '100%',
+                      position: 'absolute',
+                      height: '100%',
+                    }}
+                    src={post.photos[0].original_size.url}
+                  />
+
+                </figure>
+                {post.summary &&
+                  <figcaption>{post.summary}</figcaption>
+                }
+                {post.tags.length &&
+                  <figcaption>
+                    {post.tags.map((tag, tagIndex) =>
+                      <a key={tagIndex} href={tag}>{tag}</a>
+                    )}
+                  </figcaption>
+                }
+              </div>
+            ))}
           </div>
           :
           <Login />

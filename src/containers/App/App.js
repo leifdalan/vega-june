@@ -5,6 +5,7 @@ import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
+import throttle from 'lodash/throttle';
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,
@@ -48,12 +49,26 @@ export default class App extends Component {
     user: PropTypes.object,
     notifs: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    pushState: PropTypes.func.isRequired,
+    setSocket: PropTypes.func.isRequired,
+    setSocketNsp: PropTypes.func.isRequired,
+    setBrowser: PropTypes.func.isRequired,
+    setScroll: PropTypes.func.isRequired,
+    setWindow: PropTypes.func.isRequired,
+
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  componentDidMount() {
+    this.props.setBrowser();
+    window.addEventListener('resize', throttle(this.props.setWindow, 250));
+    window.addEventListener('scroll', throttle(this.props.setScroll, 250));
+    this.props.setWindow();
+    this.props.setScroll();
+  }
 
   handleLogout = (event) => {
     event.preventDefault();
@@ -70,11 +85,11 @@ export default class App extends Component {
           <Navbar.Collapse eventKey={0}>
             <Nav navbar>
               <LinkContainer to="/widgets">
-                <NavItem eventKey={2}>Widgets</NavItem>
+                <NavItem eventKey={2}>Widgexts</NavItem>
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
-          <div onClick={logout}>loggyz</div>
+          <div onClick={logout}>loggy</div>
         </Navbar>
 
         <div style={APP_CONTENT}>
