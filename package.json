@@ -30,11 +30,12 @@
     "build": "better-npm-run build",
     "build-dlls": "webpack --verbose --colors --display-error-details --config webpack/vendor.config.js",
     "lint": "eslint -c .eslintrc src api",
+    "watch-lint": "esw -w --color --format stylish -c .eslintrc src api",
     "postinstall": "echo 'postinstall script running' && npm run build && npm run build-dlls",
     "start-dev": "better-npm-run start-dev",
     "start-dev-api": "better-npm-run start-dev-api",
     "watch-client": "better-npm-run watch-client",
-    "dev": "concurrently --kill-others \"npm run watch-client\" \"npm run start-dev\" \"npm run start-dev-api\" \"npm run remotedev\" \"redis-server\"",
+    "dev": "concurrently --kill-others -c \"black.bgWhite,gray,blue,yellow,red,green\" --prefix \"{name}\" --names \"client,server,api   ,remote ,redis ,lint   \" \"npm run watch-client\" \"npm run start-dev\" \"npm run start-dev-api\" \"npm run remotedev\" \"redis-server\" \"npm run watch-lint\"",
     "test": "npm run lint",
     "test-node": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register",
     "test-node-watch": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register --watch",
@@ -47,7 +48,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "APIPORT": 3030
+        "APIPORT": 3030,
+        "PORT": 8080
       }
     },
     "start-prod-api": {
@@ -83,7 +85,8 @@
         "NODE_PATH": "./src",
         "PORT": 3000,
         "APIPORT": 3030,
-        "WEBPACK_DLLS": 1
+        "WEBPACK_DLLS": 1,
+        "HAPPY_VERBOSE": 1
       }
     },
     "build": {
@@ -118,6 +121,7 @@
     "config": "^1.21.0",
     "connect-redis": "^3.1.0",
     "dotenv": "^2.0.0",
+    "eslint-watch": "^2.1.13",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -151,6 +155,7 @@
     "react-hot-loader": "^3.0.0-beta.2",
     "react-infinite": "^0.9.2",
     "react-inline-css": "^2.0.0",
+    "react-list": "^0.7.20",
     "react-redux": "^4.0.0",
     "react-router": "^2.5.1",
     "react-router-bootstrap": "^0.23.0",

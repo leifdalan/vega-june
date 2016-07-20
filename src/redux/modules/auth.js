@@ -12,9 +12,13 @@ const REGISTER_FAIL = 'redux-example/auth/REGISTER_FAIL';
 const LOGOUT = 'redux-example/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const SET_SOCKET = 'redux-example/auth/SET_SOCKET';
+const SET_SOCKET_NSP = 'redux-example/auth/SET_SOCKET_NSP';
 
 const initialState = {
-  loaded: false
+  loaded: false,
+  socket: {},
+  nsp: {},
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -89,6 +93,16 @@ export default function reducer(state = initialState, action = {}) {
         loggingOut: false,
         logoutError: action.error
       };
+    case SET_SOCKET:
+      return {
+        ...state,
+        socket: action.payload
+      };
+    case SET_SOCKET_NSP:
+      return {
+        ...state,
+        nsp: action.payload
+      };
     default:
       return state;
   }
@@ -96,6 +110,20 @@ export default function reducer(state = initialState, action = {}) {
 
 export function isLoaded(globalState) {
   return globalState.auth && globalState.auth.loaded;
+}
+
+export function setSocket(socket) {
+  return {
+    type: SET_SOCKET,
+    payload: socket,
+  };
+}
+
+export function setSocketNsp(socket) {
+  return {
+    type: SET_SOCKET,
+    payload: socket,
+  };
 }
 
 export function load() {

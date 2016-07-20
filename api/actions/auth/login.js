@@ -12,7 +12,7 @@ export default function login(req) {
       };
       console.error('config.authSecret', config.authSecret);
       const token = jwt.sign(user, config.authSecret, {
-        expiresIn: 60000
+        expiresIn: '60d'
       });
       const userLogged = Object.assign(user, { token });
       req.session.user = userLogged;

@@ -32,6 +32,10 @@ export default class ApiClient {
           request.set(headers);
         }
 
+        if (this.socketHeader) {
+          request.set('X-Socket-id', `${this.socketHeader}`);
+        }
+
         if (this.token) {
           request.set('Authorization', `JWT ${this.token}`);
         }
@@ -55,5 +59,8 @@ export default class ApiClient {
 
   setJwtToken(token) {
     this.token = token;
+  }
+  setSocketHeader(id) {
+    this.socketHeader = id;
   }
 }
