@@ -11,6 +11,7 @@ const LOAD_FAIL = 'redux-example/LOAD_FAIL';
 
 
 const initialState = {
+  loading: false,
   loaded: false,
   pages: {},
   data: {},
@@ -21,6 +22,7 @@ export default function info(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
+        loading: true,
         pages: {
           ...state.pages,
           [action.page]: {
@@ -32,6 +34,7 @@ export default function info(state = initialState, action = {}) {
     case LOAD_SUCCESS:
       return {
         ...state,
+        loading: false,
         pages: {
           ...state.pages,
           [action.page]: {
@@ -48,6 +51,7 @@ export default function info(state = initialState, action = {}) {
     case LOAD_FAIL:
       return {
         ...state,
+        loading: false,
         pages: {
           ...state.pages,
           [action.page]: {
@@ -68,7 +72,7 @@ export function isLoaded(globalState) {
 
 export function load(offset = 0) {
   return (dispatch, getState) => {
-    if (getState().info.pages[offset] || offset > 5) {
+    if (getState().info.pages[offset] || offset > 6) {
       return {
         type: 'NOOP'
       };
@@ -104,6 +108,10 @@ export const getNextPageSelector = createSelector(
     const nextPage = max(numbers) + 1;
     return nextPage;
   }
+);
+
+export const getLoadingSelector = createSelector(
+  state => state.info.loading, loading => loading
 );
 
 export const getImageRatiosSelector = createSelector(

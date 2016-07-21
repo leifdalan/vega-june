@@ -75,7 +75,7 @@ app.use((req, res) => {
       ${ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} />)}`);
   }
 
-  if (__DISABLE_SSR__) {
+  if (global.__DISABLE_SSR__) {
     hydrateOnClient();
     return;
   }
@@ -117,7 +117,6 @@ app.use((req, res) => {
   });
 });
 
-console.log(config.port, 'config.port');
 if (config.port) {
   server.listen(config.port, (err) => {
     if (err) {

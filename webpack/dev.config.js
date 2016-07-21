@@ -96,13 +96,15 @@ var webpackConfig = module.exports = {
   plugins: [
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
       __DEVTOOLS__: true,  // <-------- DISABLE redux-devtools HERE
-      __DLLS__: process.env.WEBPACK_DLLS === '1'
+      __DLLS__: process.env.WEBPACK_DLLS === '1',
+      __DISABLE_SSR__: process.env.__DISABLE_SSR__ === '1',
     }),
     webpackIsomorphicToolsPlugin.development(),
 
