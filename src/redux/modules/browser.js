@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 
-
 const SET_BROWSER = 'SET_BROWSER';
 const SET_SCROLL = 'SET_SCROLL';
 const SET_WINDOW = 'SET_WINDOW';
@@ -55,18 +54,20 @@ export function setWindow() {
       width: window.innerWidth,
       docHeight: window.document.body.clientHeight
     },
-  }
+  };
 }
 
 export function setScroll() {
-  setWindow();
-  return {
-    type: SET_SCROLL,
-    payload: {
-      x: window.scrollX,
-      y: window.scrollY
-    },
-  };
+  return dispatch => {
+    dispatch(setWindow());
+    return dispatch({
+      type: SET_SCROLL,
+      payload: {
+        x: window.scrollX,
+        y: window.scrollY
+      },
+    });
+  }
 }
 
 export const getDistanceFromBottomSelector = createSelector(

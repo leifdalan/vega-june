@@ -1,16 +1,19 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { userSelector } from 'redux/modules/auth';
 
+
 import {
   getNextPageSelector,
   getPostsByDateSelector,
   getImageRatiosSelector,
   getPagesSelector,
   getDataSelector,
+  getLoadingSelector,
   load as loadInfo,
 } from 'redux/modules/info';
 import {
-  getDistanceFromBottomSelector
+  getDistanceFromBottomSelector,
+  setWindow,
 } from 'redux/modules/browser';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
@@ -27,14 +30,16 @@ const mapStateToProps = createSelector(
   getDataSelector,
   getPagesSelector,
   userSelector,
-  getDistanceFromBottomSelector, (
+  getDistanceFromBottomSelector,
+  getLoadingSelector, (
     posts,
     nextPage,
     imageRatios,
     data,
     pages,
     user,
-    distanceFromBottom
+    distanceFromBottom,
+    isLoading,
   ) => ({
     posts,
     nextPage,
@@ -43,13 +48,14 @@ const mapStateToProps = createSelector(
     pages,
     user,
     distanceFromBottom,
+    isLoading
   })
 );
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => dispatch(loadInfo())
 }])
-@connect(mapStateToProps, { loadInfo })
+@connect(mapStateToProps, { loadInfo, setWindow })
 export default class Home extends Component {
   static propTypes = {
     posts: pt.array.isRequired,
@@ -58,20 +64,23 @@ export default class Home extends Component {
     imageRatios: pt.array.isRequired,
     nextPage: pt.number.isRequired,
     loadInfo: pt.func.isRequired,
+    setWindow: pt.func.isRequired,
     user: pt.object,
     distanceFromBottom: pt.number,
+    isLoading: pt.bool
   }
 
   componentWillReceiveProps(nextProps) {
     const {
-      pages,
       nextPage,
       distanceFromBottom,
+      isLoading,
     } = nextProps;
-    const isLoading = pages[nextPage] && pages[nextPage].loading;
-    console.error('isLoading', pages, nextPage);
-    console.error('distanceFromBottom', distanceFromBottom);
-    if (distanceFromBottom < 100 && !isLoading) {
+    if (nextPage !== this.props.nextPage) {
+      return this.props.setWindow();
+    }
+    // console.log(distanceFromBottom);
+    if (distanceFromBottom < 500 && distanceFromBottom > -51 && !isLoading) {
       this.props.loadInfo(nextPage);
     }
   }
@@ -86,26 +95,17 @@ export default class Home extends Component {
 
   loadingSpinner = () => <div>Loading...</div>
 
-  handleScroll = () => {
-    console.log('scrolling');
-    const [firstVisibleIndex, lastVisibleIndex] = this.list.getVisibleRange();
-    console.log(firstVisibleIndex, lastVisibleIndex);
-    if (lastVisibleIndex < this.props.posts.length - 3) this.props.loadInfo(this.props.nextPage);
-  }
-
   render() {
     const {
       props: {
-        pages,
         posts,
-        nextPage,
         user,
-        imageRatios
+        imageRatios,
+        isLoading,
       },
     } = this;
 
-    const isLoading = pages[nextPage] && pages[nextPage].loading;
-    console.log('is rendering', user);
+    // const isLoading = pages[nextPage] && pages[nextPage].loading;
     return (
       <div>
         <Helmet title="Home" />
@@ -145,6 +145,7 @@ export default class Home extends Component {
                 }
               </div>
             ))}
+            {isLoading && this.loadingSpinner()}
           </div>
           :
           <Login />
