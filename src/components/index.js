@@ -7,3 +7,4 @@
 
 export LoginForm from './LoginForm/LoginForm';
 export Notifs from './Notifs/Notifs';
+export Gallery from './Gallery/Gallery';

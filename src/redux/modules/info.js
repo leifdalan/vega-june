@@ -4,10 +4,16 @@ import map from 'lodash/map';
 import get from 'lodash/get';
 import fOrderBy from 'lodash/fp/orderBy';
 import fMap from 'lodash/fp/map';
+import fKeys from 'lodash/fp/keys';
 import max from 'lodash/max';
+import reduce from 'lodash/reduce';
 const LOAD = 'redux-example/LOAD';
 const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/LOAD_FAIL';
+
+const LOAD_ALL = 'redux-example/LOAD_ALL';
+const LOAD_ALL_SUCCESS = 'redux-example/LOAD_ALL_SUCCESS';
+const LOAD_ALL_FAIL = 'redux-example/LOAD_ALL_FAIL';
 
 
 const initialState = {
@@ -15,6 +21,7 @@ const initialState = {
   loaded: false,
   pages: {},
   data: {},
+  blog: {}
 };
 
 export default function info(state = initialState, action = {}) {
@@ -46,6 +53,10 @@ export default function info(state = initialState, action = {}) {
         data: {
           ...state.data,
           ...keyBy(action.result.posts, 'id')
+        },
+        blog: {
+          ...state.blog,
+          ...action.result.blog,
         }
       };
     case LOAD_FAIL:
@@ -61,6 +72,22 @@ export default function info(state = initialState, action = {}) {
           }
         }
       };
+    case LOAD_ALL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        pages: reduce(action.result, (out, page, index) => ({
+          ...out,
+          [index]: map(page.posts, 'id')
+        }), state.pages),
+        data: {
+          ...state.data,
+          ...reduce(action.result, (out, page) => ({
+            ...out,
+            ...keyBy(page.posts, 'id')
+          }), state.data)
+        }
+      };
     default:
       return state;
   }
@@ -73,9 +100,7 @@ export function isLoaded(globalState) {
 export function load(offset = 0) {
   return (dispatch, getState) => {
     if (getState().info.pages[offset] || offset > 6) {
-      return {
-        type: 'NOOP'
-      };
+      return;
     }
     return dispatch({
       types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
@@ -83,6 +108,33 @@ export function load(offset = 0) {
         params: { offset }
       }),
       page: offset,
+    });
+  };
+}
+
+export function loadRemaining() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const pages = Object.keys(getPagesSelector(state));
+    const data = getDataSelector(state);
+    const totalPosts = state.info.blog.total_posts;
+    console.error('state.info', state.info);
+    console.error('pages', pages);
+    console.error('data', data);
+    console.error('totalPosts % 20', totalPosts % 20);
+    if (pages.length === totalPosts % 20 - 1) return;
+    return dispatch({
+      types: [
+        LOAD_ALL,
+        LOAD_ALL_SUCCESS,
+        LOAD_ALL_FAIL,
+      ],
+      promise: client => client.get('/loadAll/', {
+        params: {
+          pages: pages.join(','),
+          totalPosts
+        }
+      })
     });
   };
 }
@@ -117,4 +169,20 @@ export const getLoadingSelector = createSelector(
 export const getImageRatiosSelector = createSelector(
   getPostsByDateSelector,
   fMap(post => post.photos[0].original_size.height / post.photos[0].original_size.width)
+);
+
+export const getPostsByTagSelector = createSelector(
+  getPostsByDateSelector,
+  posts => posts.reduce((out, post) => ({
+    ...out,
+    ...post.tags.reduce((tagOut, tag) => ({
+      ...tagOut,
+      [tag]: (out[tag] ? out[tag] : []).concat(post.id)
+    }), {})
+  }), {})
+);
+
+export const getTagsSelector = createSelector(
+  getPostsByTagSelector,
+  fKeys
 );

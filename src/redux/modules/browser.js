@@ -3,12 +3,14 @@ import { createSelector } from 'reselect';
 const SET_BROWSER = 'SET_BROWSER';
 const SET_SCROLL = 'SET_SCROLL';
 const SET_WINDOW = 'SET_WINDOW';
+const SET_CONTAINER_WIDTH = 'SET_CONTAINER_WIDTH';
 
 const initialState = {
   scroll: {
     x: 0,
     y: 0,
   },
+  containerWidth: 0,
   window: {
     height: 0,
     width: 0,
@@ -32,6 +34,11 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         window: action.payload
+      };
+    case SET_CONTAINER_WIDTH:
+      return {
+        ...state,
+        containerWidth: action.payload
       };
 
     default:
@@ -57,6 +64,14 @@ export function setWindow() {
   };
 }
 
+export function setContainerWidth(payload = 0) {
+  return {
+    type: SET_CONTAINER_WIDTH,
+    payload,
+  };
+}
+
+
 export function setScroll() {
   return dispatch => {
     dispatch(setWindow());
@@ -67,8 +82,13 @@ export function setScroll() {
         y: window.scrollY
       },
     });
-  }
+  };
 }
+
+export const getContainerWidthSelector = createSelector(
+  state => state.browser.containerWidth,
+  containerWidth => containerWidth
+);
 
 export const getDistanceFromBottomSelector = createSelector(
   state => state.browser.window,

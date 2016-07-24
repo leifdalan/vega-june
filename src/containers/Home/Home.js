@@ -1,6 +1,7 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { userSelector } from 'redux/modules/auth';
-
+import throttle from 'lodash/throttle';
+import { Link } from 'react-router';
 
 import {
   getNextPageSelector,
@@ -13,7 +14,9 @@ import {
 } from 'redux/modules/info';
 import {
   getDistanceFromBottomSelector,
+  getContainerWidthSelector,
   setWindow,
+  setContainerWidth,
 } from 'redux/modules/browser';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
@@ -31,7 +34,8 @@ const mapStateToProps = createSelector(
   getPagesSelector,
   userSelector,
   getDistanceFromBottomSelector,
-  getLoadingSelector, (
+  getLoadingSelector,
+  getContainerWidthSelector, (
     posts,
     nextPage,
     imageRatios,
@@ -40,6 +44,7 @@ const mapStateToProps = createSelector(
     user,
     distanceFromBottom,
     isLoading,
+    containerWidth,
   ) => ({
     posts,
     nextPage,
@@ -48,14 +53,15 @@ const mapStateToProps = createSelector(
     pages,
     user,
     distanceFromBottom,
-    isLoading
+    isLoading,
+    containerWidth
   })
 );
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => dispatch(loadInfo())
 }])
-@connect(mapStateToProps, { loadInfo, setWindow })
+@connect(mapStateToProps, { loadInfo, setWindow, setContainerWidth })
 export default class Home extends Component {
   static propTypes = {
     posts: pt.array.isRequired,
@@ -65,9 +71,17 @@ export default class Home extends Component {
     nextPage: pt.number.isRequired,
     loadInfo: pt.func.isRequired,
     setWindow: pt.func.isRequired,
+    setContainerWidth: pt.func.isRequired,
     user: pt.object,
     distanceFromBottom: pt.number,
-    isLoading: pt.bool
+    isLoading: pt.bool,
+    containerWidth: pt.number,
+    children: pt.any
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.throttledCalculateContainerWidth);
+    this.calculateContainerWidth();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -89,54 +103,75 @@ export default class Home extends Component {
     return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.throttledCalculateContainerWidth);
+  }
+
+  calculateContainerWidth = () => this.props.setContainerWidth(this.container.getBoundingClientRect().width)
+
+  throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
+
   handleInfiniteLoad = () => {
     this.props.loadInfo(this.props.nextPage);
   }
 
   loadingSpinner = () => <div>Loading...</div>
 
+  containerRef = el => this.container = el // eslint-disable-line no-return-assign
+
   render() {
     const {
+      containerRef,
+      loadingSpinner,
       props: {
         posts,
         user,
         imageRatios,
         isLoading,
+        containerWidth,
+        children
       },
     } = this;
 
-    // const isLoading = pages[nextPage] && pages[nextPage].loading;
+
     return (
-      <div>
+      <div
+        className="container"
+        ref={containerRef}
+        style={{
+          padding: 0
+        }}
+      >
         <Helmet title="Home" />
         {user ?
           <div>
             {posts.map((post, index) => (
               <div>
-                <figure
-                  style={{
-                    width: '100%',
-                    paddingBottom: imageRatios[index] * 600,
-                    position: 'relative',
-                    background: 'red'
-                  }}
-                  key={post.id}
-                  >
-                  <img
-                    alt={'something'}
+                <Link key={index} to={`/gallery/${index}`}>
+                  <figure
                     style={{
                       width: '100%',
-                      position: 'absolute',
-                      height: '100%',
+                      paddingBottom: imageRatios[index] * containerWidth,
+                      position: 'relative',
+                      background: 'red'
                     }}
-                    src={post.photos[0].original_size.url}
-                  />
-
-                </figure>
+                    key={post.id}
+                    >
+                    <img
+                      alt={'something'}
+                      style={{
+                        width: '100%',
+                        position: 'absolute',
+                        height: '100%',
+                      }}
+                      src={post.photos[0].original_size.url}
+                    />
+                  </figure>
+                </Link>
                 {post.summary &&
                   <figcaption>{post.summary}</figcaption>
                 }
-                {post.tags.length &&
+                {!!post.tags.length &&
                   <figcaption>
                     {post.tags.map((tag, tagIndex) =>
                       <a key={tagIndex} href={tag}>{tag}</a>
@@ -145,7 +180,10 @@ export default class Home extends Component {
                 }
               </div>
             ))}
-            {isLoading && this.loadingSpinner()}
+            {isLoading && loadingSpinner()}
+            {children && React.cloneElement(children, {
+              slides: posts.map(post => post.photos[0].original_size.url)
+            })}
           </div>
           :
           <Login />

@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import throttle from 'lodash/throttle';
+import { Login } from 'containers';
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,
@@ -55,7 +56,6 @@ export default class App extends Component {
     setBrowser: PropTypes.func.isRequired,
     setScroll: PropTypes.func.isRequired,
     setWindow: PropTypes.func.isRequired,
-
   };
 
   static contextTypes = {
@@ -76,7 +76,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { notifs, logout } = this.props;
+    const { notifs, logout, user } = this.props;
     return (
       <div>
         {/* <Helmet {...config.app.head} />*/}
@@ -84,8 +84,8 @@ export default class App extends Component {
           <Navbar.Toggle />
           <Navbar.Collapse eventKey={0}>
             <Nav navbar>
-              <LinkContainer to="/widgets">
-                <NavItem eventKey={2}>Widgexts</NavItem>
+              <LinkContainer to="/archive">
+                <NavItem eventKey={2}>archive</NavItem>
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
@@ -100,8 +100,8 @@ export default class App extends Component {
               NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
             />
           </div>}
+          {user ? this.props.children : <Login />}
 
-          {this.props.children}
         </div>
       </div>
     );
