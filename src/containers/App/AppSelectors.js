@@ -14,7 +14,8 @@ export const mapStateToProps = state => ({
   notifs: state.notifs,
   user: state.auth.user,
   socket: state.auth.socket,
-  nsp: state.auth.nsp
+  nsp: state.auth.nsp,
+  pageLoaded: state.reduxAsyncConnect.loaded
 });
 
 export const boundActions = {

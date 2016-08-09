@@ -112,32 +112,6 @@ export function load(offset = 0) {
   };
 }
 
-export function loadRemaining() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const pages = Object.keys(getPagesSelector(state));
-    const data = getDataSelector(state);
-    const totalPosts = state.info.blog.total_posts;
-    console.error('state.info', state.info);
-    console.error('pages', pages);
-    console.error('data', data);
-    console.error('totalPosts % 20', totalPosts % 20);
-    if (pages.length === totalPosts % 20 - 1) return;
-    return dispatch({
-      types: [
-        LOAD_ALL,
-        LOAD_ALL_SUCCESS,
-        LOAD_ALL_FAIL,
-      ],
-      promise: client => client.get('/loadAll/', {
-        params: {
-          pages: pages.join(','),
-          totalPosts
-        }
-      })
-    });
-  };
-}
 
 export const getDataSelector = createSelector(
   state => get(state, 'info.data'),
@@ -163,7 +137,8 @@ export const getNextPageSelector = createSelector(
 );
 
 export const getLoadingSelector = createSelector(
-  state => state.info.loading, loading => loading
+  state => state.info.loading,
+  loading => loading
 );
 
 export const getImageRatiosSelector = createSelector(
@@ -186,3 +161,29 @@ export const getTagsSelector = createSelector(
   getPostsByTagSelector,
   fKeys
 );
+export function loadRemaining() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const pages = Object.keys(getPagesSelector(state));
+    // const data = getDataSelector(state);
+    const totalPosts = state.info.blog.total_posts;
+    // console.error('state.info', state.info);
+    // console.error('pages', pages);
+    // console.error('data', data);
+    // console.error('totalPosts % 20', totalPosts % 20);
+    if (pages.length === totalPosts % 20 - 1) return;
+    return dispatch({
+      types: [
+        LOAD_ALL,
+        LOAD_ALL_SUCCESS,
+        LOAD_ALL_FAIL,
+      ],
+      promise: client => client.get('/loadAll/', {
+        params: {
+          pages: pages.join(','),
+          totalPosts
+        }
+      })
+    });
+  };
+}

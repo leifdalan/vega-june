@@ -21,6 +21,9 @@ export default function createStore(history, client, data) {
         hostname: 'localhost',
         port: 8000,
         realtime: true,
+        filters: {
+          blacklist: ['SET_WINDOW', 'SET_SCROLL']
+        }
       }),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(_createStore);

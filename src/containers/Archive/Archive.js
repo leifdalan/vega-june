@@ -33,9 +33,6 @@ export default class Archive extends Component {
         params: { id: tagParam }
       }
     } = this;
-    console.log('props', postsByTag);
-    console.error('tags', tags);
-    console.error('this.props', this.props);
     const renderedPosts = tagParam
       ? postsByTag[tagParam].map(postId => postsById[postId])
       : posts;
@@ -47,10 +44,11 @@ export default class Archive extends Component {
         <Helmet title="Home" />
         {tags.map(tag => <Link key={tag} to={`/archive/tag/${tag}`}>{tag}</Link>)}
         {renderedPosts.map((post, index) =>
-          <Link key={index} to={`${link}${index}`}>
-            <img key={index} alt={index} src={last(post.photos[0].alt_sizes).url} />
-          </Link>
-        )}
+          post.photos.map((photo, photoIndex) =>
+            <Link key={`${index}-${photoIndex}`} to={`${link}${index}`}>
+              <img alt={index} src={last(photo.alt_sizes).url} />
+            </Link>
+        ))}
         {children && React.cloneElement(children, {
           slides: renderedPosts.map(post => post.photos[0].original_size.url)
         })}

@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import throttle from 'lodash/throttle';
 import { Login } from 'containers';
+import { Link } from 'react-router';
+import { isBoolean } from 'lodash';
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,
@@ -49,6 +47,7 @@ export default class App extends Component {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     notifs: PropTypes.object,
+    location: PropTypes.object,
     logout: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired,
     setSocket: PropTypes.func.isRequired,
@@ -56,6 +55,7 @@ export default class App extends Component {
     setBrowser: PropTypes.func.isRequired,
     setScroll: PropTypes.func.isRequired,
     setWindow: PropTypes.func.isRequired,
+    pageLoaded: PropTypes.bool.isRequired,
   };
 
   static contextTypes = {
@@ -76,22 +76,26 @@ export default class App extends Component {
   };
 
   render() {
-    const { notifs, logout, user } = this.props;
+    const {
+      notifs,
+      // logout,
+      user,
+      location: {
+        pathname
+      },
+      pageLoaded
+    } = this.props;
+    const isHome = pathname === '/';
     return (
       <div>
-        {/* <Helmet {...config.app.head} />*/}
-        <Navbar>
-          <Navbar.Toggle />
-          <Navbar.Collapse eventKey={0}>
-            <Nav navbar>
-              <LinkContainer to="/archive">
-                <NavItem eventKey={2}>archive</NavItem>
-              </LinkContainer>
-            </Nav>
-          </Navbar.Collapse>
-          <div onClick={logout}>loggy</div>
-        </Navbar>
 
+        {/* <Helmet {...config.app.head} />*/}
+        {isHome ?
+          <Link to="/archive">ARCHIVE</Link>
+          :
+          <Link to="/">HOME</Link>
+        }
+        {isBoolean(pageLoaded) && !pageLoaded  && 'loading...'}
         <div style={APP_CONTENT}>
           {notifs.global && <div className="container">
             <Notifs

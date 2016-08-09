@@ -2,7 +2,8 @@ import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 // import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
-export default (store) => {
+// export default (store) => {
+export default () => (
   // function checkAuth(logged, replace, cb) {
   //   const { auth: { user } } = store.getState();
   //   if (!!user === !logged) replace('/');
@@ -123,22 +124,20 @@ export default (store) => {
   // };
 // };
 //
-  return (
-    <Route path="/" component={require('./containers/App/App')}>
-      {/* Home (main) route */}
-      <IndexRoute component={require('./containers/Home/Home')} />
-      <Route path="gallery" component={require('./containers/Home/Home')}>
-          <Route path=":index" component={require('./components/Gallery/Gallery')} />
-      </Route>
-      <Route path="/archive" component={require('./containers/Archive/Archive')}>
-        <Route path="tag/:id">
-          <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
-        </Route>
+  <Route path="/" component={require('./containers/App/App')}>
+    {/* Home (main) route */}
+    <IndexRoute component={require('./containers/Home/Home')} />
+    <Route path="gallery" component={require('./containers/Home/Home')}>
+      <Route path=":index" component={require('./components/Gallery/Gallery')} />
+    </Route>
+    <Route path="/archive" component={require('./containers/Archive/Archive')}>
+      <Route path="tag/:id">
         <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
       </Route>
-
-      {/* Routes disallow login */}
-      <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+      <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
     </Route>
-  );
-};
+
+    {/* Routes disallow login */}
+    <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+  </Route>
+);

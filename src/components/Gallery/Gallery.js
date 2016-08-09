@@ -1,33 +1,13 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { connect } from 'react-redux';
 import { mapStateToProps } from 'containers/Archive/ArchiveSelectors';
-import ReactSwipe from 'react-swipe';
+// import ReactSwipe from 'react-swipe';
 import Modal from 'react-modal';
-const MODAL_STYLES = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)'
-  },
-  content: {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0',
-    border: 'none',
-    background: 'transparent',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '0',
-    outline: 'none',
-    padding: '2px'
-
-  }
-};
+import {
+  MODAL_STYLES,
+  IMG_STYLES,
+  IMG_CONTAINER_STYLES,
+} from './Gallery.styles';
 
 @connect(mapStateToProps, {})
 export default class Gallery extends Component {
@@ -40,22 +20,30 @@ export default class Gallery extends Component {
   handleRequestClose = () => this.props.history.goBack()
 
   render() {
-    console.error('this.props', this.props);
+    const {
+      handleRequestClose,
+      props: {
+        params: {
+          index,
+        },
+        slides
+      }
+    } = this;
     return (
       <Modal
         isOpen
-        onRequestClose={this.handleRequestClose}
+        onRequestClose={handleRequestClose}
         style={MODAL_STYLES}
       >
-        <ReactSwipe
-          className="carousel"
-          swipeOptions={{
-            continuous: true,
-            startSlide: this.props.params.index
-          }}
-        >
-          {this.props.slides.map((url, index) => <img key={index} alt={index} src={url} />)}
-        </ReactSwipe>
+        <figure style={IMG_CONTAINER_STYLES}>
+          <img
+            src={slides[index]}
+            alt={'something'}
+            style={IMG_STYLES}
+            onClick={handleRequestClose}
+          />
+        </figure>
+
       </Modal>
 
     );

@@ -3,14 +3,31 @@
  *
  */
 
-.navbar-brand {
-  position: relative;
-  padding-left: 50px;
+// .navbar-brand {
+//   position: relative;
+//   padding-left: 50px;
+// }
+
+// .navbar-default .navbar-nav > .active > a,
+// .navbar-default .navbar-nav > .active > a:hover,
+// .navbar-default .navbar-nav > .active > a:focus {
+//   color: #33e0ff;
+//   background-color: transparent;
+// }
+
+@font-face {
+    font-family: 'montserratregular';
+    src: url('./fonts/montserrat-regular-webfont.woff2') format('woff2'),
+         url('./fonts/montserrat-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-  color: #33e0ff;
-  background-color: transparent;
+h1 {
+  font-family: 'montserratregular';
+}
+
+body {
+  font-family: 'Verdana';
 }

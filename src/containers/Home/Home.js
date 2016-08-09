@@ -1,7 +1,8 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { userSelector } from 'redux/modules/auth';
 import throttle from 'lodash/throttle';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
+import { Post } from 'components';
 
 import {
   getNextPageSelector,
@@ -99,9 +100,9 @@ export default class Home extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
@@ -126,59 +127,36 @@ export default class Home extends Component {
       props: {
         posts,
         user,
-        imageRatios,
         isLoading,
-        containerWidth,
-        children
+        children,
+        imageRatios,
+        containerWidth
       },
     } = this;
-
 
     return (
       <div
         className="container"
         ref={containerRef}
         style={{
-          padding: 0
+          padding: 0,
+          maxWidth: '600px'
         }}
       >
         <Helmet title="Home" />
         {user ?
           <div>
+            <h1>VEGA JUNE</h1>
+            <p>I'm a baby</p>
+
             {posts.map((post, index) => (
-              <div>
-                <Link key={index} to={`/gallery/${index}`}>
-                  <figure
-                    style={{
-                      width: '100%',
-                      paddingBottom: imageRatios[index] * containerWidth,
-                      position: 'relative',
-                      background: 'red'
-                    }}
-                    key={post.id}
-                    >
-                    <img
-                      alt={'something'}
-                      style={{
-                        width: '100%',
-                        position: 'absolute',
-                        height: '100%',
-                      }}
-                      src={post.photos[0].original_size.url}
-                    />
-                  </figure>
-                </Link>
-                {post.summary &&
-                  <figcaption>{post.summary}</figcaption>
-                }
-                {!!post.tags.length &&
-                  <figcaption>
-                    {post.tags.map((tag, tagIndex) =>
-                      <a key={tagIndex} href={tag}>{tag}</a>
-                    )}
-                  </figcaption>
-                }
-              </div>
+              <Post
+                post={post}
+                key={index}
+                index={index}
+                containerWidth={containerWidth}
+                imageRatio={imageRatios[index]}
+              />
             ))}
             {isLoading && loadingSpinner()}
             {children && React.cloneElement(children, {
