@@ -6,6 +6,7 @@ import auth from './auth';
 import notifs from './notifs';
 import info from './info';
 import browser from './browser';
+import progress from './progress';
 
 export default combineReducers({
   routing: routerReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   form,
   auth,
   info,
-  browser
+  browser,
+  progress
 });

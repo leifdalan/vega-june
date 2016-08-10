@@ -1,84 +1,24 @@
-import React, { Component, PropTypes as pt } from 'react';
-import { userSelector } from 'redux/modules/auth';
+import React, { Component } from 'react';
 import throttle from 'lodash/throttle';
-// import { Link } from 'react-router';
 import { Post } from 'components';
-
-import {
-  getNextPageSelector,
-  getPostsByDateSelector,
-  getImageRatiosSelector,
-  getPagesSelector,
-  getDataSelector,
-  getLoadingSelector,
-  load as loadInfo,
-} from 'redux/modules/info';
-import {
-  getDistanceFromBottomSelector,
-  getContainerWidthSelector,
-  setWindow,
-  setContainerWidth,
-} from 'redux/modules/browser';
+import Infinite from 'react-infinite';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
 import Helmet from 'react-helmet';
-
-import { createSelector } from 'reselect';
 import { Login } from 'containers';
-
-
-const mapStateToProps = createSelector(
-  getPostsByDateSelector,
-  getNextPageSelector,
-  getImageRatiosSelector,
-  getDataSelector,
-  getPagesSelector,
-  userSelector,
-  getDistanceFromBottomSelector,
-  getLoadingSelector,
-  getContainerWidthSelector, (
-    posts,
-    nextPage,
-    imageRatios,
-    data,
-    pages,
-    user,
-    distanceFromBottom,
-    isLoading,
-    containerWidth,
-  ) => ({
-    posts,
-    nextPage,
-    imageRatios,
-    data,
-    pages,
-    user,
-    distanceFromBottom,
-    isLoading,
-    containerWidth
-  })
-);
+import {
+  mapStateToProps,
+  actions,
+  propTypes
+} from './HomeSelectors';
 
 @asyncConnect([{
-  promise: ({ store: { dispatch } }) => dispatch(loadInfo())
+  promise: ({ store: { dispatch } }) => dispatch(actions.loadInfo())
 }])
-@connect(mapStateToProps, { loadInfo, setWindow, setContainerWidth })
+@connect(mapStateToProps, actions)
 export default class Home extends Component {
-  static propTypes = {
-    posts: pt.array.isRequired,
-    data: pt.object.isRequired,
-    pages: pt.object.isRequired,
-    imageRatios: pt.array.isRequired,
-    nextPage: pt.number.isRequired,
-    loadInfo: pt.func.isRequired,
-    setWindow: pt.func.isRequired,
-    setContainerWidth: pt.func.isRequired,
-    user: pt.object,
-    distanceFromBottom: pt.number,
-    isLoading: pt.bool,
-    containerWidth: pt.number,
-    children: pt.any
-  }
+
+  static propTypes = propTypes
 
   componentDidMount() {
     window.addEventListener('resize', this.throttledCalculateContainerWidth);
@@ -95,9 +35,9 @@ export default class Home extends Component {
       return this.props.setWindow();
     }
     // console.log(distanceFromBottom);
-    if (distanceFromBottom < 500 && distanceFromBottom > -51 && !isLoading) {
-      this.props.loadInfo(nextPage);
-    }
+    // if (distanceFromBottom < 500 && distanceFromBottom > -51 && !isLoading) {
+    //   this.props.loadInfo(nextPage);
+    // }
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -113,7 +53,12 @@ export default class Home extends Component {
   throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
 
   handleInfiniteLoad = () => {
-    this.props.loadInfo(this.props.nextPage);
+    const {
+      isLoading,
+      loadInfo,
+      nextPage
+    } = this.props;
+    if (!isLoading) loadInfo(nextPage);
   }
 
   loadingSpinner = () => <div>Loading...</div>
@@ -148,16 +93,23 @@ export default class Home extends Component {
           <div>
             <h1>VEGA JUNE</h1>
             <p>I'm a baby</p>
+            <Infinite
+              useWindowAsScrollContainer
+              elementHeight={imageRatios.map(ratio => ratio * containerWidth + 50)}
+              infiniteLoadBeginEdgeOffset={200}
+              onInfiniteLoad={this.handleInfiniteLoad}
+            >
+              {posts.map((post, index) => (
+                <Post
+                  post={post}
+                  key={index}
+                  index={index}
+                  containerWidth={containerWidth}
+                  imageRatio={imageRatios[index]}
+                />
+              ))}
+            </Infinite>
 
-            {posts.map((post, index) => (
-              <Post
-                post={post}
-                key={index}
-                index={index}
-                containerWidth={containerWidth}
-                imageRatio={imageRatios[index]}
-              />
-            ))}
             {isLoading && loadingSpinner()}
             {children && React.cloneElement(children, {
               slides: posts.map(post => post.photos[0].original_size.url)

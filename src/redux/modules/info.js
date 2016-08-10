@@ -7,6 +7,7 @@ import fMap from 'lodash/fp/map';
 import fKeys from 'lodash/fp/keys';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
+import last from 'lodash/last';
 const LOAD = 'redux-example/LOAD';
 const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/LOAD_FAIL';
@@ -136,6 +137,17 @@ export const getNextPageSelector = createSelector(
   }
 );
 
+export const getAllThumbnails = createSelector(
+  getDataSelector,
+  data => reduce(data, (out, post) => [
+    ...out,
+    ...reduce(post.photos, (photosOut, photo) => [
+      ...photosOut,
+      last(photo.alt_sizes).url
+    ], [])
+  ], [])
+);
+
 export const getLoadingSelector = createSelector(
   state => state.info.loading,
   loading => loading
@@ -161,6 +173,7 @@ export const getTagsSelector = createSelector(
   getPostsByTagSelector,
   fKeys
 );
+
 export function loadRemaining() {
   return (dispatch, getState) => {
     const state = getState();
@@ -187,3 +200,31 @@ export function loadRemaining() {
     });
   };
 }
+
+export const preloadImages = imageSrcs => dispatch => {
+  dispatch({
+    type: 'START_LOADING',
+    payload: imageSrcs.length
+  });
+  return Promise.all(imageSrcs.map((imgSrc) =>
+    new Promise((resolve, reject) => {
+      const image = new window.Image();
+      image.src = imgSrc;
+      image.onload = img => {
+        dispatch({
+          type: 'TICK_LOADING'
+        });
+        resolve(img);
+      };
+      image.onerror = err => reject(err);
+    })
+  )).then(() => {
+    dispatch({
+      type: 'RESET_LOADING'
+    });
+  }, () => {
+    dispatch({
+      type: 'RESET_LOADING'
+    });
+  });
+};
