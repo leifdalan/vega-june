@@ -67,7 +67,7 @@
         "PORT": 3000,
         "APIPORT": 3030,
         "WEBPACK_DLLS": 1,
-        "__DISABLE_SSR__": 1
+        "__DISABLE_SSR__": 0
       }
     },
     "start-dev-api": {

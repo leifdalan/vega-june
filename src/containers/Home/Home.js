@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
 import Helmet from 'react-helmet';
 import { Login } from 'containers';
+import reduce from 'lodash/reduce';
 import {
   mapStateToProps,
   actions,
@@ -79,6 +80,36 @@ export default class Home extends Component {
       },
     } = this;
 
+    const Scroller = {
+      element: __CLIENT__ ? Infinite : 'div'
+    };
+
+    const {
+      postElements,
+      elementHeights
+    } = reduce(posts, (out, post, index) => ({
+      postElements: [
+        ...out.postElements,
+        <Post
+          post={post}
+          key={index}
+          index={index}
+          containerWidth={containerWidth}
+          imageRatio={imageRatios[index]}
+        />
+      ],
+      elementHeights: [
+        ...out.elementHeights,
+        imageRatios[index] * containerWidth + (
+          post.summary ? 20 : 0
+        ) + (
+          !!post.tags.length ? 20 : 0
+        )
+      ]
+    }), {
+      postElements: [],
+      elementHeights: []
+    });
     return (
       <div
         className="container"
@@ -93,22 +124,14 @@ export default class Home extends Component {
           <div>
             <h1>VEGA JUNE</h1>
             <p>I'm a baby</p>
-            <Infinite
+            <Scroller.element
               useWindowAsScrollContainer
-              elementHeight={imageRatios.map(ratio => ratio * containerWidth + 50)}
+              elementHeight={elementHeights}
               infiniteLoadBeginEdgeOffset={200}
               onInfiniteLoad={this.handleInfiniteLoad}
             >
-              {posts.map((post, index) => (
-                <Post
-                  post={post}
-                  key={index}
-                  index={index}
-                  containerWidth={containerWidth}
-                  imageRatio={imageRatios[index]}
-                />
-              ))}
-            </Infinite>
+              {postElements}
+            </Scroller.element>
 
             {isLoading && loadingSpinner()}
             {children && React.cloneElement(children, {
