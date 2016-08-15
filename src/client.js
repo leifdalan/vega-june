@@ -10,10 +10,12 @@ import io from 'socket.io-client';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { ReduxAsyncConnect } from 'redux-connect';
+import { ReduxAsyncConnect } from 'redux-async-connect';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
 import withScroll from 'scroll-behavior';
 import getRoutes from './routes';
+
+console.error('ReduxAsyncConnect', ReduxAsyncConnect);
 
 const client = new ApiClient();
 const _browserHistory = withScroll(browserHistory);
@@ -24,7 +26,6 @@ const history = syncHistoryWithStore(_browserHistory, store);
 function initSocket() {
   const socket = io.connect('', { path: '/ws', transports: ['websocket'] });
   socket.on('connect', () => {
-    console.error('socket.id', socket.id);
     const nsp = io(`/${socket.id}`, {
       path: '/ws',
       transports: ['websocket']

@@ -3,15 +3,19 @@ import throttle from 'lodash/throttle';
 import { Post } from 'components';
 import Infinite from 'react-infinite';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-connect';
+import { asyncConnect } from 'redux-async-connect';
 import Helmet from 'react-helmet';
 import { Login } from 'containers';
 import reduce from 'lodash/reduce';
+import { window } from 'utils/lib';
 import {
   mapStateToProps,
   actions,
   propTypes
 } from './HomeSelectors';
+import {
+  CENTER_STYLE
+} from './Home.styles';
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => dispatch(actions.loadInfo())
@@ -29,8 +33,8 @@ export default class Home extends Component {
   componentWillReceiveProps(nextProps) {
     const {
       nextPage,
-      distanceFromBottom,
-      isLoading,
+      // distanceFromBottom,
+      // isLoading,
     } = nextProps;
     if (nextPage !== this.props.nextPage) {
       return this.props.setWindow();
@@ -41,6 +45,9 @@ export default class Home extends Component {
     // }
   }
 
+  componentDidUpdate() {
+    this.calculateContainerWidth();
+  }
   // shouldComponentUpdate(nextProps) {
   //   return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
   // }
@@ -49,7 +56,11 @@ export default class Home extends Component {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
   }
 
-  calculateContainerWidth = () => this.props.setContainerWidth(this.container.getBoundingClientRect().width)
+  calculateContainerWidth = () => this
+    .props
+    .setContainerWidth(
+      this.container.getBoundingClientRect().width
+    )
 
   throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
 
@@ -122,8 +133,8 @@ export default class Home extends Component {
         <Helmet title="Home" />
         {user ?
           <div>
-            <h1>VEGA JUNE</h1>
-            <p>I'm a baby</p>
+            <h1 style={CENTER_STYLE}>VEGA JUNE</h1>
+            <p style={CENTER_STYLE}>I'm a baby</p>
             <Scroller.element
               useWindowAsScrollContainer
               elementHeight={elementHeights}

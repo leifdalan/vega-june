@@ -17,10 +17,11 @@ import {
 import { Notifs } from 'components';
 import {
   mapStateToProps,
-  boundActions
+  boundActions,
+  propTypes
 } from './AppSelectors';
 // import config from 'config';
-import { asyncConnect } from 'redux-connect';
+import { asyncConnect } from 'redux-async-connect';
 import Radium from 'radium';
 import {
   NOTIFS,
@@ -43,20 +44,7 @@ import {
 }])
 @connect(mapStateToProps, boundActions)
 export default class App extends Component {
-  static propTypes = {
-    children: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    notifs: PropTypes.object,
-    location: PropTypes.object,
-    logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired,
-    setSocket: PropTypes.func.isRequired,
-    setSocketNsp: PropTypes.func.isRequired,
-    setBrowser: PropTypes.func.isRequired,
-    setScroll: PropTypes.func.isRequired,
-    setWindow: PropTypes.func.isRequired,
-    pageLoaded: PropTypes.bool.isRequired,
-  };
+  static propTypes = propTypes;
 
   static contextTypes = {
     store: PropTypes.object.isRequired
@@ -68,6 +56,7 @@ export default class App extends Component {
     window.addEventListener('scroll', throttle(this.props.setScroll, 250));
     this.props.setWindow();
     this.props.setScroll();
+    console.error('this.refs.appContainer', this.refs.appContainer.getBoundingClientRect().width);
   }
 
   handleLogout = (event) => {
@@ -87,7 +76,7 @@ export default class App extends Component {
     } = this.props;
     const isHome = pathname === '/';
     return (
-      <div>
+      <div ref="appContainer">
 
         {/* <Helmet {...config.app.head} />*/}
         {isHome ?
@@ -95,7 +84,7 @@ export default class App extends Component {
           :
           <Link to="/">HOME</Link>
         }
-        {isBoolean(pageLoaded) && !pageLoaded  && 'loading...'}
+        {isBoolean(pageLoaded) && !pageLoaded && 'loading...'}
         <div style={APP_CONTENT}>
           {notifs.global && <div className="container">
             <Notifs

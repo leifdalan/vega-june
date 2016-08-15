@@ -22,7 +22,7 @@ export default function createStore(history, client, data) {
         port: 8000,
         realtime: true,
         filters: {
-          blacklist: ['SET_WINDOW', 'SET_SCROLL']
+          blacklist: ['SET_WINDOW', 'SET_SCROLL', 'SET_CONTAINER_WIDTH']
         }
       }),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))

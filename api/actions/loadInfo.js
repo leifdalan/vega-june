@@ -28,17 +28,18 @@ export function loadAll(req) {
       ? req.query.totalPosts
       : null;
     const firstPromise = totalPosts
-      ? Promise.resolve()
+      ? Promise.resolve(totalPosts)
       : new Promise((resolve, reject) => {
+        console.error('gettingFirstPage');
         tumblrClient.blogPosts('vega-june.tumblr.com', {
           limit: 20,
         }, (err, data) => {
           if (err) return reject(err);
-          return resolve(data);
+          return resolve(data.blog.posts);
         });
       });
-    firstPromise.then(() => {
-      const pagesNeeded = totalPosts % 20;
+    firstPromise.then((promiseResponse) => {
+      const pagesNeeded = promiseResponse % 20;
       console.error('pagesNeeded', pagesNeeded);
       console.error('pages', pages);
       const allPagesNeededFetch = without(range(pagesNeeded), ...pages);

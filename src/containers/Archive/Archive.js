@@ -1,27 +1,17 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-connect';
+import { asyncConnect } from 'redux-async-connect';
 import Helmet from 'react-helmet';
 import last from 'lodash/last';
 import {
   loadRemaining,
-  getAllThumbnails,
-  preloadImages,
 } from 'redux/modules/info';
 import { mapStateToProps } from './ArchiveSelectors';
 
 @asyncConnect([{
-  promise: ({ store: { dispatch, getState } }) => new Promise(resolve => {
-    dispatch(loadRemaining()).then(() => {
-      if (__CLIENT__) {
-        const thumbnails = getAllThumbnails(getState());
-        dispatch(preloadImages(thumbnails)).then(resolve);
-      } else {
-        resolve();
-      }
-    });
-  })
+  deferred: __CLIENT__,
+  promise: ({ store: { dispatch } }) => dispatch(loadRemaining())
 }])
 @connect(mapStateToProps, {})
 export default class Archive extends Component {

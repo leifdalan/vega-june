@@ -71,7 +71,7 @@ module.exports = {
       'react-router-bootstrap',
       'react-router-redux',
       'redux',
-      'redux-connect',
+      'redux-async-connect',
       'redux-form',
       'scroll-behavior',
       'serialize-javascript',

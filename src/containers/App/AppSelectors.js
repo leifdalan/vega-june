@@ -1,3 +1,5 @@
+import { PropTypes } from 'react';
+
 import {
   logout,
   setSocket,
@@ -26,4 +28,19 @@ export const boundActions = {
   setBrowser,
   setScroll,
   setWindow,
+};
+
+export const propTypes = {
+  children: PropTypes.object.isRequired,
+  user: PropTypes.object,
+  notifs: PropTypes.object,
+  location: PropTypes.object,
+  logout: PropTypes.func.isRequired,
+  pushState: PropTypes.func.isRequired,
+  setSocket: PropTypes.func.isRequired,
+  setSocketNsp: PropTypes.func.isRequired,
+  setBrowser: PropTypes.func.isRequired,
+  setScroll: PropTypes.func.isRequired,
+  setWindow: PropTypes.func.isRequired,
+  pageLoaded: PropTypes.bool.isRequired,
 };

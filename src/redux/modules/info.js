@@ -178,12 +178,12 @@ export function loadRemaining() {
   return (dispatch, getState) => {
     const state = getState();
     const pages = Object.keys(getPagesSelector(state));
-    // const data = getDataSelector(state);
+    const data = getDataSelector(state);
     const totalPosts = state.info.blog.total_posts;
-    // console.error('state.info', state.info);
-    // console.error('pages', pages);
-    // console.error('data', data);
-    // console.error('totalPosts % 20', totalPosts % 20);
+    console.error('state.info', state.info);
+    console.error('pages', pages);
+    console.error('data', data);
+    console.error('totalPosts % 20', totalPosts % 20);
     if (pages.length === totalPosts % 20 - 1) return;
     return dispatch({
       types: [

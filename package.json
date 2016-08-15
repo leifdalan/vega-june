@@ -60,7 +60,7 @@
       }
     },
     "start-dev": {
-      "command": "node --debug=5858 ./bin/server.js",
+      "command": "node ./bin/server.js",
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
@@ -71,7 +71,7 @@
       }
     },
     "start-dev-api": {
-      "command": "node --debug=7000 ./bin/api.js",
+      "command": "node ./bin/api.js",
       "env": {
         "NODE_PATH": "./api",
         "NODE_ENV": "development",
@@ -149,7 +149,7 @@
     "pretty-error": "^2.0.0",
     "purifycss-webpack-plugin": "^2.0.3",
     "radium": "^0.17.1",
-    "react": "^15.2.1",
+    "react": "^15.3.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
     "react-helmet": "^3.1.0",
@@ -165,7 +165,7 @@
     "react-swipe": "^5.0.3",
     "redis": "^2.6.2",
     "redux": "^3.0.4",
-    "redux-connect": "^2.4.0",
+    "redux-async-connect": "^1.0.0-rc4",
     "redux-form": "^5.2.5",
     "redux-thunk": "^2.1.0",
     "remote-redux-devtools": "^0.3.3",

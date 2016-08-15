@@ -69,4 +69,4 @@ export const propTypes = {
   isLoading: pt.bool,
   containerWidth: pt.number,
   children: pt.any
-}
+};
