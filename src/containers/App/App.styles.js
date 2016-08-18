@@ -12,10 +12,13 @@ export const BRAND_STYLES = {
 };
 
 export const APP_CONTENT = {
-  margin: '50px 0',
   position: 'relative',
 };
 
 export const NOTIFS = {
   margin: '15px 0',
+};
+
+export const APP_CONTAINER_STYLE ={
+  minHeight: '100%'
 };

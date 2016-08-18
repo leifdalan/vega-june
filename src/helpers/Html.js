@@ -42,9 +42,6 @@ export default class Html extends Component {
               rel="stylesheet" type="text/css" charSet="UTF-8" />
           )}
 
-          {/* (will be present only in development mode) */}
-          {Object.keys(assets.styles).length === 0 ?
-            <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} /> : null}
         </head>
         <body>
           <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
@@ -56,8 +53,6 @@ export default class Html extends Component {
           <script src={assets.javascript.main} charSet="UTF-8" />
 
           {/* (will be present only in development mode) */}
-          {Object.keys(assets.styles).length === 0 ? <script
-            dangerouslySetInnerHTML={{ __html: 'document.getElementById("content").style.display="block";' }} /> : null}
         </body>
       </html>
     );

@@ -26,6 +26,7 @@ import Radium from 'radium';
 import {
   NOTIFS,
   APP_CONTENT,
+  APP_CONTAINER_STYLE,
 } from './App.styles';
 
 @Radium
@@ -76,7 +77,10 @@ export default class App extends Component {
     } = this.props;
     const isHome = pathname === '/';
     return (
-      <div ref="appContainer">
+      <div
+        style={APP_CONTAINER_STYLE}
+        ref="appContainer"
+      >
 
         {/* <Helmet {...config.app.head} />*/}
         {isHome ?
