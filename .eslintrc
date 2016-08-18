@@ -52,6 +52,7 @@
     "__DISABLE_SSR__": true,
     "__DEVTOOLS__": true,
     "__DLLS__": true,
+    "__TEST__": true,
     "socket": true,
     "webpackIsomorphicTools": true
   }

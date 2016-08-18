@@ -103,6 +103,7 @@ var webpackConfig = module.exports = {
       __SERVER__: false,
       __DEVELOPMENT__: true,
       __DEVTOOLS__: true,  // <-------- DISABLE redux-devtools HERE
+      __TEST__: false,  // <-------- DISABLE redux-devtools HERE
       __DLLS__: process.env.WEBPACK_DLLS === '1',
       __DISABLE_SSR__: process.env.__DISABLE_SSR__ === '1',
     }),

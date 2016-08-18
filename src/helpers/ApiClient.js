@@ -1,6 +1,6 @@
 import superagent from 'superagent';
 // import config from 'config';
-
+export const testUrl = `http://fartsz.com`;
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 function formatUrl(path) {
@@ -9,6 +9,8 @@ function formatUrl(path) {
     const config = require('config');
     // Prepend host and port of the API server to the path.
     return `http://${config.apiHost}:${config.apiPort + adjustedPath}`;
+  } else if (__TEST__) {
+    return `${testUrl}${adjustedPath}`;
   }
   // Prepend `/api` to relative URL, to proxy to API server.
   return `/api${adjustedPath}`;
@@ -19,7 +21,6 @@ export default class ApiClient {
     methods.forEach(method => {
       this[method] = (path, { params, data, headers, files, fields } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](formatUrl(path));
-
         if (params) {
           request.query(params);
         }
@@ -47,12 +48,13 @@ export default class ApiClient {
         if (fields) {
           fields.forEach(item => request.field(item.key, item.value));
         }
-
         if (data) {
           request.send(data);
         }
 
-        request.end((err, { body } = {}) => (err ? reject(body || err) : resolve(body)));
+        request.end((err, { body } = {}) => {
+          return (err ? reject(body || err) : resolve(body));
+        });
       });
     });
   }

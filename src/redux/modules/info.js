@@ -8,13 +8,12 @@ import fKeys from 'lodash/fp/keys';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import last from 'lodash/last';
-const LOAD = 'redux-example/LOAD';
-const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/LOAD_FAIL';
-
-const LOAD_ALL = 'redux-example/LOAD_ALL';
-const LOAD_ALL_SUCCESS = 'redux-example/LOAD_ALL_SUCCESS';
-const LOAD_ALL_FAIL = 'redux-example/LOAD_ALL_FAIL';
+export const LOAD = 'redux-example/LOAD';
+export const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
+export const LOAD_FAIL = 'redux-example/LOAD_FAIL';
+export const LOAD_ALL = 'redux-example/LOAD_ALL';
+export const LOAD_ALL_SUCCESS = 'redux-example/LOAD_ALL_SUCCESS';
+export const LOAD_ALL_FAIL = 'redux-example/LOAD_ALL_FAIL';
 
 
 const initialState = {

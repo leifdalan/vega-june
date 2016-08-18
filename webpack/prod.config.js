@@ -76,7 +76,7 @@ module.exports = {
       'process.env': {
         NODE_ENV: '"production"'
       },
-
+      __TEST__: false,
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: false,

@@ -15,12 +15,12 @@ import { AppContainer as HotEnabler } from 'react-hot-loader';
 import withScroll from 'scroll-behavior';
 import getRoutes from './routes';
 
-console.error('ReduxAsyncConnect', ReduxAsyncConnect);
-
 const client = new ApiClient();
-const _browserHistory = withScroll(browserHistory);
+const _browserHistory = withScroll(browserHistory, (prev, loc) =>
+  !loc.pathname.includes('gallery')
+);
 const dest = document.getElementById('content');
-const store = createStore(_browserHistory, client, window.__data);
+export const store = createStore(_browserHistory, client, window.__data);
 const history = syncHistoryWithStore(_browserHistory, store);
 
 function initSocket() {
