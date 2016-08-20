@@ -29,6 +29,7 @@ import {
   APP_CONTAINER_STYLE,
 } from './App.styles';
 
+
 @Radium
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
@@ -57,7 +58,6 @@ export default class App extends Component {
     window.addEventListener('scroll', throttle(this.props.setScroll, 250));
     this.props.setWindow();
     this.props.setScroll();
-    console.error('this.refs.appContainer', this.refs.appContainer.getBoundingClientRect().width);
   }
 
   handleLogout = (event) => {
@@ -67,21 +67,28 @@ export default class App extends Component {
 
   render() {
     const {
-      notifs,
-      // logout,
-      user,
-      location: {
-        pathname
-      },
-      pageLoaded
-    } = this.props;
+      props: {
+        notifs,
+        // logout,
+        user,
+        tags,
+        location: {
+          pathname
+        },
+        pageLoaded,
+        children,
+        content,
+        sidebar
+      }
+    } = this;
     const isHome = pathname === '/';
     return (
       <div
         style={APP_CONTAINER_STYLE}
         ref="appContainer"
+        id="outer-container"
       >
-
+        {sidebar}
         {/* <Helmet {...config.app.head} />*/}
         {isHome ?
           <Link to="/archive">ARCHIVE</Link>
@@ -89,7 +96,10 @@ export default class App extends Component {
           <Link to="/">HOME</Link>
         }
         {isBoolean(pageLoaded) && !pageLoaded && 'loading...'}
-        <div style={APP_CONTENT}>
+        <main
+          id="page-wrap"
+          style={APP_CONTENT}
+        >
           {notifs.global && <div className="container">
             <Notifs
               style={NOTIFS}
@@ -97,9 +107,9 @@ export default class App extends Component {
               NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
             />
           </div>}
-          {user ? this.props.children : <Login />}
-
-        </div>
+          {user ? children : <Login />}
+          {content && content}
+        </main>
       </div>
     );
   }

@@ -13,7 +13,7 @@ const initialState = {
   containerWidth: 0,
   window: {
     height: 0,
-    width: 0,
+    width: 768,
     docHeight: 0
   }
 };
@@ -84,6 +84,11 @@ export function setScroll() {
     });
   };
 }
+
+export const getBrowserDimensionSelector = createSelector(
+  state => state.browser.window.width,
+  width => width
+);
 
 export const getContainerWidthSelector = createSelector(
   state => state.browser.containerWidth,

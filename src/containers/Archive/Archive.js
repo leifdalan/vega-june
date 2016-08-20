@@ -8,11 +8,10 @@ import {
   loadRemaining,
 } from 'redux/modules/info';
 import { mapStateToProps } from './ArchiveSelectors';
-import { scaleRotate as Menu } from 'react-burger-menu';
 import {
-  BURGER_STYLES,
   OUTER_STYLE
 } from './Archive.styles';
+import Picture from 'components/Picture';
 
 @asyncConnect([{
   deferred: __CLIENT__,
@@ -26,28 +25,19 @@ export default class Archive extends Component {
     postsById: pt.object.isRequired,
     tags: pt.array.isRequired,
     params: pt.object.isRequired,
-    children: pt.any
+    children: pt.any,
+    browserWidth: pt.number.isRequired
   }
-
-  state = {
-    menuOpen: false
-  }
-
-  toggleMenu = () => this.setState({menuOpen: !this.state.menuOpen})
 
   render() {
     const {
-      toggleMenu,
-      state: {
-        menuOpen,
-      },
       props: {
         posts,
         postsByTag,
-        tags,
         postsById,
         children,
-        params: { id: tagParam }
+        params: { id: tagParam },
+        browserWidth
       }
     } = this;
     const renderedPosts = tagParam
@@ -56,42 +46,58 @@ export default class Archive extends Component {
     const link = tagParam
       ? `/archive/tag/${tagParam}/gallery/`
       : '/archive/gallery/';
+
+    const remainder = (browserWidth - 1) % 76;
+    const rowAmount = Math.floor((browserWidth - 1) / 76);
+    const imageSize = 76 + remainder / rowAmount;
+    console.error('remainder, rowAmount, imageSize', remainder, rowAmount, imageSize);
     return (
       <div
         style={OUTER_STYLE}
         id="outer-container"
       >
-        <a onClick={toggleMenu}>TAGS</a>
-        <Menu
-          isOpen={menuOpen}
-          right
-          customBurgerIcon={false}
-          styles={BURGER_STYLES}
-          pageWrapId={"page-wrap"}
-          outerContainerId={"outer-container"}
-        >
-          <ul>
-            {tags.map(tag =>
-              <li key={tag}>
-                <Link
-                  to={`/archive/tag/${tag}`}
-                  onClick={toggleMenu}
-                  >
-                  {tag}
-                </Link>
-              </li>
-            )}
-          </ul>
-        </Menu>
-        <main id="page-wrap">
-          <Helmet title="Home" />
+        <main
+          id="page-wrap"
+          style={{
+            width: '100%'
+          }}
 
-          {renderedPosts.map((post, index) =>
-            post.photos.map((photo, photoIndex) =>
-              <Link key={`${index}-${photoIndex}`} to={`${link}${index}`}>
-                <img alt={index} src={last(photo.alt_sizes).url} />
+        >
+          <Helmet title="Home" />
+          <div
+            style={{
+              display: 'flex',
+              width: browserWidth,
+              flexWrap: 'wrap',
+              borderLeft: '1px solid white'
+            }}
+          >
+
+            {renderedPosts.map((post, index) =>
+              post.photos.map((photo, photoIndex) =>
+              <Link
+                key={`${index}-${photoIndex}`}
+                to={`${link}${index}`}
+                >
+
+                <div
+                  style={{
+                    width: imageSize,
+                    fontSize: 0,
+                    lineHeight: 0,
+                    borderRight: '1px solid white',
+                    borderBottom: '1px solid white'
+                  }}
+                  >
+                  <Picture
+                    src={last(photo.alt_sizes).url}
+                    ratio={1}
+                    />
+                </div>
+                {/*<img alt={index} src={last(photo.alt_sizes).url} />*/}
               </Link>
-          ))}
+            ))}
+          </div>
           {children && React.cloneElement(children, {
             slides: renderedPosts.map(post => post.photos[0].original_size.url)
           })}

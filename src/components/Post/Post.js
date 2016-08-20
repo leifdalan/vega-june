@@ -1,11 +1,16 @@
 import React, { PropTypes as pt } from 'react';
 import { Link } from 'react-router';
+import Picture from 'components/Picture';
 
 const Post = ({ post, containerWidth, imageRatio, index }) => (
   <div key={post.id}>
     {post.photos.length === 1 ?
       <Link key={index} to={`/gallery/${index}`}>
-        <figure
+        <Picture
+          src={post.photos[0].alt_sizes[1].url}
+          ratio={imageRatio}
+        />
+        {/*<figure
           style={{
             width: '100%',
             paddingBottom: imageRatio * containerWidth,
@@ -23,7 +28,7 @@ const Post = ({ post, containerWidth, imageRatio, index }) => (
             }}
             src={post.photos[0].alt_sizes[1].url}
             />
-        </figure>
+        </figure>*/}
       </Link>
       :
       post.photos.map((photo, photoIndex) =>

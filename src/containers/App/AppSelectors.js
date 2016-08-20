@@ -1,5 +1,5 @@
 import { PropTypes } from 'react';
-
+import { createSelector } from 'reselect';
 import {
   logout,
   setSocket,
@@ -11,14 +11,30 @@ import {
   setWindow
 } from 'redux/modules/browser';
 import { push } from 'react-router-redux';
+import {
+  getTagsSelector,
 
-export const mapStateToProps = state => ({
-  notifs: state.notifs,
-  user: state.auth.user,
-  socket: state.auth.socket,
-  nsp: state.auth.nsp,
-  pageLoaded: state.reduxAsyncConnect.loaded
-});
+} from 'redux/modules/info';
+
+export const mapStateToProps = createSelector(
+  state => state.notifs,
+  state => state.auth.user,
+  state => state.auth.socket,
+  state => state.auth.nsp,
+  state => state.reduxAsyncConnect.loaded, (
+    notifs,
+    user,
+    socket,
+    nsp,
+    pageLoaded,
+  ) => ({
+    notifs,
+    user,
+    socket,
+    nsp,
+    pageLoaded,
+  })
+);
 
 export const boundActions = {
   logout,

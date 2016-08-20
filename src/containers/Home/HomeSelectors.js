@@ -3,7 +3,7 @@ import { userSelector } from 'redux/modules/auth';
 import { PropTypes as pt } from 'react';
 import {
   getNextPageSelector,
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   getImageRatiosSelector,
   getPagesSelector,
   getDataSelector,
@@ -18,7 +18,7 @@ import {
 } from 'redux/modules/browser';
 
 export const mapStateToProps = createSelector(
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   getNextPageSelector,
   getImageRatiosSelector,
   getDataSelector,

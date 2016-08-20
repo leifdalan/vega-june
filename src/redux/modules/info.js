@@ -8,6 +8,7 @@ import fKeys from 'lodash/fp/keys';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import last from 'lodash/last';
+import filter from 'lodash/filter';
 export const LOAD = 'redux-example/LOAD';
 export const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
 export const LOAD_FAIL = 'redux-example/LOAD_FAIL';
@@ -126,6 +127,14 @@ export const getPostsByDateSelector = createSelector(
   getDataSelector,
   fOrderBy('date', 'desc')
 );
+
+export const getPhotoPostsByDateSelector = createSelector(
+  getDataSelector,
+  data => {
+    const filtered = filter(data, (post) => !!post.photos);
+    return fOrderBy('date', 'desc')(filtered);
+  }
+);
 export const getNextPageSelector = createSelector(
   getPagesSelector,
   pages => {
@@ -153,12 +162,12 @@ export const getLoadingSelector = createSelector(
 );
 
 export const getImageRatiosSelector = createSelector(
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   fMap(post => post.photos[0].original_size.height / post.photos[0].original_size.width)
 );
 
 export const getPostsByTagSelector = createSelector(
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   posts => posts.reduce((out, post) => ({
     ...out,
     ...post.tags.reduce((tagOut, tag) => ({

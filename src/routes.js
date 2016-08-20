@@ -130,7 +130,10 @@ export default () => (
     <Route path="gallery" component={require('./containers/Home/Home')}>
       <Route path=":index" component={require('./components/Gallery/Gallery')} />
     </Route>
-    <Route path="/archive" component={require('./containers/Archive/Archive')}>
+    <Route path="/archive" components={{
+        content: require('./containers/Archive/Archive'),
+        sidebar: require('./components/Sidebar')
+      }}>
       <Route path="tag/:id">
         <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
       </Route>

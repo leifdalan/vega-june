@@ -39,7 +39,8 @@ export function loadAll(req) {
         });
       });
     firstPromise.then((promiseResponse) => {
-      const pagesNeeded = promiseResponse % 20;
+      console.error('promiseResponse', promiseResponse);
+      const pagesNeeded = Math.floor(promiseResponse / 20);
       console.error('pagesNeeded', pagesNeeded);
       console.error('pages', pages);
       const allPagesNeededFetch = without(range(pagesNeeded), ...pages);

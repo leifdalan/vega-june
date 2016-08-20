@@ -1,24 +1,30 @@
 import { createSelector } from 'reselect';
 import {
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   getPostsByTagSelector,
   getTagsSelector,
   getDataSelector,
 } from 'redux/modules/info';
+import {
+  getBrowserDimensionSelector
+} from 'redux/modules/browser';
 
 export const mapStateToProps = createSelector(
-  getPostsByDateSelector,
+  getPhotoPostsByDateSelector,
   getPostsByTagSelector,
   getTagsSelector,
-  getDataSelector, (
+  getDataSelector,
+  getBrowserDimensionSelector, (
     posts,
     postsByTag,
     tags,
-    postsById
+    postsById,
+    browserWidth
   ) => ({
     posts,
     postsByTag,
     tags,
-    postsById
+    postsById,
+    browserWidth
   })
 );
