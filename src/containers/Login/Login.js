@@ -17,34 +17,29 @@ export default class Login extends Component {
   }
 
   login = data => this.props.login(data)
-  .then(result => {
-    this.props.notifSend({
-      message: 'You\'r logged !',
-      kind: 'success',
-      dismissAfter: 2000
-    });
-    return result;
-  });
 
   render() {
     const { user, logout } = this.props;
     return (
-      <div className="container">
-        <Helmet title="Login" />
-        <h1>Login</h1>
-        {!user && <div>
-          <LoginForm onSubmit={this.login} />
-          <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
-        </div>
-        }
-        {user && <div>
-          <p>You are currently logged in as {user.email}.</p>
+      <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%'
+        }}>
+        <div>
+          <h1 style={{textAlign: 'center'}}>
+            Login
+          </h1>
+          <small style={{
+              textAlign: 'center',
+              display: 'block'
+            }}>to see baby</small>
+          <br />
+            <Helmet title="Login" />
+            <LoginForm onSubmit={this.login} />
 
-          <div>
-            <button className="btn btn-danger" onClick={logout}><i className="fa fa-sign-out" />{' '}Log Out</button>
-          </div>
         </div>
-        }
       </div>
     );
   }

@@ -74,8 +74,13 @@ var webpackConfig = module.exports = {
         loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
       }),
       helpers.createSourceLoader({
+        happy: { id: 'css' },
+        test: /\.css$/,
+        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
+      }),
+      helpers.createSourceLoader({
         happy: { id: 'sass' },
-        test: /\.scss$/,
+        test: /(\.scss$|\.css$)/,
         loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap',
       }),
       { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
@@ -113,6 +118,7 @@ var webpackConfig = module.exports = {
     helpers.createHappyPlugin('json'),
     helpers.createHappyPlugin('less'),
     helpers.createHappyPlugin('sass'),
+    helpers.createHappyPlugin('css'),
   ]
 };
 

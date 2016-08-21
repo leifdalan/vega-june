@@ -38,7 +38,7 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
       },
       {
-        test: /\.scss$/,
+        test: /(\.scss$|\.css$)/,
         loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
       },
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [strip.loader('debug'), 'babel'] },

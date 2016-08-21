@@ -28,7 +28,7 @@ import {
   APP_CONTENT,
   APP_CONTAINER_STYLE,
 } from './App.styles';
-
+// import 'react-html5video/dist/ReactHtml5Video.css';
 
 @Radium
 @asyncConnect([{
@@ -67,6 +67,7 @@ export default class App extends Component {
 
   render() {
     const {
+      handleLogout,
       props: {
         notifs,
         // logout,
@@ -81,6 +82,7 @@ export default class App extends Component {
         sidebar
       }
     } = this;
+    if (!user) return <Login />;
     const isHome = pathname === '/';
     return (
       <div
@@ -88,6 +90,7 @@ export default class App extends Component {
         ref="appContainer"
         id="outer-container"
       >
+
         {sidebar}
         {/* <Helmet {...config.app.head} />*/}
         {isHome ?
@@ -95,6 +98,7 @@ export default class App extends Component {
           :
           <Link to="/">HOME</Link>
         }
+        <button onClick={handleLogout}>logout</button>
         {isBoolean(pageLoaded) && !pageLoaded && 'loading...'}
         <main
           id="page-wrap"
@@ -108,7 +112,7 @@ export default class App extends Component {
             />
           </div>}
           {user ? children : <Login />}
-          {content && content}
+          {user && content}
         </main>
       </div>
     );

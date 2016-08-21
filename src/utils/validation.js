@@ -10,7 +10,7 @@ export function email(value) {
 
 export function required(value) {
   if (isEmpty(value)) {
-    return 'Required';
+    return 'Password field is required.';
   }
 }
 
