@@ -8,7 +8,6 @@ import Helmet from 'react-helmet';
 import { Login } from 'containers';
 import reduce from 'lodash/reduce';
 import { window } from 'utils/lib';
-import Video from 'react-html5video';
 import {
   mapStateToProps,
   actions,
@@ -50,10 +49,7 @@ export default class Home extends Component {
   componentDidUpdate() {
     this.calculateContainerWidth();
   }
-  // shouldComponentUpdate(nextProps) {
-  //   return (nextProps.distanceFromBottom === this.props.distanceFromBottom);
-  // }
-
+  
   componentWillUnmount() {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
   }
@@ -103,15 +99,15 @@ export default class Home extends Component {
     } = reduce(posts, (out, post, index) => ({
       postElements: [
         ...out.postElements,
-        post.video ?
-        <VideoPost post={post} /> :
-        <Post
-          post={post}
-          key={index}
-          index={index}
-          containerWidth={containerWidth}
-          imageRatio={imageRatios[index]}
-        />
+        post.type === 'video'
+          ? <VideoPost post={post} />
+          : <Post
+            post={post}
+            key={index}
+            index={index}
+            containerWidth={containerWidth}
+            imageRatio={imageRatios[index]}
+          />
       ],
       elementHeights: [
         ...out.elementHeights,
@@ -134,11 +130,8 @@ export default class Home extends Component {
           maxWidth: '600px'
         }}
       >
-      {/*<video controls autoplay id='embed-57b8904ca7e94063362860' class='crt-video crt-skin-default' width='500' height='889' poster='https://66.media.tumblr.com/tumblr_oc7268zUeU1vw7u75_smart1.jpg' preload='none' muted data-crt-video data-crt-options='{"autoheight":null,"duration":30,"hdUrl":"https:\/\/api.tumblr.com\/video_file\/149210296168\/tumblr_oc7268zUeU1vw7u75\/720","filmstrip":{"url":"https:\/\/66.media.tumblr.com\/previews\/tumblr_oc7268zUeU1vw7u75_filmstrip.jpg","width":"200","height":"357"}}' > <source src="https://api.tumblr.com/video_file/149210296168/tumblr_oc7268zUeU1vw7u75/480" type="video/mp4" /> </video>*/}
+
         <Helmet title="Home" />
-          <Video controls loop muted>
-                <source src="https://api.tumblr.com/video_file/149210296168/tumblr_oc7268zUeU1vw7u75/480" type="video/mp4" />
-            </Video>
 
         {user ?
           <div>

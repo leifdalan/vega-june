@@ -162,8 +162,14 @@ export const getLoadingSelector = createSelector(
 );
 
 export const getImageRatiosSelector = createSelector(
-  getPhotoPostsByDateSelector,
-  fMap(post => post.photos[0].original_size.height / post.photos[0].original_size.width)
+  getPostsByDateSelector,
+  /* eslint-disable */
+  fMap(post => post.type === 'photo'
+    ? post.photos[0].original_size.height / post.photos[0].original_size.width
+    // its a video post
+    : post.thumbnail_height / post.thumbnail_width
+  )
+  /* eslint-enable */
 );
 
 export const getPostsByTagSelector = createSelector(

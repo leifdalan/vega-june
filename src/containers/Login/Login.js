@@ -29,7 +29,7 @@ export default class Login extends Component {
         }}>
         <div>
           <h1 style={{textAlign: 'center'}}>
-            Login
+            LOGIN
           </h1>
           <small style={{
               textAlign: 'center',

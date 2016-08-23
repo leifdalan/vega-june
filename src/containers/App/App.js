@@ -72,7 +72,6 @@ export default class App extends Component {
         notifs,
         // logout,
         user,
-        tags,
         location: {
           pathname
         },
@@ -82,7 +81,7 @@ export default class App extends Component {
         sidebar
       }
     } = this;
-    if (!user) return <Login />;
+    if (!user) return children;
     const isHome = pathname === '/';
     return (
       <div
@@ -111,7 +110,7 @@ export default class App extends Component {
               NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
             />
           </div>}
-          {user ? children : <Login />}
+          {user && children}
           {user && content}
         </main>
       </div>

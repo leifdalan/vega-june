@@ -85,6 +85,7 @@ app.use((req, res) => {
     location: req.originalUrl
   }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
+      // @TODO use flash instead of ?r=balls
       res.redirect(redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
       console.error('ROUTER ERROR:', pretty.render(error));
@@ -99,7 +100,7 @@ app.use((req, res) => {
         );
 
         res.status(200);
-
+        // @TODO use flash instead of ?r=balls and dispatch to state
         global.navigator = { userAgent: req.headers['user-agent'] };
 
         res.send(`<!doctype html>

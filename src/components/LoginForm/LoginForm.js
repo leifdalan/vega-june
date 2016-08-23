@@ -94,7 +94,7 @@ export default class LoginForm extends Component {
             bsSize="large"
             bsStyle="success"
           >
-            <i className="fa fa-sign-in" />{' '}Log In
+            <i className="fa fa-sign-in" />{' '}Go
           </Button>
         </div>
       </form>

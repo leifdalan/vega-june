@@ -1,22 +1,40 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
-// import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
 // export default (store) => {
-export default () => (
-  // function checkAuth(logged, replace, cb) {
-  //   const { auth: { user } } = store.getState();
-  //   if (!!user === !logged) replace('/');
-  //   cb();
-  // }
-  //
-  // const requireLogin = (nextState, replace, cb) => {
-  //   if (!isAuthLoaded(store.getState())) {
-  //     store.dispatch(loadAuth()).then(() => checkAuth(true, replace, cb));
-  //   } else {
-  //     checkAuth(true, replace, cb);
-  //   }
-  // };
+export default store => {
+  function checkAuth(logged, replace, cb) {
+    const {
+      auth: {
+        user
+      },
+      routing: {
+        locationBeforeTransitions: {
+          pathname
+        }
+      }
+    } = store.getState();
+
+    console.error('user in checkAuth', store.getState());
+    if (!!user === !logged) replace('/');
+    if (!user) {
+      store.dispatch({
+        type: 'REDIRECT_BACK',
+        payload: pathname
+      });
+      replace(`/login?r=${pathname}`);
+    }
+    cb();
+  }
+
+  const requireLogin = (nextState, replace, cb) => {
+    if (!isAuthLoaded(store.getState())) {
+      store.dispatch(loadAuth()).then(() => checkAuth(true, replace, cb));
+    } else {
+      checkAuth(true, replace, cb);
+    }
+  };
   //
   // const requireNotLogged = (nextState, replace, cb) => {
   //   if (!isAuthLoaded(store.getState())) {
@@ -124,13 +142,13 @@ export default () => (
   // };
 // };
 //
-  <Route path="/" component={require('./containers/App/App')}>
+  return <Route path="/" component={require('./containers/App/App')}>
     {/* Home (main) route */}
-    <IndexRoute component={require('./containers/Home/Home')} />
-    <Route path="gallery" component={require('./containers/Home/Home')}>
+    <IndexRoute onEnter={requireLogin} component={require('./containers/Home/Home')} />
+    <Route onEnter={requireLogin} path="gallery" component={require('./containers/Home/Home')}>
       <Route path=":index" component={require('./components/Gallery/Gallery')} />
     </Route>
-    <Route path="/archive" components={{
+    <Route onEnter={requireLogin} path="/archive" components={{
         content: require('./containers/Archive/Archive'),
         sidebar: require('./components/Sidebar')
       }}>
@@ -139,8 +157,8 @@ export default () => (
       </Route>
       <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
     </Route>
-
+    <Route path="login" component={require('./containers/Login/Login')} />
     {/* Routes disallow login */}
     <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
   </Route>
-);
+};

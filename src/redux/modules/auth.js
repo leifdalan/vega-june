@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { replace, push } from 'react-router-redux';
 import get from 'lodash/get';
 const LOAD = 'redux-example/auth/LOAD';
 const LOAD_SUCCESS = 'redux-example/auth/LOAD_SUCCESS';
@@ -141,17 +142,34 @@ export function register(data) {
 }
 
 export function login(data) {
-  return {
+  return (dispatch, getState) => dispatch({
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
     promise: (client) => client.post('/auth/login', { data })
-  };
+  }).then((res) => {
+    const {
+      routing: {
+        locationBeforeTransitions: {
+          query: {
+            r: redirect
+          }
+        }
+      }
+    } = getState();
+    const actualRedirect = redirect === '/login'
+      ? '/'
+      : redirect
+        ? redirect
+        : '/';
+    dispatch(replace(actualRedirect));
+    return res;
+  });
 }
 
 export function logout() {
-  return {
+  return dispatch => dispatch({
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
     promise: (client) => client.get('/auth/logout')
-  };
+  }).then(() => dispatch(replace('/login')));
 }
 
 export const userSelector = createSelector(
