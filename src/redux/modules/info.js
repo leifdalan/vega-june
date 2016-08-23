@@ -197,8 +197,9 @@ export function loadRemaining() {
     console.error('state.info', state.info);
     console.error('pages', pages);
     console.error('data', data);
-    console.error('totalPosts % 20', totalPosts % 20);
+    // console.error('totalPosts % 20', totalPosts % 20);
     if (pages.length === totalPosts % 20 - 1) return;
+
     return dispatch({
       types: [
         LOAD_ALL,
@@ -210,7 +211,11 @@ export function loadRemaining() {
           pages: pages.join(','),
           totalPosts
         }
-      })
+      }),
+      cache: {
+        key: 'loadAll',
+        ttl: 1000 * 20
+      }
     });
   };
 }

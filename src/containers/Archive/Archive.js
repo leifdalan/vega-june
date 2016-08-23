@@ -15,7 +15,7 @@ import Picture from 'components/Picture';
 
 @asyncConnect([{
   deferred: __CLIENT__,
-  promise: ({ store: { dispatch } }) => dispatch(loadRemaining())
+  promise: ({ store: { dispatch } }) => dispatch(loadRemaining()),
 }])
 @connect(mapStateToProps, {})
 export default class Archive extends Component {

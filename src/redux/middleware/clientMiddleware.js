@@ -1,10 +1,11 @@
+import { ADD_CACHE } from '../modules/cache';
 export default function clientMiddleware(client) {
   return ({ dispatch, getState }) => next => action => {
     if (typeof action === 'function') {
       return action(dispatch, getState);
     }
 
-    const { promise, types, ...rest } = action; // eslint-disable-line no-redeclare
+    const { promise, types, cache, ...rest } = action; // eslint-disable-line no-redeclare
     if (!promise) {
       return next(action);
     }
@@ -13,15 +14,41 @@ export default function clientMiddleware(client) {
     next({ ...rest, type: REQUEST });
 
     const {
-      auth
+      auth,
+      cache: cacheState
     } = getState();
 
     client.setJwtToken(auth.user && auth.user.token ? auth.user.token : null);
     client.setSocketHeader(auth.socket && auth.socket.id ? auth.socket.id : null);
 
+    // Skip API call if it has been designated as a cache call
+
+    const cachedCall = cacheState[cache && cache.key];
+    if (cachedCall) {
+      const ttl = cachedCall || Infinity;
+      console.error('new Date() - cachedCall.time < ttl', new Date() - new Date(cachedCall.time), ttl);
+      return Promise.resolve();
+      if (new Date() - new Date(cachedCall.time) < ttl) {
+        console.error('%c its cached!!!', 'font-size: 56px');
+
+      }
+    }
+
     const actionPromise = promise(client);
     actionPromise.then(
-      (result) => next({ ...rest, result, type: SUCCESS }),
+      (result) => {
+        if (cache) {
+          next({
+            type: ADD_CACHE,
+            payload: {
+              key: cache.key,
+              time: new Date(),
+              ttl: cache.ttl
+            }
+          });
+        }
+        return next({ ...rest, result, type: SUCCESS });
+      },
       (error) => next({ ...rest, error, type: FAILURE })
     ).catch((error) => {
       console.error('MIDDLEWARE ERROR:', error);

@@ -23,7 +23,7 @@ export function loadAll(req) {
   return new Promise((masterResolve, masterReject) => {
     const pages = req && req.query && req.query.pages
       ? map(req.query.pages.split(','), toNumber)
-      : null;
+      : -1;
     const totalPosts = req && req.query && req.query.totalPosts
       ? req.query.totalPosts
       : null;

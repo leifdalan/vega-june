@@ -49,7 +49,7 @@ export default class Home extends Component {
   componentDidUpdate() {
     this.calculateContainerWidth();
   }
-  
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
   }
@@ -148,7 +148,11 @@ export default class Home extends Component {
 
             {isLoading && loadingSpinner()}
             {children && React.cloneElement(children, {
-              slides: posts.map(post => post.photos[0].original_size.url)
+              slides: posts.map(post => post.type === 'photo'
+                ? post.photos[0].original_size.url
+                // its a video post
+                : post.thumbnail_url
+              )
             })}
           </div>
           :

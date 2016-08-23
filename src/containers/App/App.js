@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Alert from 'react-bootstrap/lib/Alert';
 import throttle from 'lodash/throttle';
-import { Login } from 'containers';
 import { Link } from 'react-router';
 import { isBoolean } from 'lodash';
 // import Helmet from 'react-helmet';
@@ -37,9 +36,6 @@ import {
 
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
-    }
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
     }
     return Promise.all(promises);
   }

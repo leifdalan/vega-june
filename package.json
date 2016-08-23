@@ -170,6 +170,7 @@
     "redux": "^3.0.4",
     "redux-async-connect": "^1.0.0-rc4",
     "redux-form": "^5.2.5",
+    "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "remote-redux-devtools": "^0.3.3",
     "reselect": "^2.5.3",
