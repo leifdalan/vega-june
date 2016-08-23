@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Alert from 'react-bootstrap/lib/Alert';
 import throttle from 'lodash/throttle';
 import { Link } from 'react-router';
-import { isBoolean } from 'lodash';
+import isBoolean from 'lodash/isBoolean';
+
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isInfoLoaded,

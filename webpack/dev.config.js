@@ -8,7 +8,7 @@ var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
 var helpers = require('./helpers');
-
+var Visualizer = require('webpack-visualizer-plugin');
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
@@ -113,6 +113,7 @@ var webpackConfig = module.exports = {
       __DISABLE_SSR__: process.env.__DISABLE_SSR__ === '1',
     }),
     webpackIsomorphicToolsPlugin.development(),
+    new Visualizer(),
 
     helpers.createHappyPlugin('jsx'),
     helpers.createHappyPlugin('json'),

@@ -40,7 +40,8 @@
     "test-node": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register",
     "test-node-watch": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register --watch",
     "remotedev": "remotedev --hostname=localhost --port=8000",
-    "fix": "eslint --fix ./src ./api"
+    "fix": "eslint --fix ./src ./api",
+    "webpack-audit": "webpack --verbose --colors --display-error-details --config webpack/prod.config.js --json > stats.json"
   },
   "betterScripts": {
     "start-prod": {
@@ -226,8 +227,11 @@
     "sinon": "^1.17.2",
     "style-loader": "^0.13.0",
     "timekeeper": "^0.1.1",
+    "webpack-bundle-size-analyzer": "^2.0.2",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.5.0"
+    "webpack-graph": "^0.1.4",
+    "webpack-hot-middleware": "^2.5.0",
+    "webpack-visualizer-plugin": "^0.1.5"
   },
   "engines": {
     "node": "6.2.1"
