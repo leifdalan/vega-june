@@ -21,32 +21,32 @@ export default function clientMiddleware(client) {
     client.setJwtToken(auth.user && auth.user.token ? auth.user.token : null);
     client.setSocketHeader(auth.socket && auth.socket.id ? auth.socket.id : null);
 
-    // Skip API call if it has been designated as a cache call
-
-    const cachedCall = cacheState[cache && cache.key];
-    if (cachedCall) {
-      const ttl = cachedCall || Infinity;
-      console.error('new Date() - cachedCall.time < ttl', new Date() - new Date(cachedCall.time), ttl);
-      return Promise.resolve();
-      if (new Date() - new Date(cachedCall.time) < ttl) {
-        console.error('%c its cached!!!', 'font-size: 56px');
-
-      }
+    // // Skip API call if it has been designated as a cache call
+    //
+    // const cachedCall = cacheState[cache && cache.key];
+    // if (cachedCall) {
+    //   const ttl = cachedCall || Infinity;
+    //   console.error('new Date() - cachedCall.time < ttl', new Date() - new Date(cachedCall.time), ttl);
+    //   return Promise.resolve();
+      // if (new Date() - new Date(cachedCall.time) < ttl) {
+      //   console.error('%c its cached!!!', 'font-size: 56px');
+      //
+      // }
     }
 
     const actionPromise = promise(client);
     actionPromise.then(
-      (result) => {
-        if (cache) {
-          next({
-            type: ADD_CACHE,
-            payload: {
-              key: cache.key,
-              time: new Date(),
-              ttl: cache.ttl
-            }
-          });
-        }
+      // (result) => {
+      //   if (cache) {
+      //     next({
+      //       type: ADD_CACHE,
+      //       payload: {
+      //         key: cache.key,
+      //         time: new Date(),
+      //         ttl: cache.ttl
+      //       }
+      //     });
+      //   }
         return next({ ...rest, result, type: SUCCESS });
       },
       (error) => next({ ...rest, error, type: FAILURE })
