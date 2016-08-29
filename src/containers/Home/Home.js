@@ -5,7 +5,6 @@ import Infinite from 'react-infinite';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 import Helmet from 'react-helmet';
-import { Login } from 'containers';
 import reduce from 'lodash/reduce';
 import { window } from 'utils/lib';
 import {
@@ -16,6 +15,10 @@ import {
 import {
   CENTER_STYLE
 } from './Home.styles';
+import {
+  POST_CONTAINER,
+  PICTURE_STYLE,
+} from 'components/Post/Post.styles';
 import VideoPost from 'components/VideoPost/VideoPost';
 
 @asyncConnect([{
@@ -34,16 +37,10 @@ export default class Home extends Component {
   componentWillReceiveProps(nextProps) {
     const {
       nextPage,
-      // distanceFromBottom,
-      // isLoading,
     } = nextProps;
     if (nextPage !== this.props.nextPage) {
       return this.props.setWindow();
     }
-    // console.log(distanceFromBottom);
-    // if (distanceFromBottom < 500 && distanceFromBottom > -51 && !isLoading) {
-    //   this.props.loadInfo(nextPage);
-    // }
   }
 
   componentDidUpdate() {
@@ -55,10 +52,10 @@ export default class Home extends Component {
   }
 
   calculateContainerWidth = () => this
-    .props
-    .setContainerWidth(
-      this.container.getBoundingClientRect().width
-    )
+  .props
+  .setContainerWidth(
+    this.container.getBoundingClientRect().width
+  )
 
   throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
 
@@ -75,13 +72,37 @@ export default class Home extends Component {
 
   containerRef = el => this.container = el // eslint-disable-line no-return-assign
 
+  getPostHeight = index => {
+    const {
+      posts,
+      imageRatios,
+      containerWidth
+    } = this.props;
+    const post = posts[index];
+    let photoHeight = imageRatios[index] * containerWidth;
+    if (post.type === 'photo' && post.photos.length === 2) {
+      photoHeight = photoHeight / 2;
+    }
+    return photoHeight + (
+      // Add 20 for summary
+      post.summary ? 20 : 0
+    ) + (
+      // Add 20 for tags
+      !!post.tags.length ? 20 : 0
+    ) +
+      // and all the padding/margin
+      POST_CONTAINER.marginBottom +
+      POST_CONTAINER.paddingBottom +
+      PICTURE_STYLE.marginBottom;
+  }
+
   render() {
     const {
+      getPostHeight,
       containerRef,
       loadingSpinner,
       props: {
         posts,
-        user,
         isLoading,
         children,
         imageRatios,
@@ -111,11 +132,7 @@ export default class Home extends Component {
       ],
       elementHeights: [
         ...out.elementHeights,
-        imageRatios[index] * containerWidth + (
-          post.summary ? 20 : 0
-        ) + (
-          !!post.tags.length ? 20 : 0
-        )
+        getPostHeight(index)
       ]
     }), {
       postElements: [],
@@ -126,38 +143,36 @@ export default class Home extends Component {
         className="container"
         ref={containerRef}
         style={{
-          padding: 0,
+          padding: 15,
           maxWidth: '600px'
         }}
       >
 
         <Helmet title="Home" />
 
-        {user ?
-          <div>
-            <h1 style={CENTER_STYLE}>VEGA JUNE</h1>
-            <p style={CENTER_STYLE}>I'm a baby</p>
-            <Scroller.element
-              useWindowAsScrollContainer
-              elementHeight={elementHeights}
-              infiniteLoadBeginEdgeOffset={200}
-              onInfiniteLoad={this.handleInfiniteLoad}
-            >
-              {postElements}
-            </Scroller.element>
+        <div>
+          <h1 style={CENTER_STYLE}>VEGA JUNE</h1>
+          <p style={CENTER_STYLE}>I'm a baby</p>
+          <Scroller.element
+            useWindowAsScrollContainer
+            elementHeight={elementHeights}
+            infiniteLoadBeginEdgeOffset={200}
+            onInfiniteLoad={this.handleInfiniteLoad}
+          >
+            {postElements}
+          </Scroller.element>
 
-            {isLoading && loadingSpinner()}
-            {children && React.cloneElement(children, {
-              slides: posts.map(post => post.type === 'photo'
-                ? post.photos[0].original_size.url
-                // its a video post
-                : post.thumbnail_url
-              )
-            })}
-          </div>
-          :
-          <Login />
-        }
+          {isLoading && loadingSpinner()}
+
+          {/* This is for the gallery */}
+          {children && React.cloneElement(children, {
+            slides: posts.map(post => post.type === 'photo' // eslint-disable
+              ? post.photos[0].original_size.url
+              // its a video post
+              : post.thumbnail_url
+            )
+          })}
+        </div>
       </div>
     );
   }

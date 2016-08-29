@@ -1,4 +1,5 @@
 import React, { PropTypes as pt } from 'react';
+import { BACKGROUND_PLACEHOLDER } from './Picture.style';
 
 export default function Picture({ src, ratio, style }) {
   return (
@@ -6,30 +7,32 @@ export default function Picture({ src, ratio, style }) {
       style={{
         paddingBottom: `${ratio * 100}%`,
         position: 'relative',
-        background: 'blue',
         width: '100%',
         display: 'block',
         lineHeight: 0,
+        ...BACKGROUND_PLACEHOLDER,
         ...style,
       }}
     >
-      <img
-        src={src}
-        alt={'balls'}
-        style={{
-          width: '100%',
-          display: 'block',
-          position: 'absolute',
-          height: '100%',
-        }}
-      />
+      {src &&
+        <img
+          src={src}
+          alt={'balls'}
+          style={{
+            width: '100%',
+            display: 'block',
+            position: 'absolute',
+            height: '100%',
+          }}
+          />
+      }
     </figure>
   );
 }
 
 Picture.propTypes = {
-  src: pt.string.required,
+  src: pt.string,
   alt: pt.string,
-  ratio: pt.number.required,
+  ratio: pt.number,
   style: pt.object
 };

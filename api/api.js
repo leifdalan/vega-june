@@ -18,7 +18,7 @@ import redis from 'redis';
 const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();
-const redisClient = redis.createClient(config.redisUrl);
+export const redisClient = redis.createClient(config.redisUrl);
 const server = new http.Server(app);
 
 const io = new SocketIo(server);

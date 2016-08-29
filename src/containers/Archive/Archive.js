@@ -11,7 +11,7 @@ import { mapStateToProps } from './ArchiveSelectors';
 import {
   OUTER_STYLE
 } from './Archive.styles';
-import Picture from 'components/Picture';
+import { Picture } from 'components';
 
 @asyncConnect([{
   deferred: __CLIENT__,
@@ -63,7 +63,7 @@ export default class Archive extends Component {
           }}
 
         >
-          <Helmet title="Home" />
+          <Helmet title="Archive" />
           <div
             style={{
               display: 'flex',

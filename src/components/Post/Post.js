@@ -1,73 +1,102 @@
 import React, { PropTypes as pt } from 'react';
 import { Link } from 'react-router';
-import Picture from 'components/Picture';
+import { Picture } from 'components';
+import radium from 'radium';
+import {
+  POST_CONTAINER,
+  DATE_STYLE,
+  PICTURE_STYLE,
+  MID_BORDER,
+  BOTTOM_BORDER
+} from './Post.styles';
+import {
+  FLEX,
+  POS_REL
+} from 'helpers/radium';
+import fecha from 'fecha';
 
 const Post = ({ post, containerWidth, imageRatio, index }) => (
-  <div key={post.id}>
-    {post.photos.length === 1 ?
+  <div
+    key={post.id}
+    style={POST_CONTAINER}
+  >
+    {post.photos.length === 1 &&
       <Link key={index} to={`/gallery/${index}`}>
         <Picture
           src={post.photos[0].alt_sizes[1].url}
           ratio={imageRatio}
+          style={PICTURE_STYLE}
         />
-        {/*<figure
-          style={{
-            width: '100%',
-            paddingBottom: imageRatio * containerWidth,
-            position: 'relative',
-            background: 'red'
-          }}
-          key={post.id}
-          >
-          <img
-            alt={'something'}
-            style={{
-              width: '100%',
-              position: 'absolute',
-              height: '100%',
-            }}
-            src={post.photos[0].alt_sizes[1].url}
-            />
-        </figure>*/}
       </Link>
-      :
-      post.photos.map((photo, photoIndex) =>
-        <Link key={`${index}${photoIndex}`} to={`/gallery/${index}`}>
-          <figure
+    }
+    {(post.photos.length === 2 || post.photos.length === 4) &&
+      <div
+        style={{
+          ...FLEX,
+          ...POS_REL,
+          flexWrap: 'wrap',
+        }}
+      >
+        {post.photos.map((photo, photoIndex) =>
+          <div
             style={{
               width: '50%',
-              paddingBottom: imageRatio * containerWidth / 2,
-              position: 'relative',
-              background: 'red',
-              display: 'inline-block',
-              lineHeight: 0,
-              fontSize: 0,
             }}
-            key={post.id}
-            >
-            <img
-              alt={'something'}
-              style={{
-                width: '100%',
-                position: 'absolute',
-                height: '100%',
-              }}
-              src={photo.alt_sizes[1].url}
+          >
+            <Link key={`${index}${photoIndex}`} to={`/gallery/${index}`}>
+              <Picture
+                style={{
+                  paddingBottom: imageRatio * containerWidth / 2,
+                }}
+                src={photo.alt_sizes[1].url}
               />
-          </figure>
-        </Link>
+            </Link>
+          </div>
+         )}
+        <span style={MID_BORDER} />
+        {post.photos.length === 4 && <span style={BOTTOM_BORDER} />}
+      </div>
+    }
+    {/*{post.photos.length === 4 &&
+    post.photos.map((photo, photoIndex) =>
+      <Link key={`${index}${photoIndex}`} to={`/gallery/${index}`}>
+        <Picture
+          style={{
+            paddingBottom: imageRatio * containerWidth / 2,
+          }}
+          src={photo.alt_sizes[1].url}
+        />
+      </Link>
      )
-    }
-    {post.summary &&
-      <figcaption>{post.summary}</figcaption>
-    }
-    {!!post.tags.length &&
-      <figcaption>
-        {post.tags.map((tag, tagIndex) =>
-          <a key={tagIndex} href={tag}>{tag}</a>
-        )}
-      </figcaption>
-    }
+    }*/}
+    <figcaption>
+      <div style={DATE_STYLE}>
+        <div>
+          {fecha.format(new Date(post.date), 'MMM DD')}
+        </div>
+        <div>
+          <a
+            download={`${post.timestamp}.jpg`}
+            href={post.photos[0].original_size.url}
+          >
+            Download
+          </a>
+        </div>
+      </div>
+
+      {post.summary &&
+        post.summary
+      }
+      {!!post.tags.length &&
+        <div>
+          {post.tags.map((tag, tagIndex) =>
+
+            <Link key={tagIndex} to={`/archive/tag/${tag}`}>#{tag}</Link>
+          )}
+
+        </div>
+      }
+    </figcaption>
   </div>
 );
 
@@ -78,4 +107,4 @@ Post.propTypes = {
   index: pt.number.isRequired
 };
 
-export default Post;
+export default radium(Post);

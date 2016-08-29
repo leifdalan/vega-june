@@ -1,20 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Alert from 'react-bootstrap/lib/Alert';
 import throttle from 'lodash/throttle';
 import { Link } from 'react-router';
 import isBoolean from 'lodash/isBoolean';
-
+import Helmet from 'react-helmet';
+import config from '../../../config/default';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 // import Helmet from 'react-helmet';
-import {
-  isLoaded as isInfoLoaded,
-  load as loadInfo
-} from 'redux/modules/info';
 import {
   isLoaded as isAuthLoaded,
   load as loadAuth
 } from 'redux/modules/auth';
-import { Notifs } from 'components';
 import {
   mapStateToProps,
   boundActions,
@@ -24,11 +20,9 @@ import {
 import { asyncConnect } from 'redux-async-connect';
 import Radium from 'radium';
 import {
-  NOTIFS,
   APP_CONTENT,
   APP_CONTAINER_STYLE,
 } from './App.styles';
-// import 'react-html5video/dist/ReactHtml5Video.css';
 
 @Radium
 @asyncConnect([{
@@ -50,24 +44,22 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.props.setBrowser();
-    window.addEventListener('resize', throttle(this.props.setWindow, 250));
-    window.addEventListener('scroll', throttle(this.props.setScroll, 250));
-    this.props.setWindow();
-    this.props.setScroll();
+    const {
+      setWindow,
+      setScroll,
+      setBrowser
+    } = this.props;
+    setBrowser();
+    window.addEventListener('resize', throttle(setWindow, 250));
+    window.addEventListener('scroll', throttle(setScroll, 250));
+    setWindow();
+    setScroll();
   }
-
-  handleLogout = (event) => {
-    event.preventDefault();
-    this.props.logout();
-  };
 
   render() {
     const {
-      handleLogout,
       props: {
-        notifs,
-        // logout,
+        logout,
         user,
         location: {
           pathname
@@ -86,27 +78,27 @@ export default class App extends Component {
         ref="appContainer"
         id="outer-container"
       >
-
+        <Helmet {...config.app.head} />
         {sidebar}
-        {/* <Helmet {...config.app.head} />*/}
         {isHome ?
           <Link to="/archive">ARCHIVE</Link>
           :
           <Link to="/">HOME</Link>
         }
-        <button onClick={handleLogout}>logout</button>
-        {isBoolean(pageLoaded) && !pageLoaded && 'loading...'}
+        {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}
+        >
+
+          {(isBoolean(pageLoaded) && !pageLoaded) ? <h1>loading</h1> : <span />}
+        </CSSTransitionGroup>
+
         <main
           id="page-wrap"
           style={APP_CONTENT}
         >
-          {notifs.global && <div className="container">
-            <Notifs
-              style={NOTIFS}
-              namespace="global"
-              NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
-            />
-          </div>}
           {user && children}
           {user && content}
         </main>

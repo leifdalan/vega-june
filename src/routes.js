@@ -16,13 +16,8 @@ export default store => {
       }
     } = store.getState();
 
-    console.error('user in checkAuth', store.getState());
     if (!!user === !logged) replace('/');
     if (!user) {
-      store.dispatch({
-        type: 'REDIRECT_BACK',
-        payload: pathname
-      });
       replace(`/login?r=${pathname}`);
     }
     cb();
