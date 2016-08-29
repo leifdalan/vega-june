@@ -32,11 +32,10 @@ export default function clientMiddleware(client) {
       //   console.error('%c its cached!!!', 'font-size: 56px');
       //
       // }
-    }
+
 
     const actionPromise = promise(client);
-    actionPromise.then(
-      // (result) => {
+    actionPromise.then((result) => {
       //   if (cache) {
       //     next({
       //       type: ADD_CACHE,
