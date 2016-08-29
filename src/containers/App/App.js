@@ -86,7 +86,7 @@ export default class App extends Component {
           <div
             style={{
               ...MENU_LINK_STYLES,
-              float: 'right',
+              textAlign: 'right'
             }}
           >
             <Link to="/archive">ARCHIVE</Link>
@@ -98,7 +98,7 @@ export default class App extends Component {
           </div>
 
         }
-        {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
+        {/*{__DEVELOPMENT__ && <button onClick={logout}>logout</button>}*/}
         {/*<CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}

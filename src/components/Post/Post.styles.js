@@ -1,7 +1,7 @@
 export const POST_CONTAINER = {
   display: 'block',
   marginBottom: 70,
-  borderBottom: '1px solid rgba(155, 155, 155, 0.5)',
+  borderBottom: '1px solid rgba(155, 155, 155, 0.3)',
   paddingBottom: 50,
 }
 
