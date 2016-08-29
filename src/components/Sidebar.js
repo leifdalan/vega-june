@@ -9,6 +9,7 @@ import {
 } from 'containers/App/App.styles';
 import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router';
+import { MENU_LINK_STYLES } from '../containers/App/App.styles';
 
 @connect(createSelector(getTagsSelector, tags => ({ tags })), {})
 export default class Sidebar extends Component {
@@ -44,7 +45,13 @@ export default class Sidebar extends Component {
           >
           <ul>
             {tags.map(tag =>
-              <li key={tag}>
+              <li
+                key={tag}
+                style={{
+                  listStyle: 'none',
+                  ...MENU_LINK_STYLES,
+                }}
+              >
                 <Link
                   to={`/archive/tag/${tag}`}
                   onClick={toggleMenu}
@@ -57,7 +64,10 @@ export default class Sidebar extends Component {
         </Menu>
         <a
           onClick={toggleMenu}
-          style={{ float: 'right' }}
+          style={{
+            ...MENU_LINK_STYLES,
+            float: 'right'
+          }}
         >
           TAGS
         </a>

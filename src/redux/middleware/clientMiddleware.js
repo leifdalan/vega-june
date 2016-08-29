@@ -26,11 +26,9 @@ export default function clientMiddleware(client) {
     const cachedCall = cacheState[cache && cache.key];
     if (cachedCall) {
       const ttl = cachedCall || Infinity;
-      console.error('new Date() - cachedCall.time < ttl', new Date() - new Date(cachedCall.time), ttl);
       return Promise.resolve();
       if (new Date() - new Date(cachedCall.time) < ttl) {
         console.error('%c its cached!!!', 'font-size: 56px');
-
       }
     }
 
@@ -50,7 +48,6 @@ export default function clientMiddleware(client) {
       },
       (error) => next({ ...rest, error, type: FAILURE })
     ).catch((error) => {
-      console.error('MIDDLEWARE ERROR:', error);
       next({ ...rest, error, type: FAILURE });
     });
 

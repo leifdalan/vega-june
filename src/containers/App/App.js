@@ -22,6 +22,7 @@ import Radium from 'radium';
 import {
   APP_CONTENT,
   APP_CONTAINER_STYLE,
+  MENU_LINK_STYLES
 } from './App.styles';
 
 @Radium
@@ -80,10 +81,22 @@ export default class App extends Component {
       >
         <Helmet {...config.app.head} />
         {sidebar}
+
         {isHome ?
-          <Link to="/archive">ARCHIVE</Link>
+          <div
+            style={{
+              ...MENU_LINK_STYLES,
+              float: 'right',
+            }}
+          >
+            <Link to="/archive">ARCHIVE</Link>
+          </div>
+
           :
-          <Link to="/">HOME</Link>
+          <div style={MENU_LINK_STYLES}>
+            <Link to="/">HOME</Link>
+          </div>
+
         }
         {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
         {/*<CSSTransitionGroup

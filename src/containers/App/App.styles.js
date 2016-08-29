@@ -21,7 +21,7 @@ export const NOTIFS = {
 };
 
 export const APP_CONTAINER_STYLE = {
-  height: '100%'
+  height: '100%',
 };
 
 export const BURGER_STYLES = {
@@ -58,3 +58,9 @@ export const BURGER_STYLES = {
     background: 'rgba(0, 0, 0, 0.3)'
   }
 };
+
+export const MENU_LINK_STYLES = {
+  padding: 15,
+  fontSize: 18,
+  fontFamily: 'montserratregular'
+}

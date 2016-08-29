@@ -50,7 +50,6 @@ export default class Archive extends Component {
     const remainder = (browserWidth - 1) % 76;
     const rowAmount = Math.floor((browserWidth - 1) / 76);
     const imageSize = 76 + remainder / rowAmount;
-    console.error('remainder, rowAmount, imageSize', remainder, rowAmount, imageSize);
     return (
       <div
         style={OUTER_STYLE}

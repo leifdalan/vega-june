@@ -1,3 +1,4 @@
 export const CENTER_STYLE = {
-  textAlign: 'center'
+  textAlign: 'center',
+  marginBottom: 60
 };

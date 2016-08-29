@@ -162,7 +162,7 @@
     "pretty-error": "^2.0.0",
     "promisify-node": "^0.4.0",
     "purifycss-webpack-plugin": "^2.0.3",
-    "radium": "^0.17.1",
+    "radium": "^0.18.1",
     "react": "^15.3.0",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-update": "^15.3.0",

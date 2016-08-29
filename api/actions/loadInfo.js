@@ -30,7 +30,6 @@ export function loadAll(req) {
     const firstPromise = totalPosts
       ? Promise.resolve(totalPosts)
       : new Promise((resolve, reject) => {
-        console.error('gettingFirstPage');
         tumblrClient.blogPosts('vega-june.tumblr.com', {
           limit: 20,
         }, (err, data) => {
@@ -39,10 +38,7 @@ export function loadAll(req) {
         });
       });
     firstPromise.then((promiseResponse) => {
-      console.error('promiseResponse', promiseResponse);
       const pagesNeeded = Math.floor(promiseResponse / 20);
-      console.error('pagesNeeded', pagesNeeded);
-      console.error('pages', pages);
       const allPagesNeededFetch = without(range(pagesNeeded), ...pages);
       return Promise.all(
         allPagesNeededFetch.reduce((out, page) => [
