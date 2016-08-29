@@ -86,14 +86,14 @@ export default class App extends Component {
           <Link to="/">HOME</Link>
         }
         {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
-        <CSSTransitionGroup
+        {/*<CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}
         >
 
           {(isBoolean(pageLoaded) && !pageLoaded) ? <h1>loading</h1> : <span />}
-        </CSSTransitionGroup>
+        </CSSTransitionGroup>*/}
 
         <main
           id="page-wrap"
