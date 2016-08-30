@@ -68,7 +68,14 @@ export default class Home extends Component {
     if (!isLoading) loadInfo(nextPage);
   }
 
-  loadingSpinner = () => <div>Loading...</div>
+  loadingSpinner = () => (
+    <h1 style={{
+        letterSpacing: 4,
+        textAlign: 'center'
+      }}>
+      LOADING...
+    </h1>
+  )
 
   containerRef = el => this.container = el // eslint-disable-line no-return-assign
 

@@ -98,7 +98,7 @@ export default class App extends Component {
           </div>
 
         }
-        {/*{__DEVELOPMENT__ && <button onClick={logout}>logout</button>}*/}
+        {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
         {/*<CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}

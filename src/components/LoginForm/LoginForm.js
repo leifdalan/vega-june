@@ -72,6 +72,11 @@ export default class LoginForm extends Component {
             width: '100%'
           }}
         >
+          <div>
+            <em style={{fontWeight: 'normal'}}>
+              (Password is the same as before)
+            </em>
+          </div>
           <input
             type="checkbox"
             checked={showPassword}
@@ -80,6 +85,7 @@ export default class LoginForm extends Component {
               marginRight: 10
             }}
           />
+
         <span style={{
             fontWeight: 'normal'
           }}>Show password</span>
