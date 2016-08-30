@@ -16,5 +16,9 @@ module.exports = {
   password: 'PASSWORD',
   redisDb: 'REDIS_DB',
   redisPass: 'REDIS_PASS',
-  redisUrl: 'REDIS_URL'
+  redisUrl: 'REDIS_URL',
+  awsKey: 'AWS_KEY',
+  awsSecret: 'AWS_SECRET',
+  awsBucket: 'AWS_BUCKET',
+  publicAssetPath: 'PUBLIC_ASSET_PATH'
 };

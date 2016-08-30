@@ -13,6 +13,9 @@ var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+var S3Plugin = require('webpack-s3-plugin');
+var CompressionPlugin = require("compression-webpack-plugin");
+var config = require('config');
 
 module.exports = {
   devtool: 'source-map',
@@ -28,7 +31,8 @@ module.exports = {
     path: assetsPath,
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
-    publicPath: '/dist/'
+    publicPath: config.publicAssetPath,
+    // publicPath: '/dist/'
   },
   module: {
     loaders: [
@@ -98,6 +102,45 @@ module.exports = {
       },
       output: {comments: false},
       comments: false
+    }),
+    new CompressionPlugin({
+            asset: "[path][query]",
+            algorithm: "gzip",
+            test: /\.js$|\.css$|\.ttf$|\.eot$|\.svg$/,
+            threshold: 10240,
+            minRatio: 0.8
+        }),
+    new S3Plugin({
+      // Only upload css and js
+      include: /.*\.(css|js|woff|woff2|ttf|eot|svg)/,
+      directory: assetsPath,
+      // s3Options are required
+      s3Options: {
+        accessKeyId: config.awsKey,
+        secretAccessKey: config.awsSecret,
+      },
+      s3UploadOptions: {
+        Bucket: config.awsBucket,
+        // ContentType: function(fileName) {
+        //   console.error('fileName', fileName);
+        //   if (/\.js/.test(fileName))
+        //     return 'application/javascript'
+        //   else if (/\.css/.test(fileName))
+        //     return 'text/css'
+        //   else if (/\.woff/.test(fileName))
+        //     return 'application/font-woff'
+        //   else if (/\.woff2/.test(fileName))
+        //     return 'application/font-woff'
+        //   else if (/\.ttf/.test(fileName))
+        //     return 'font/ttf'
+        //   else if (/\.svg/.test(fileName))
+        //     return 'image/svg+xml'
+        // },
+        ContentEncoding: function(fileName) {
+          if (/.*\.(css|js|ttf|eot|svg)/.test(fileName))
+            return 'gzip'
+        }
+      }
     }),
 
     webpackIsomorphicToolsPlugin
