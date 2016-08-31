@@ -16,6 +16,7 @@ var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./w
 var S3Plugin = require('webpack-s3-plugin');
 var CompressionPlugin = require("compression-webpack-plugin");
 var config = require('config');
+var Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -103,16 +104,17 @@ module.exports = {
       output: {comments: false},
       comments: false
     }),
+    new Visualizer(),
     new CompressionPlugin({
-            asset: "[path][query]",
-            algorithm: "gzip",
-            test: /\.js$|\.css$|\.ttf$|\.eot$|\.svg$/,
-            threshold: 10240,
-            minRatio: 0.8
-        }),
+      asset: "[path][query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.ttf$|\.eot$|\.svg$/,
+      threshold: 10240,
+      minRatio: 0.8
+    }),
     new S3Plugin({
       // Only upload css and js
-      include: /.*\.(css|js|woff|woff2|ttf|eot|svg)/,
+      include: /.*\.(css|js|woff|woff2|ttf|eot|svg|html)/,
       directory: assetsPath,
       // s3Options are required
       s3Options: {
