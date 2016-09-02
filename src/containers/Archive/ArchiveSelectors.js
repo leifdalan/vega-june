@@ -4,6 +4,7 @@ import {
   getPostsByTagSelector,
   getTagsSelector,
   getDataSelector,
+  getPostsByMonthSelector,
 } from 'redux/modules/info';
 import {
   getBrowserDimensionSelector
@@ -14,17 +15,20 @@ export const mapStateToProps = createSelector(
   getPostsByTagSelector,
   getTagsSelector,
   getDataSelector,
-  getBrowserDimensionSelector, (
+  getBrowserDimensionSelector,
+  getPostsByMonthSelector, (
     posts,
     postsByTag,
     tags,
     postsById,
-    browserWidth
+    browserWidth,
+    postsByMonth,
   ) => ({
     posts,
     postsByTag,
     tags,
     postsById,
-    browserWidth
+    browserWidth,
+    postsByMonth,
   })
 );

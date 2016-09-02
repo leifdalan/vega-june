@@ -9,13 +9,13 @@ import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import last from 'lodash/last';
 import filter from 'lodash/filter';
+import fecha from 'fecha';
 export const LOAD = 'redux-example/LOAD';
 export const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
 export const LOAD_FAIL = 'redux-example/LOAD_FAIL';
 export const LOAD_ALL = 'redux-example/LOAD_ALL';
 export const LOAD_ALL_SUCCESS = 'redux-example/LOAD_ALL_SUCCESS';
 export const LOAD_ALL_FAIL = 'redux-example/LOAD_ALL_FAIL';
-
 
 const initialState = {
   loading: false,
@@ -126,6 +126,18 @@ export const getPagesSelector = createSelector(
 export const getPostsByDateSelector = createSelector(
   getDataSelector,
   fOrderBy('date', 'desc')
+);
+
+export const getPostsByMonthSelector = createSelector(
+  getPostsByDateSelector,
+  posts => reduce(posts, (out, post) => {
+    console.error('post, new Date(post.timestamp', post.date, new Date(post.date).getMonth());
+    const month = new Date(post.date).getMonth();
+    return {
+      ...out,
+      [month]: out[month] ? out[month].concat(post) : [post]
+    }
+  }, {})
 );
 
 export const getPhotoPostsByDateSelector = createSelector(
