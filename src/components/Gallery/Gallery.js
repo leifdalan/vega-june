@@ -9,6 +9,7 @@ import {
   IMG_STYLES,
   IMG_CONTAINER_STYLES,
 } from './Gallery.styles';
+import Swipeable from 'react-swipeable';
 
 @withRouter
 @connect(mapStateToProps, {})
@@ -21,10 +22,27 @@ export default class Gallery extends Component {
     router: pt.object.isRequired,
   }
 
+  state = {
+    left: 0
+  }
+
   handleRequestClose = () => this.props.router.goBack()
+
+  handleSwipingLeft = (e, abs) => {
+    console.error('e', abs);
+    this.setState({
+      left: abs
+    })
+  }
+
+  handleSwipedLeft = (a, b, c, d) => {
+    console.log(a,b,c,d)
+  }
 
   render() {
     const {
+      handleSwipingLeft,
+      handleSwipedLeft,
       handleRequestClose,
       props: {
         params: {
@@ -39,14 +57,52 @@ export default class Gallery extends Component {
         onRequestClose={handleRequestClose}
         style={MODAL_STYLES}
       >
-        <figure style={IMG_CONTAINER_STYLES}>
-          <img
-            src={slides[index]}
-            alt={'something'}
-            style={IMG_STYLES}
-            onClick={handleRequestClose}
-          />
-        </figure>
+        <Swipeable
+          onSwipingLeft={handleSwipingLeft}
+          onSwipedLeft={handleSwipedLeft}
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%'
+          }}
+        >
+          <figure style={IMG_CONTAINER_STYLES}>
+            <img
+              src={slides[index-1]}
+              alt={'something'}
+              style={{
+                ...IMG_STYLES,
+                left: -this.state.left
+              }}
+              onClick={handleRequestClose}
+              />
+          </figure>
+
+          <figure style={IMG_CONTAINER_STYLES}>
+            <img
+              src={slides[index]}
+              alt={'something'}
+              style={{
+                ...IMG_STYLES,
+                left: -this.state.left
+              }}
+              onClick={handleRequestClose}
+              />
+          </figure>
+
+          <figure style={IMG_CONTAINER_STYLES}>
+            <img
+              src={slides[index + 1]}
+              alt={'something'}
+              style={{
+                ...IMG_STYLES,
+                left: -this.state.left
+              }}
+              onClick={handleRequestClose}
+              />
+          </figure>
+
+        </Swipeable>
 
       </Modal>
 

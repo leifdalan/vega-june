@@ -9,7 +9,6 @@ import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import last from 'lodash/last';
 import filter from 'lodash/filter';
-import fecha from 'fecha';
 export const LOAD = 'redux-example/LOAD';
 export const LOAD_SUCCESS = 'redux-example/LOAD_SUCCESS';
 export const LOAD_FAIL = 'redux-example/LOAD_FAIL';
@@ -134,12 +133,11 @@ export const getPostsByDateSelector = createSelector(
 export const getPostsByMonthSelector = createSelector(
   getPostsByDateSelector,
   posts => reduce(posts, (out, post) => {
-    console.error('post, new Date(post.timestamp', post.date, new Date(post.date).getMonth());
     const month = new Date(post.date).getMonth();
     return {
       ...out,
       [month]: out[month] ? out[month].concat(post) : [post]
-    }
+    };
   }, {})
 );
 
@@ -218,7 +216,6 @@ export function loadRemaining() {
   return (dispatch, getState) => {
     const state = getState();
     const pages = Object.keys(getPagesSelector(state));
-    const data = getDataSelector(state);
     const totalPosts = state.info.blog.total_posts;
     if (pages.length === totalPosts % 20 - 1) return;
 

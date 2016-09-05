@@ -27,7 +27,9 @@ export const MODAL_STYLES = {
 export const IMG_CONTAINER_STYLES = {
   width: '100%',
   height: '100%',
-  position: 'relative',
+  position: 'absolute',
+  top: 0,
+  left: 0,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -35,5 +37,6 @@ export const IMG_CONTAINER_STYLES = {
 
 export const IMG_STYLES = {
   maxHeight: '100%',
-  maxWidth: '100%'
+  maxWidth: '100%',
+  position: 'relative'
 };
