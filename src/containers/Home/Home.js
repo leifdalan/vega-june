@@ -142,14 +142,11 @@ export default class Home extends Component {
       postElements: [],
       elementHeights: []
     });
-    const Scroller = {
-      element: __CLIENT__ ? Infinite : 'div'
-    };
 
-    let Feed;
+    let feed;
 
     if (__CLIENT__) {
-      Feed = (
+      feed = (
         <Infinite
           useWindowAsScrollContainer
           elementHeight={elementHeights}
@@ -158,13 +155,13 @@ export default class Home extends Component {
         >
           {postElements}
         </Infinite>
-      )
+      );
     } else {
-      Feed = (
+      feed = (
         <div>
           {postElements.slice(0, 20)}
         </div>
-      )
+      );
     }
     return (
       <div
@@ -181,7 +178,7 @@ export default class Home extends Component {
         <div>
           <h1 style={CENTER_STYLE}>VEGA JUNE</h1>
           <p style={CENTER_STYLE}>I'm a baby</p>
-          {Feed}
+          {feed}
           {isLoading && loadingSpinner()}
 
           {/* This is for the gallery */}

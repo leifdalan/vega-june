@@ -102,7 +102,7 @@ export function fetchAllPostsFromTumblr(req) {
         });
       });
     firstPromise.then((promiseResponse) => {
-      const pagesNeeded = Math.floor(promiseResponse / 20);
+      const pagesNeeded = Math.floor(promiseResponse / 20 + 1);
       const allPagesNeededFetch = without(range(pagesNeeded), ...pages);
       return Promise.all(
         allPagesNeededFetch.reduce((out, page) => [
