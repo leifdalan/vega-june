@@ -16,6 +16,9 @@ export const LOAD_FAIL = 'redux-example/LOAD_FAIL';
 export const LOAD_ALL = 'redux-example/LOAD_ALL';
 export const LOAD_ALL_SUCCESS = 'redux-example/LOAD_ALL_SUCCESS';
 export const LOAD_ALL_FAIL = 'redux-example/LOAD_ALL_FAIL';
+export const UPDATE_TUMBLR = 'redux-example/UPDATE_TUMBLR';
+export const UPDATE_TUMBLR_SUCCESS = 'redux-example/UPDATE_TUMBLR_SUCCESS';
+export const UPDATE_TUMBLR_FAIL = 'redux-example/UPDATE_TUMBLR_FAIL';
 
 const initialState = {
   loading: false,
@@ -199,6 +202,17 @@ export const getTagsSelector = createSelector(
   getPostsByTagSelector,
   fKeys
 );
+
+export function updateTumblr() {
+  return {
+    types: [
+      UPDATE_TUMBLR,
+      UPDATE_TUMBLR_SUCCESS,
+      UPDATE_TUMBLR_FAIL
+    ],
+    promise: client => client.get('/fetchAllPostsFromTumblr')
+  };
+}
 
 export function loadRemaining() {
   return (dispatch, getState) => {

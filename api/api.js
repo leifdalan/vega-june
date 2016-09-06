@@ -15,6 +15,7 @@ import * as helpers from './helpers';
 import connectRedis from 'connect-redis';
 // const { auth } = helpers;
 import redis from 'redis';
+import cron from './cron';
 const RedisStore = connectRedis(session);
 const pretty = new PrettyError();
 const app = express();

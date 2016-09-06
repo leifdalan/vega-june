@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
 import Helmet from 'react-helmet';
 import last from 'lodash/last';
-import {
-  loadRemaining,
-} from 'redux/modules/info';
 import { mapStateToProps } from './ArchiveSelectors';
+import { loadRemaining } from 'redux/modules/info';
 import {
   OUTER_STYLE,
   HEADER_STYLE,
@@ -29,9 +27,7 @@ const MONTH_MAP = {
   10: 'November',
   11: 'December',
 };
-
 @asyncConnect([{
-  deferred: __CLIENT__,
   promise: ({ store: { dispatch } }) => dispatch(loadRemaining()),
 }])
 @connect(mapStateToProps, {})
@@ -51,9 +47,11 @@ export default class Archive extends Component {
     const {
       props: {
         params: { id: tagParam },
-        browserWidth
+        browserWidth,
+        posts: allPosts,
       }
     } = this;
+
     const link = tagParam
       ? `/archive/tag/${tagParam}/gallery/`
       : '/archive/gallery/';
@@ -79,7 +77,7 @@ export default class Archive extends Component {
             <Link
               key={`${index}-${photoIndex}`}
               to={`${link}${index}`}
-              >
+            >
 
               <div
                 style={{
@@ -93,7 +91,7 @@ export default class Archive extends Component {
                 <Picture
                   src={last(photo.alt_sizes).url}
                   ratio={1}
-                  />
+                />
               </div>
             </Link>
           )
@@ -113,6 +111,12 @@ export default class Archive extends Component {
       postsById,
       children
     } = this.props;
+
+
+    const galleryPosts = tagParam
+      ? postsByTag[tagParam].map(postId => postsById[postId])
+      : posts;
+
     return (
       <div
         style={OUTER_STYLE}
@@ -126,7 +130,7 @@ export default class Archive extends Component {
         >
           <Helmet title="Archive" />
           {tagParam
-            ? this.renderPosts(postsByTag[tagParam].map(postId => postsById[postId]))
+            ? this.renderPosts(galleryPosts)
             : Object.keys(postsByMonth).reverse().map((monthKey) => (
               <div key={monthKey} style={MONTH_STYLE}>
                 <h1 style={HEADER_STYLE}>{MONTH_MAP[monthKey]}</h1>
@@ -135,7 +139,7 @@ export default class Archive extends Component {
             ))
           }
           {children && React.cloneElement(children, {
-            slides: posts.map(post => post.photos[0].original_size.url)
+            slides: galleryPosts.map(post => post.photos[0].original_size.url)
           })}
 
         </main>

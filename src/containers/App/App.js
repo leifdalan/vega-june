@@ -5,6 +5,9 @@ import { Link } from 'react-router';
 import isBoolean from 'lodash/isBoolean';
 import Helmet from 'react-helmet';
 import config from '../../../config/default';
+import {
+  loadRemaining,
+} from 'redux/modules/info';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 // import Helmet from 'react-helmet';
 import {
@@ -29,7 +32,6 @@ import {
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
-
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
     }

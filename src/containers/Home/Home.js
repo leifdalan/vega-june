@@ -22,7 +22,7 @@ import {
 import VideoPost from 'components/VideoPost/VideoPost';
 
 @asyncConnect([{
-  promise: ({ store: { dispatch } }) => dispatch(actions.loadInfo())
+  promise: ({ store: { dispatch } }) => dispatch(actions.loadRemaining()),
 }])
 @connect(mapStateToProps, actions)
 export default class Home extends Component {

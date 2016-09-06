@@ -9,6 +9,7 @@ import {
   getDataSelector,
   getLoadingSelector,
   load as loadInfo,
+  loadRemaining,
 } from 'redux/modules/info';
 import {
   getDistanceFromBottomSelector,
@@ -50,7 +51,7 @@ export const mapStateToProps = createSelector(
 );
 
 export const actions = {
-  loadInfo,
+  loadRemaining,
   setWindow,
   setContainerWidth
 };
