@@ -2,7 +2,7 @@ import { fetchAllPostsFromTumblr } from './actions';
 import { CronJob } from 'cron';
 
 const job = new CronJob(
-  '* */5 * * * *',
+  '0 */5 * * * *',
   () => {
     console.log('running job:');
     fetchAllPostsFromTumblr().then(() => {
