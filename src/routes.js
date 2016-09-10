@@ -137,25 +137,31 @@ export default store => {
   // };
 // };
 //
-  return <Route path="/" component={require('./containers/App/App')}>
-    {/* Home (main) route */}
-    <IndexRoute onEnter={requireLogin} component={require('./containers/Home/Home')} />
-    <Route onEnter={requireLogin} path="gallery" component={require('./containers/Home/Home')}>
-      <Route path=":index" component={require('./components/Gallery/Gallery')} />
-    </Route>
-    <Route onEnter={requireLogin} path="tumblrize" component={require('./containers/Tumblrize/Tumblrize')} />
-    <Route onEnter={requireLogin} path="/archive" components={{
-        content: require('./containers/Archive/Archive'),
-        sidebar: require('./components/Sidebar')
-      }}>
-      <Route path="tag/:id">
+  return (
+    <Route path="/" component={require('./containers/App/App')}>
+      {/* Home (main) route */}
+      <IndexRoute onEnter={requireLogin} component={require('./containers/Home/Home')} />
+      <Route onEnter={requireLogin} path="gallery" component={require('./containers/Home/Home')}>
+        <Route path=":index" component={require('./components/Gallery/Gallery')} />
+      </Route>
+      <Route onEnter={requireLogin} path="tumblrize" component={require('./containers/Tumblrize/Tumblrize')} />
+      <Route
+        onEnter={requireLogin}
+        path="/archive"
+        components={{
+          content: require('./containers/Archive/Archive'),
+          sidebar: require('./components/Sidebar')
+        }}
+      >
+        <Route path="tag/:id">
+          <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
+        </Route>
         <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
       </Route>
-      <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
-    </Route>
-    <Route path="login" component={require('./containers/Login/Login')} />
+      <Route path="login" component={require('./containers/Login/Login')} />
 
-    {/* Routes disallow login */}
-    <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
-  </Route>
+      {/* Routes disallow login */}
+      <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+    </Route>
+  );
 };

@@ -20,5 +20,7 @@ module.exports = {
   awsKey: 'AWS_KEY',
   awsSecret: 'AWS_SECRET',
   awsBucket: 'AWS_BUCKET',
-  publicAssetPath: 'PUBLIC_ASSET_PATH'
+  publicAssetPath: 'PUBLIC_ASSET_PATH',
+  vimeoClientId: 'VIMEO_CLIENT_ID',
+  vimeoClientSecret: 'VIMEO_CLIENT_SECRET'
 };

@@ -6,48 +6,46 @@ import toNumber from 'lodash/toNumber';
 import { redisClient } from '../api';
 // import redis from 'redis';
 
-
-
-function getBlogPostsPromise({ limit = 20, offset }) {
-  return new Promise((resolve, reject) => {
-    tumblrClient.blogPosts('vega-june.tumblr.com', {
-      limit,
-      offset: offset * 20,
-    }, (err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
-}
-
-function getRedisMultiPromise(multi) {
-  return new Promise((resolve, reject) => {
-    multi.exec((err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
-}
-
-function superagentGetPromise(superAgent) {
-  return new Promise((resolve, reject) => {
-    superAgent.end((err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
-}
-
-function mapTumblrToIds(tumblrData) {
-  const multi = redisClient.multi();
-  const ids = map(tumblrData.posts, ({ id, type, photos, thumbnail_url }) => {
-    multi.get(id);
-    const url = type === 'video'
-      ? thumbnail_url
-      : photos[0].alt_sizes[5].url
-    return { id, url };
-  });
-}
+// function getBlogPostsPromise({ limit = 20, offset }) {
+//   return new Promise((resolve, reject) => {
+//     tumblrClient.blogPosts('vega-june.tumblr.com', {
+//       limit,
+//       offset: offset * 20,
+//     }, (err, data) => {
+//       if (err) reject(err);
+//       resolve(data);
+//     });
+//   });
+// }
+//
+// function getRedisMultiPromise(multi) {
+//   return new Promise((resolve, reject) => {
+//     multi.exec((err, data) => {
+//       if (err) reject(err);
+//       resolve(data);
+//     });
+//   });
+// }
+//
+// function superagentGetPromise(superAgent) {
+//   return new Promise((resolve, reject) => {
+//     superAgent.end((err, data) => {
+//       if (err) reject(err);
+//       resolve(data);
+//     });
+//   });
+// }
+//
+// function mapTumblrToIds(tumblrData) {
+//   const multi = redisClient.multi();
+//   const ids = map(tumblrData.posts, ({ id, type, photos, thumbnail_url }) => {
+//     multi.get(id);
+//     const url = type === 'video'
+//       ? thumbnail_url
+//       : photos[0].alt_sizes[5].url
+//     return { id, url };
+//   });
+// }
 
 
 export function loadInfo(req) {
@@ -66,21 +64,21 @@ export function loadInfo(req) {
 }
 
 export function loadAll(req) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     redisClient.get('latestTumblr', (err, data) => {
       if (data) {
-        console.log('resolving data')
-        return resolve(JSON.parse(data))
+        console.log('resolving data');
+        return resolve(JSON.parse(data));
       }
-      fetchAllPostsFromTumblr(req).then((tumblrData, tumblrErr) => {
+      fetchAllPostsFromTumblr(req).then((tumblrData) => {
         redisClient.set('latestTumblr', JSON.stringify(tumblrData), (setErr, setData) => {
           console.log('setData', setData);
           resolve(tumblrData);
         });
 
       });
-    })
-  })
+    });
+  });
 }
 
 export function fetchAllPostsFromTumblr(req) {

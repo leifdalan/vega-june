@@ -33,10 +33,66 @@ export const IMG_CONTAINER_STYLES = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  perspective: '1000px',
+  transformOrigin: 'left',
+  backfaceVisbility: 'none'
 };
 
 export const IMG_STYLES = {
   maxHeight: '100%',
   maxWidth: '100%',
-  position: 'relative'
+  position: 'relative',
+  transformOrigin: 'left center 0px',
+  perspective: '1000px',
+};
+
+export const IMG_TRANSFORM_NEXT = {
+  transitionProperty: 'transform3d',
+  transitionDuration: '1s',
+  transform3d: 'rotateY(-90deg)'
+};
+
+export const FIGURE_SWIPELEFT = {
+  transitionProperty: 'transform',
+  transitionDuration: '1s',
+  transform: 'rotateY(-90deg)'
+}
+
+export const NEXT_IMG_CONTAINER = {
+  display: 'inherit',
+};
+
+export const NEXT_IMG_CONTAINER_TRANSITION = {
+  transitionProperty: 'transform',
+  transitionDuration: '1s',
+  transform: 'scale(1)'
+}
+
+export const PREV_IMG_CONTAINER_TRANSITION = {
+  transitionProperty: 'transform',
+  transitionDuration: '1s',
+  transform: 'rotateY(0deg)'
+}
+
+export const GO_TO_THIRD_TRANSITION = {
+  transitionProperty: 'transform',
+  transitionDuration: '1s',
+  transform: 'rotateY(90deg)',
+};
+
+export const TRANSITION_STYLES = {
+  transitionProperty: 'transform',
+  transitionDuration: '.1s',
+}
+
+export const PREV_DEFAULT = {
+  transform: 'rotateY(-110deg)',
+};
+
+export const CURRENT_DEFAULT = {
+  transform: 'rotateY(0deg)'
+};
+
+export const NEXT_DEFAULT = {
+  transform: 'rotateY(110deg)',
 };
