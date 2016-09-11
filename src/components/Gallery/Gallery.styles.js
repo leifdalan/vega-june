@@ -61,7 +61,7 @@ export const FIGURE_SWIPELEFT = {
   transitionProperty: 'transform',
   transitionDuration: '1s',
   transform: 'rotateY(-90deg)'
-}
+};
 
 export const NEXT_IMG_CONTAINER = {
   display: 'inherit',
@@ -96,3 +96,24 @@ export const CURRENT_DEFAULT = {
 export const NEXT_DEFAULT = {
   transform: 'rotateY(110deg)',
 };
+
+export const SUMMARY_STYLES = {
+  bottom: 30,
+  textAlign: 'center',
+  background: 'rgba(0,0,0, .6)',
+  color: 'white',
+  display: 'inline-block',
+  zIndex: 3,
+  padding: 10,
+  borderRadius: 10
+};
+
+export const SUMMARY_CONTAINER_STYLES = {
+  position: 'absolute',
+  bottom: 30,
+  zIndex: 3,
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+  display: 'flex'
+}

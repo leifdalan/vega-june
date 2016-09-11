@@ -145,6 +145,7 @@ export default class Archive extends Component {
                 url: post.photos[0].original_size.url,
                 ratio: post.photos[0].original_size.height / post.photos[0].original_size.width,
                 id: post.id,
+                summary: post.summary
               })
             )
           })}

@@ -12,6 +12,8 @@ import {
   PREV_DEFAULT,
   CURRENT_DEFAULT,
   NEXT_DEFAULT,
+  SUMMARY_STYLES,
+  SUMMARY_CONTAINER_STYLES
 } from './Gallery.styles';
 import Swipeable from 'react-swipeable';
 
@@ -163,23 +165,15 @@ export default class Gallery extends Component {
 
         break;
       default:
-        const transformOrigin = swipe > 0
-          ? 'left center 0px'
-          : 'center';
         firstSlideStyle = {
           zIndex: swipe < 0 ? 2 : 0,
           transform: `rotateY(${-110 + (-swipe / 2)}deg)`,
         };
         secondSlideStyle = {
-          transform: swipe < 0
-           ? `scale(${1 - (Math.abs(swipe) / 210)})`
-           : `rotateY(${-swipe / 2}deg)`,
-           transformOrigin
+          transform: `rotateY(${-swipe / 2}deg)`,
         };
         thirdSlideStyle = {
-          display: swipe < 0 ? 'none' : 'flex',
-          transform: `scale(${(Math.abs(swipe) / 210)})`,
-          transformOrigin: 'center'
+          transform: `rotateY(${110 + (-swipe / 2)}deg)`,
         };
         break;
       // default:
@@ -257,7 +251,13 @@ export default class Gallery extends Component {
               }}
 
             />
+
           </div>
+          {!swipe &&
+            <div style={SUMMARY_CONTAINER_STYLES}>
+              <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
+            </div>
+          }
 
           <Picture
             src={slides[preload1].url}
