@@ -39,9 +39,14 @@ export default class Gallery extends Component {
       goToNext: false,
       goToPrev: false,
       swipe: 0,
-      transitionDuration: 0.3,
+      transitionDuration: 0.5,
+      showSummary: false,
       index,
     };
+  }
+
+  componentDidMount() {
+    this.showSummary();
   }
 
   handleRequestClose = () => this.props.router.goBack()
@@ -50,6 +55,15 @@ export default class Gallery extends Component {
     this.setState({
       swipe: abs,
     });
+  }
+
+  showSummary = () => {
+    clearTimeout(this.summaryTimeout);
+    this.summaryTimeout = setTimeout(() => {
+      this.setState({
+        showSummary: true,
+      })
+    }, 800)
   }
 
   handleSwiped = (e, abs) => {
@@ -61,9 +75,11 @@ export default class Gallery extends Component {
     this.setState({
       swipe: 0
     });
+    clearTimeout(this.summaryTimeout);
     if (abs > 50) {
       this.setState({
         goToNext: true,
+        showSummary: false,
       });
       setTimeout(() => {
         const actualIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
@@ -71,10 +87,12 @@ export default class Gallery extends Component {
           goToNext: false,
           index: actualIndex
         });
+        this.showSummary();
       }, timeout);
     } else if (abs < -50) {
       this.setState({
         goToPrev: true,
+        showSummary: false,
       });
       setTimeout(() => {
         const actualIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
@@ -82,6 +100,7 @@ export default class Gallery extends Component {
           goToPrev: false,
           index: actualIndex
         });
+        this.showSummary();
       }, timeout);
     } else {
       this.setState({
@@ -110,6 +129,7 @@ export default class Gallery extends Component {
         goToNext,
         goToCurrent,
         transitionDuration,
+        showSummary,
       }
     } = this;
     let firstSlideStyle;
@@ -118,7 +138,7 @@ export default class Gallery extends Component {
     firstSlideStyle = secondSlideStyle = thirdSlideStyle = {};
     const TRANSITION_STYLES = {
       transitionProperty: 'transform',
-      transitionDuration
+      transitionDuration: `${transitionDuration}s`
     };
     switch (true) {
       case goToPrev:
@@ -253,7 +273,7 @@ export default class Gallery extends Component {
             />
 
           </div>
-          {!swipe &&
+          {showSummary && slides[index].summary &&
             <div style={SUMMARY_CONTAINER_STYLES}>
               <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
             </div>
