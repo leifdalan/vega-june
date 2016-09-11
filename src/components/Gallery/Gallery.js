@@ -63,7 +63,7 @@ export default class Gallery extends Component {
       this.setState({
         showSummary: true,
       });
-    }, 800);
+    }, 500);
   }
 
   handleSwiped = (e, abs) => {
