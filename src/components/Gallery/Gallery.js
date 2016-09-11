@@ -4,6 +4,7 @@ import { mapStateToProps } from 'containers/Archive/ArchiveSelectors';
 // import ReactSwipe from 'react-swipe';
 import Modal from 'react-modal';
 import { withRouter } from 'react-router';
+import { Picture } from 'components';
 import {
   MODAL_STYLES,
   IMG_STYLES,
@@ -190,26 +191,27 @@ export default class Gallery extends Component {
         thirdSlideStyle = {
           ...TRANSITION_STYLES,
           ...NEXT_DEFAULT,
-
         };
 
         break;
       default:
         firstSlideStyle = {
           zIndex: swipe < 0 ? 2 : 0,
-          transform: `rotateY(${-90 + (-swipe / 2)}deg)`,
+          transform: `rotateY(${-110 + (-swipe / 2)}deg)`,
         };
         secondSlideStyle = {
           transform: `rotateY(${-swipe / 2}deg)`,
         };
         thirdSlideStyle = {
-          transform: `rotateY(${90 + (-swipe / 2)}deg)`,
+          transform: `rotateY(${110 + (-swipe / 2)}deg)`,
         };
         break;
       // default:
       //   break;
 
     }
+    const prevIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
+    const nextIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
     return (
       <Modal
         isOpen
@@ -231,56 +233,56 @@ export default class Gallery extends Component {
             transformOrigin: 'left',
           }}
         >
-          <figure
+          <div
             style={{
               ...IMG_CONTAINER_STYLES,
               ...firstSlideStyle,
             }}
           >
-            <img
-              src={slides[index - 1 < 0 ? this.props.slides.length - 1 : index - 1]}
-              alt={'something'}
+            <Picture
+              src={slides[prevIndex].url}
+              ratio={slides[prevIndex].ratio}
               style={{
                 ...IMG_STYLES,
               }}
-              onClick={handleRequestClose}
-              />
-          </figure>
 
-          <figure
+            />
+          </div>
+
+          <div
             style={{
               ...IMG_CONTAINER_STYLES,
               zIndex: 1,
               ...secondSlideStyle,
             }}
+            onClick={handleRequestClose}
           >
 
-            <img
-              src={slides[index]}
-              alt={'something'}
+            <Picture
+              src={slides[index].url}
+              ratio={slides[index].ratio}
               style={{
                 ...IMG_STYLES,
               }}
-              onClick={handleRequestClose}
-              />
-          </figure>
+            />
+          </div>
 
-          <figure
+          <div
             style={{
               ...IMG_CONTAINER_STYLES,
               ...thirdSlideStyle,
             }}
           >
 
-            <img
-              src={slides[index + 1 === this.props.slides.length ? 0 : index + 1]}
-              alt={'something'}
+            <Picture
+              src={slides[nextIndex].url}
+              ratio={slides[nextIndex].ratio}
               style={{
                 ...IMG_STYLES,
               }}
-              onClick={handleRequestClose}
+
             />
-          </figure>
+          </div>
 
         </Swipeable>
 

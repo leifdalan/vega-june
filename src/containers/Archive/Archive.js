@@ -139,7 +139,13 @@ export default class Archive extends Component {
             ))
           }
           {children && React.cloneElement(children, {
-            slides: galleryPosts.map(post => post.photos[0].original_size.url)
+            slides: posts
+              .filter(post => post.type === 'photo')
+              .map(post => ({
+                url: post.photos[0].original_size.url,
+                ratio: post.photos[0].original_size.height / post.photos[0].original_size.width
+              })
+            )
           })}
 
         </main>
