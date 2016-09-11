@@ -61,19 +61,29 @@ export default class Picture extends Component {
           ...style,
         }}
         >
-        {isLoaded &&
-          <img
-            ref="img"
-            src={src}
-            alt={'balls'}
+          <div
             style={{
               width: '100%',
               display: 'block',
               position: 'absolute',
               height: '100%',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'opacity 0.3s ease-out'
             }}
-            />
-        }
+          >
+          {isLoaded &&
+            <img
+              ref="img"
+              src={src}
+              alt={'balls'}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+
+              />
+          }
+          </div>
       </figure>
     );
   }
