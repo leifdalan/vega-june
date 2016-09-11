@@ -211,7 +211,10 @@ export default class Gallery extends Component {
 
     }
     const prevIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
+    const prevPreload1 = prevIndex - 1 < 0 ? this.props.slides.length - 1 : prevIndex - 1;
     const nextIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
+    const preload1 = nextIndex + 1 === this.props.slides.length ? 0 : nextIndex + 1;
+    const preload2 = preload1 + 1 === this.props.slides.length ? 0 : preload1 + 1;
     return (
       <Modal
         isOpen
@@ -283,6 +286,34 @@ export default class Gallery extends Component {
 
             />
           </div>
+
+          <Picture
+            src={slides[preload1].url}
+            ratio={slides[preload1].ratio}
+            style={{
+              ...IMG_STYLES,
+              opacity: 0,
+            }}
+
+          />
+          <Picture
+            src={slides[preload2].url}
+            ratio={slides[preload2].ratio}
+            style={{
+              ...IMG_STYLES,
+              opacity: 0,
+            }}
+
+          />
+          <Picture
+            src={slides[prevPreload1].url}
+            ratio={slides[prevPreload1].ratio}
+            style={{
+              ...IMG_STYLES,
+              opacity: 0,
+            }}
+
+          />
 
         </Swipeable>
 
