@@ -21,7 +21,7 @@ const Post = ({ post, containerWidth, imageRatio, index }) => (
     style={POST_CONTAINER}
   >
     {post.photos.length === 1 &&
-      <Link key={index} to={`/gallery/${index}`}>
+      <Link key={index} to={`/gallery/${post.id}`}>
         <Picture
           src={post.photos[0].alt_sizes[1].url}
           ratio={imageRatio}

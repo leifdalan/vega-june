@@ -1,8 +1,8 @@
 import React, { Component, PropTypes as pt } from 'react';
 import { connect } from 'react-redux';
 import { mapStateToProps } from 'containers/Archive/ArchiveSelectors';
-// import ReactSwipe from 'react-swipe';
 import Modal from 'react-modal';
+import findIndex from 'lodash/findIndex';
 import { withRouter } from 'react-router';
 import { Picture } from 'components';
 import {
@@ -12,7 +12,6 @@ import {
   PREV_DEFAULT,
   CURRENT_DEFAULT,
   NEXT_DEFAULT,
-  TRANSITION_STYLES,
 } from './Gallery.styles';
 import Swipeable from 'react-swipeable';
 
@@ -30,46 +29,20 @@ export default class Gallery extends Component {
 
   constructor(...args) {
     super(...args);
+    const index = findIndex(this.props.slides, slide =>
+      parseInt(this.props.params.index, 10) === slide.id
+    );
     this.state = {
-      swipeLeft: 0,
-      swiperight: 0,
-      hasSwiped: false,
       goToCurrent: false,
       goToNext: false,
       goToPrev: false,
       swipe: 0,
-      index: parseInt(this.props.params.index, 10)
+      transitionDuration: 0.3,
+      index,
     };
   }
 
   handleRequestClose = () => this.props.router.goBack()
-
-  handleSwipingLeft = (e, abs) => {
-    this.setState({
-      swipeLeft: abs
-    });
-  }
-
-  handleSwipedLeft = (e, abs) => {
-    if (abs > 50) {
-      this.setState({
-        hasSwiped: true,
-      });
-    }
-  }
-  handleSwipingRight = (e, abs) => {
-    this.setState({
-      swipeRight: abs
-    });
-  }
-
-  handleSwipedRight = (e, abs) => {
-    if (abs > 50) {
-      this.setState({
-        hasSwiped: true,
-      });
-    }
-  }
 
   handleSwiping = (e, abs) => {
     this.setState({
@@ -78,51 +51,45 @@ export default class Gallery extends Component {
   }
 
   handleSwiped = (e, abs) => {
-    const { index } = this.state;
+    const {
+      index,
+      transitionDuration,
+    } = this.state;
+    const timeout = transitionDuration * 1000;
     this.setState({
       swipe: 0
     });
     if (abs > 50) {
       this.setState({
-        goToCurrent: false,
         goToNext: true,
-        goToPrev: false,
       });
       setTimeout(() => {
+        const actualIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
         this.setState({
-          goToCurrent: false,
           goToNext: false,
-          goToPrev: false,
-          index: index + 1 === this.props.slides.length ? 0 : index + 1
+          index: actualIndex
         });
-      }, 100);
+      }, timeout);
     } else if (abs < -50) {
       this.setState({
-        goToCurrent: false,
-        goToNext: false,
         goToPrev: true,
       });
       setTimeout(() => {
+        const actualIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
         this.setState({
-          goToCurrent: false,
-          goToNext: false,
           goToPrev: false,
-          index: index - 1 < 0 ? this.props.slides.length - 1 : index - 1
+          index: actualIndex
         });
-      }, 100);
+      }, timeout);
     } else {
       this.setState({
         goToCurrent: true,
-        goToNext: false,
-        goToPrev: false,
       });
       setTimeout(() => {
         this.setState({
           goToCurrent: false,
-          goToNext: false,
-          goToPrev: false,
         });
-      }, 100);
+      }, timeout);
     }
   }
 
@@ -130,10 +97,6 @@ export default class Gallery extends Component {
     const {
       handleSwiping,
       handleSwiped,
-      handleSwipingLeft,
-      handleSwipedLeft,
-      handleSwipingRight,
-      handleSwipedRight,
       handleRequestClose,
       props: {
         slides
@@ -144,12 +107,17 @@ export default class Gallery extends Component {
         goToPrev,
         goToNext,
         goToCurrent,
+        transitionDuration,
       }
     } = this;
     let firstSlideStyle;
     let secondSlideStyle;
     let thirdSlideStyle;
     firstSlideStyle = secondSlideStyle = thirdSlideStyle = {};
+    const TRANSITION_STYLES = {
+      transitionProperty: 'transform',
+      transitionDuration
+    };
     switch (true) {
       case goToPrev:
         firstSlideStyle = {
@@ -195,15 +163,23 @@ export default class Gallery extends Component {
 
         break;
       default:
+        const transformOrigin = swipe > 0
+          ? 'left center 0px'
+          : 'center';
         firstSlideStyle = {
           zIndex: swipe < 0 ? 2 : 0,
           transform: `rotateY(${-110 + (-swipe / 2)}deg)`,
         };
         secondSlideStyle = {
-          transform: `rotateY(${-swipe / 2}deg)`,
+          transform: swipe < 0
+           ? `scale(${1 - (Math.abs(swipe) / 210)})`
+           : `rotateY(${-swipe / 2}deg)`,
+           transformOrigin
         };
         thirdSlideStyle = {
-          transform: `rotateY(${110 + (-swipe / 2)}deg)`,
+          display: swipe < 0 ? 'none' : 'flex',
+          transform: `scale(${(Math.abs(swipe) / 210)})`,
+          transformOrigin: 'center'
         };
         break;
       // default:
@@ -224,10 +200,6 @@ export default class Gallery extends Component {
         <Swipeable
           onSwiping={handleSwiping}
           onSwiped={handleSwiped}
-          onSwipingLeft={handleSwipingLeft}
-          onSwipedLeft={handleSwipedLeft}
-          onSwipingRight={handleSwipingRight}
-          onSwipedRight={handleSwipedRight}
           style={{
             position: 'relative',
             width: '100%',
@@ -294,7 +266,6 @@ export default class Gallery extends Component {
               ...IMG_STYLES,
               opacity: 0,
             }}
-
           />
           <Picture
             src={slides[preload2].url}
@@ -302,8 +273,9 @@ export default class Gallery extends Component {
             style={{
               ...IMG_STYLES,
               opacity: 0,
+              height: 0,
+              width: 0,
             }}
-
           />
           <Picture
             src={slides[prevPreload1].url}
@@ -311,8 +283,9 @@ export default class Gallery extends Component {
             style={{
               ...IMG_STYLES,
               opacity: 0,
+              height: 0,
+              width: 0,
             }}
-
           />
 
         </Swipeable>

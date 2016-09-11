@@ -76,7 +76,7 @@ export default class Archive extends Component {
           post.photos && post.photos.map((photo, photoIndex) =>
             <Link
               key={`${index}-${photoIndex}`}
-              to={`${link}${index}`}
+              to={`${link}${post.id}`}
             >
 
               <div
@@ -139,11 +139,12 @@ export default class Archive extends Component {
             ))
           }
           {children && React.cloneElement(children, {
-            slides: posts
+            slides: galleryPosts
               .filter(post => post.type === 'photo')
               .map(post => ({
                 url: post.photos[0].original_size.url,
-                ratio: post.photos[0].original_size.height / post.photos[0].original_size.width
+                ratio: post.photos[0].original_size.height / post.photos[0].original_size.width,
+                id: post.id,
               })
             )
           })}

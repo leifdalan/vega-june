@@ -77,18 +77,13 @@ export const PREV_IMG_CONTAINER_TRANSITION = {
   transitionProperty: 'transform',
   transitionDuration: '1s',
   transform: 'rotateY(0deg)'
-}
+};
 
 export const GO_TO_THIRD_TRANSITION = {
   transitionProperty: 'transform',
   transitionDuration: '1s',
   transform: 'rotateY(90deg)',
 };
-
-export const TRANSITION_STYLES = {
-  transitionProperty: 'transform',
-  transitionDuration: '.1s',
-}
 
 export const PREV_DEFAULT = {
   transform: 'rotateY(-110deg)',

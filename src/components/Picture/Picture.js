@@ -18,18 +18,24 @@ export default class Picture extends Component {
     }
   }
 
-  loadSrc = (src) => {
-    console.log('loading src')
+  componentWillUnmount() {
+    this.image.onload = () => {};
+  }
+
+  onLoad = () => {
+    this.setState({
+      isLoaded: true,
+    });
+  }
+
+  loadSrc = src => {
     this.setState({
       isLoaded: false,
     });
     this.image = new Image();
     this.image.src = src;
-    this.image.onload = () => this.setState({
-      isLoaded: true,
-    });
+    this.image.onload = this.onLoad;
   }
-
 
   render() {
     const {

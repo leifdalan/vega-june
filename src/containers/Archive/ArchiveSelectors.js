@@ -16,13 +16,15 @@ export const mapStateToProps = createSelector(
   getTagsSelector,
   getDataSelector,
   getBrowserDimensionSelector,
-  getPostsByMonthSelector, (
+  getPostsByMonthSelector,
+  state => state.routing.locationBeforeTransitions, (
     posts,
     postsByTag,
     tags,
     postsById,
     browserWidth,
     postsByMonth,
+    location,
   ) => ({
     posts,
     postsByTag,
@@ -30,5 +32,6 @@ export const mapStateToProps = createSelector(
     postsById,
     browserWidth,
     postsByMonth,
+    location,
   })
 );
