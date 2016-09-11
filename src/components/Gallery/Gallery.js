@@ -39,7 +39,7 @@ export default class Gallery extends Component {
       goToNext: false,
       goToPrev: false,
       swipe: 0,
-      transitionDuration: 0.5,
+      transitionDuration: 0.3,
       showSummary: false,
       index,
     };
@@ -62,8 +62,8 @@ export default class Gallery extends Component {
     this.summaryTimeout = setTimeout(() => {
       this.setState({
         showSummary: true,
-      })
-    }, 800)
+      });
+    }, 800);
   }
 
   handleSwiped = (e, abs) => {
