@@ -273,11 +273,19 @@ export default class Gallery extends Component {
             />
 
           </div>
-          {showSummary && slides[index].summary &&
-            <div style={SUMMARY_CONTAINER_STYLES}>
+            <div
+              style={{
+                ...SUMMARY_CONTAINER_STYLES,
+                ...(showSummary && slides[index].summary) ? {
+                  opacity: 1,
+                  bottom: 30,
+                } : {
+                  opacity: 0,
+                  bottom: 10
+                }
+              }}>
               <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
             </div>
-          }
 
           <Picture
             src={slides[preload1].url}

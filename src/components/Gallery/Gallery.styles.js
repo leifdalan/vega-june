@@ -115,5 +115,6 @@ export const SUMMARY_CONTAINER_STYLES = {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
-  display: 'flex'
-}
+  display: 'flex',
+  transition: 'opacity 0.5s ease-out, bottom 0.5s ease-out'
+};
