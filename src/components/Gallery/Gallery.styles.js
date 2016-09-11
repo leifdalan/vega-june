@@ -1,3 +1,7 @@
+import {
+  BACKGROUND_PLACEHOLDER
+} from '../Picture/Picture.style';
+
 export const MODAL_STYLES = {
   overlay: {
     position: 'fixed',
@@ -39,6 +43,7 @@ export const IMG_CONTAINER_STYLES = {
 };
 
 export const IMG_STYLES = {
+  background: `rgba(255,255,255,.3) ${BACKGROUND_PLACEHOLDER.background}`,
   maxHeight: '100%',
   maxWidth: '100%',
   position: 'relative',
