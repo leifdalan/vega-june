@@ -52,6 +52,7 @@ export default class Gallery extends Component {
   handleRequestClose = () => this.props.router.goBack()
 
   handleSwiping = (e, abs) => {
+    e.preventDefault();
     this.setState({
       swipe: abs,
     });
