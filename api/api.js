@@ -37,6 +37,9 @@ app.use(session({
   secret: redisSecret,
   resave: true,
   saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 365
+  }
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
