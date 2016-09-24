@@ -13,7 +13,8 @@ import {
   CURRENT_DEFAULT,
   NEXT_DEFAULT,
   SUMMARY_STYLES,
-  SUMMARY_CONTAINER_STYLES
+  SUMMARY_CONTAINER_STYLES,
+  CLOSE_CONTAINER_STYLES
 } from './Gallery.styles';
 import Swipeable from 'react-swipeable';
 
@@ -40,16 +41,23 @@ export default class Gallery extends Component {
       goToPrev: false,
       swipe: 0,
       transitionDuration: 0.3,
-      showSummary: false,
+      showExtras: false,
       index,
     };
   }
 
   componentDidMount() {
-    this.showSummary();
+    this.showExtras();
   }
 
-  handleRequestClose = () => this.props.router.goBack()
+  handleRequestClose = () => {
+    console.error('this.props.router', this.props);
+    console.error('this.props.history', this.props.history);
+    const location = this.props.location.pathname;
+    console.error('location', location);
+    const base = location.split('gallery')[0];
+    this.props.router.push(base);
+  }
 
   handleSwiping = (e, abs) => {
     e.preventDefault();
@@ -58,11 +66,11 @@ export default class Gallery extends Component {
     });
   }
 
-  showSummary = () => {
+  showExtras = () => {
     clearTimeout(this.summaryTimeout);
     this.summaryTimeout = setTimeout(() => {
       this.setState({
-        showSummary: true,
+        showExtras: true,
       });
     }, 500);
   }
@@ -80,7 +88,7 @@ export default class Gallery extends Component {
     if (abs > 50) {
       this.setState({
         goToNext: true,
-        showSummary: false,
+        showExtras: false,
       });
       setTimeout(() => {
         const actualIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
@@ -88,12 +96,12 @@ export default class Gallery extends Component {
           goToNext: false,
           index: actualIndex
         });
-        this.showSummary();
+        this.showExtras();
       }, timeout);
     } else if (abs < -50) {
       this.setState({
         goToPrev: true,
-        showSummary: false,
+        showExtras: false,
       });
       setTimeout(() => {
         const actualIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
@@ -101,7 +109,7 @@ export default class Gallery extends Component {
           goToPrev: false,
           index: actualIndex
         });
-        this.showSummary();
+        this.showExtras();
       }, timeout);
     } else {
       this.setState({
@@ -130,7 +138,7 @@ export default class Gallery extends Component {
         goToNext,
         goToCurrent,
         transitionDuration,
-        showSummary,
+        showExtras,
       }
     } = this;
     let firstSlideStyle;
@@ -277,7 +285,7 @@ export default class Gallery extends Component {
             <div
               style={{
                 ...SUMMARY_CONTAINER_STYLES,
-                ...(showSummary && slides[index].summary) ? {
+                ...(showExtras && slides[index].summary) ? {
                   opacity: 1,
                   bottom: 30,
                 } : {
@@ -287,6 +295,22 @@ export default class Gallery extends Component {
               }}>
               <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
             </div>
+            <div
+              style={{
+                ...CLOSE_CONTAINER_STYLES,
+                ...(showExtras) ? {
+                  opacity: 1,
+                  right: 0,
+                } : {
+                  opacity: 0,
+                  right: -30
+                }
+              }}
+              onClick={handleRequestClose}
+            >
+              &#10005;
+            </div>
+
 
           <Picture
             src={slides[preload1].url}

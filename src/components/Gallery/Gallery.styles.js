@@ -118,3 +118,14 @@ export const SUMMARY_CONTAINER_STYLES = {
   display: 'flex',
   transition: 'opacity 0.4s ease-out, bottom 0.4s ease-out'
 };
+
+export const CLOSE_CONTAINER_STYLES = {
+  position: 'absolute',
+  zIndex: 3,
+  transition: 'opacity 0.4s ease-out, right 0.4s ease-out',
+  background: 'rgba(0,0,0, .6)',
+  color: 'white',
+  display: 'inline-block',
+  padding: 20,
+  cursor: 'pointer',
+};
