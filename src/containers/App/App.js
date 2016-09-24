@@ -50,13 +50,15 @@ export default class App extends Component {
     const {
       setWindow,
       setScroll,
-      setBrowser
+      setBrowser,
+      setTouch,
     } = this.props;
     setBrowser();
     window.addEventListener('resize', throttle(setWindow, 250));
     window.addEventListener('scroll', throttle(setScroll, 250));
     setWindow();
     setScroll();
+    setTouch();
   }
 
   render() {

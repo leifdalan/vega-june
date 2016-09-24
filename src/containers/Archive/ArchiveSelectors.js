@@ -7,7 +7,9 @@ import {
   getPostsByMonthSelector,
 } from 'redux/modules/info';
 import {
-  getBrowserDimensionSelector
+  getBrowserDimensionSelector,
+  getBrowserHeightSelector,
+  getTouchSelector,
 } from 'redux/modules/browser';
 
 export const mapStateToProps = createSelector(
@@ -16,22 +18,28 @@ export const mapStateToProps = createSelector(
   getTagsSelector,
   getDataSelector,
   getBrowserDimensionSelector,
+  getBrowserHeightSelector,
   getPostsByMonthSelector,
-  state => state.routing.locationBeforeTransitions, (
+  state => state.routing.locationBeforeTransitions,
+  getTouchSelector, (
     posts,
     postsByTag,
     tags,
     postsById,
     browserWidth,
+    browserHeight,
     postsByMonth,
     location,
+    hasTouch,
   ) => ({
     posts,
     postsByTag,
     tags,
     postsById,
     browserWidth,
+    browserHeight,
     postsByMonth,
     location,
+    hasTouch,
   })
 );

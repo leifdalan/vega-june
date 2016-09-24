@@ -5,6 +5,8 @@ import Modal from 'react-modal';
 import findIndex from 'lodash/findIndex';
 import { withRouter } from 'react-router';
 import { Picture } from 'components';
+import LeftArrow from 'components/svg/LeftArrow';
+import RightArrow from 'components/svg/RightArrow';
 import {
   MODAL_STYLES,
   IMG_STYLES,
@@ -48,13 +50,28 @@ export default class Gallery extends Component {
 
   componentDidMount() {
     this.showExtras();
+    window.addEventListener('keydown', this.handleKeyboard);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyboard);
+  }
+
+  handleKeyboard = (e) => {
+    switch (e.keyCode) {
+      case 37:
+        this.goToPrev();
+        break;
+      case 39:
+        this.goToNext();
+        break;
+      default:
+        break;
+    }
   }
 
   handleRequestClose = () => {
-    console.error('this.props.router', this.props);
-    console.error('this.props.history', this.props.history);
     const location = this.props.location.pathname;
-    console.error('location', location);
     const base = location.split('gallery')[0];
     this.props.router.push(base);
   }
@@ -75,6 +92,48 @@ export default class Gallery extends Component {
     }, 500);
   }
 
+  goToNext = () => {
+    const {
+      index,
+      transitionDuration,
+    } = this.state;
+    const timeout = transitionDuration * 1000;
+
+    this.setState({
+      goToNext: true,
+      showExtras: false,
+    });
+    setTimeout(() => {
+      const actualIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
+      this.setState({
+        goToNext: false,
+        index: actualIndex
+      });
+      this.showExtras();
+    }, timeout);
+  }
+
+  goToPrev = () => {
+    const {
+      index,
+      transitionDuration,
+    } = this.state;
+    const timeout = transitionDuration * 1000;
+
+    this.setState({
+      goToPrev: true,
+      showExtras: false,
+    });
+    setTimeout(() => {
+      const actualIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
+      this.setState({
+        goToPrev: false,
+        index: actualIndex
+      });
+      this.showExtras();
+    }, timeout);
+  }
+
   handleSwiped = (e, abs) => {
     const {
       index,
@@ -86,31 +145,9 @@ export default class Gallery extends Component {
     });
     clearTimeout(this.summaryTimeout);
     if (abs > 50) {
-      this.setState({
-        goToNext: true,
-        showExtras: false,
-      });
-      setTimeout(() => {
-        const actualIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
-        this.setState({
-          goToNext: false,
-          index: actualIndex
-        });
-        this.showExtras();
-      }, timeout);
+      this.goToNext();
     } else if (abs < -50) {
-      this.setState({
-        goToPrev: true,
-        showExtras: false,
-      });
-      setTimeout(() => {
-        const actualIndex = index - 1 < 0 ? this.props.slides.length - 1 : index - 1;
-        this.setState({
-          goToPrev: false,
-          index: actualIndex
-        });
-        this.showExtras();
-      }, timeout);
+      this.goToPrev();
     } else {
       this.setState({
         goToCurrent: true,
@@ -129,7 +166,10 @@ export default class Gallery extends Component {
       handleSwiped,
       handleRequestClose,
       props: {
-        slides
+        slides,
+        browserHeight,
+        browserWidth,
+        hasTouch,
       },
       state: {
         swipe,
@@ -214,6 +254,7 @@ export default class Gallery extends Component {
     const nextIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
     const preload1 = nextIndex + 1 === this.props.slides.length ? 0 : nextIndex + 1;
     const preload2 = preload1 + 1 === this.props.slides.length ? 0 : preload1 + 1;
+    const windowIsPortrait = browserWidth < browserHeight;
     return (
       <Modal
         isOpen
@@ -231,6 +272,48 @@ export default class Gallery extends Component {
             transformOrigin: 'left',
           }}
         >
+          {!hasTouch &&
+            <div
+              onClick={this.goToNext}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                marginTop: -25,
+                left: 0,
+              }}
+            >
+            <LeftArrow
+              size={50}
+              fill="white"
+              style={{
+                zIndex: 3,
+                position: 'relative',
+              }}
+              />
+            </div>
+          }
+          {!hasTouch &&
+            <div
+              onClick={this.goToPrev}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                marginTop: -25,
+                right: 0
+              }}
+
+            >
+            <RightArrow
+              size={50}
+              fill="white"
+              style={{
+                zIndex: 3,
+                position: 'relative',
+              }}
+              />
+            </div>
+          }
+
           <div
             style={{
               ...IMG_CONTAINER_STYLES,
@@ -240,12 +323,14 @@ export default class Gallery extends Component {
             <Picture
               src={slides[prevIndex].url}
               ratio={slides[prevIndex].ratio}
+              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
               }}
 
             />
           </div>
+
 
           <div
             style={{
@@ -259,10 +344,13 @@ export default class Gallery extends Component {
             <Picture
               src={slides[index].url}
               ratio={slides[index].ratio}
+              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
               }}
             />
+
+
           </div>
 
           <div
@@ -275,6 +363,7 @@ export default class Gallery extends Component {
             <Picture
               src={slides[nextIndex].url}
               ratio={slides[nextIndex].ratio}
+              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
               }}

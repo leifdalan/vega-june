@@ -43,18 +43,26 @@ export default class Picture extends Component {
         ratio,
         style,
         src,
+        isInPortraitContainer,
       },
       state: {
         isLoaded,
       },
     } = this;
 
+    const ratioStyle = isInPortraitContainer ? {
+      paddingBottom: `${ratio * 100}%`,
+      width: '100%',
+    } : {
+      paddingLeft: `${(1 / ratio) * 100}%`,
+      height: '100%',
+    };
+
     return (
       <figure
         style={{
-          paddingBottom: `${ratio * 100}%`,
+          ...ratioStyle,
           position: 'relative',
-          width: '100%',
           display: 'block',
           lineHeight: 0,
           ...BACKGROUND_PLACEHOLDER,
@@ -68,6 +76,8 @@ export default class Picture extends Component {
               position: 'absolute',
               height: '100%',
               opacity: isLoaded ? 1 : 0,
+              top: 0,
+              left: 0,
               transition: 'opacity 0.3s ease-out'
             }}
           >
@@ -93,5 +103,10 @@ Picture.propTypes = {
   src: pt.string,
   alt: pt.string,
   ratio: pt.number,
-  style: pt.object
+  style: pt.object,
+  isInPortraitContainer: pt.bool,
+};
+
+Picture.defaultProps = {
+  isInPortraitContainer: true,
 };

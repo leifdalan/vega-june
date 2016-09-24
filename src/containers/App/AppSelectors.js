@@ -8,7 +8,8 @@ import {
 import {
   setBrowser,
   setScroll,
-  setWindow
+  setWindow,
+  setTouch,
 } from 'redux/modules/browser';
 import { push } from 'react-router-redux';
 import {
@@ -44,6 +45,7 @@ export const boundActions = {
   setBrowser,
   setScroll,
   setWindow,
+  setTouch,
 };
 
 export const propTypes = {
@@ -58,5 +60,6 @@ export const propTypes = {
   setBrowser: PropTypes.func.isRequired,
   setScroll: PropTypes.func.isRequired,
   setWindow: PropTypes.func.isRequired,
+  setTouch: PropTypes.func.isRequired,
   pageLoaded: PropTypes.bool.isRequired,
 };
