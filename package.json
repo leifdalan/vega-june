@@ -154,6 +154,7 @@
     "lodash-webpack-plugin": "^0.10.0",
     "lru-memoize": "^1.0.0",
     "map-props": "^1.0.0",
+    "md5": "^2.2.1",
     "moment": "^2.14.1",
     "morgan": "^1.7.0",
     "multireducer": "^2.0.0",

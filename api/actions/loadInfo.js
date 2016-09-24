@@ -4,6 +4,13 @@ import without from 'lodash/without';
 import map from 'lodash/map';
 import toNumber from 'lodash/toNumber';
 import { redisClient } from '../api';
+import md5 from 'md5';
+import fs from 'fs';
+
+const appCache = `CACHE MANIFEST
+/dist/*
+https://cdn.vegajune.com
+`
 // import redis from 'redis';
 
 // function getBlogPostsPromise({ limit = 20, offset }) {
@@ -72,7 +79,7 @@ export function loadAll(req) {
       }
       fetchAllPostsFromTumblr(req).then((tumblrData) => {
         redisClient.set('latestTumblr', JSON.stringify(tumblrData), (setErr, setData) => {
-          console.log('setData', setData);
+
           resolve(tumblrData);
         });
 
@@ -117,9 +124,17 @@ export function fetchAllPostsFromTumblr(req) {
           })
         ], [])
       ).then(resultArray => {
-        redisClient.set('latestTumblr', JSON.stringify(resultArray), (setErr, setData) => {
+        const latestString = JSON.stringify(resultArray);
+        redisClient.set('latestTumblr', latestString, (setErr, setData) => {
           console.log('setData', setData);
-          masterResolve(resultArray);
+          const manifestHash = md5(latestString);
+          redisClient.set('manifest', manifestHash, () => {
+            console.error('manifestHash', manifestHash);
+            fs.writeFile(`./static/manifest-${manifestHash}.appcache`, appCache, (writing) => {
+              console.error('writing', writing);
+              masterResolve(resultArray);
+            });
+          });
         });
       }).catch((err) => {
         masterReject(err);

@@ -25,7 +25,10 @@ export default class Html extends Component {
     const head = Helmet.rewind();
 
     return (
-      <html lang="en-us">
+      <html
+        lang="en-us"
+        manifest={`/manifest-${this.props.manifest}.appcache`}
+      >
         <head>
           {head.base.toComponent()}
           {head.title.toComponent()}

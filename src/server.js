@@ -18,10 +18,12 @@ import createHistory from 'react-router/lib/createMemoryHistory';
 import { Provider } from 'react-redux';
 // import remotedev from 'remotedev-server';
 import getRoutes from './routes';
+import { redisClient } from '../api/redisClient';
 const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
+
 const proxy = httpProxy.createProxyServer({
   target: targetUrl,
   ws: true
@@ -102,11 +104,18 @@ app.use((req, res) => {
         res.status(200);
         // @TODO use flash instead of ?r=balls and dispatch to state
         global.navigator = { userAgent: req.headers['user-agent'] };
-
-        res.send(`<!doctype html>
-        ${ReactDOM.renderToString(
-          <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />
-        )}`);
+        redisClient.get('manifest', (err, data) => {
+          console.error('data', data);
+          res.send(`<!doctype html>
+            ${ReactDOM.renderToString(
+              <Html
+                assets={webpackIsomorphicTools.assets()}
+                component={component}
+                store={store}
+                manifest={data}
+              />
+            )}`);
+        });
       }).catch(mountError => {
         console.error('MOUNT ERROR:', pretty.render(mountError));
         res.status(500);
