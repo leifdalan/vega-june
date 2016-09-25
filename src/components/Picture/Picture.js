@@ -61,7 +61,8 @@ export default class Picture extends Component {
     return (
       <figure
         style={{
-          ...ratioStyle,
+          paddingBottom: `${ratio * 100}%`,
+          width: '100%',          
           position: 'relative',
           display: 'block',
           lineHeight: 0,

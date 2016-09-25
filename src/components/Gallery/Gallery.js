@@ -160,15 +160,31 @@ export default class Gallery extends Component {
     }
   }
 
+  getDimensions = ratio => {
+    const {
+      browserHeight,
+      browserWidth,
+    } = this.props;
+    const windowRatio = browserHeight / browserWidth;
+    return (windowRatio < ratio ? {
+      height: '100%',
+      width: browserHeight * (1 / ratio),
+      paddingBottom: 0,
+    } : {
+      width: '100%',
+      height: browserWidth * ratio,
+      paddingBottom: 0,
+    });
+  }
+
   render() {
     const {
       handleSwiping,
       handleSwiped,
       handleRequestClose,
+      getDimensions,
       props: {
         slides,
-        browserHeight,
-        browserWidth,
         hasTouch,
       },
       state: {
@@ -254,7 +270,6 @@ export default class Gallery extends Component {
     const nextIndex = index + 1 === this.props.slides.length ? 0 : index + 1;
     const preload1 = nextIndex + 1 === this.props.slides.length ? 0 : nextIndex + 1;
     const preload2 = preload1 + 1 === this.props.slides.length ? 0 : preload1 + 1;
-    const windowIsPortrait = browserWidth < browserHeight;
     return (
       <Modal
         isOpen
@@ -270,6 +285,7 @@ export default class Gallery extends Component {
             height: '100%',
             perspective: '1000px',
             transformOrigin: 'left',
+            overflow: 'hidden',
           }}
         >
           {!hasTouch &&
@@ -282,13 +298,13 @@ export default class Gallery extends Component {
                 left: 0,
               }}
             >
-            <LeftArrow
-              size={50}
-              fill="white"
-              style={{
-                zIndex: 3,
-                position: 'relative',
-              }}
+              <LeftArrow
+                size={50}
+                fill="white"
+                style={{
+                  zIndex: 3,
+                  position: 'relative',
+                }}
               />
             </div>
           }
@@ -303,13 +319,13 @@ export default class Gallery extends Component {
               }}
 
             >
-            <RightArrow
-              size={50}
-              fill="white"
-              style={{
-                zIndex: 3,
-                position: 'relative',
-              }}
+              <RightArrow
+                size={50}
+                fill="white"
+                style={{
+                  zIndex: 3,
+                  position: 'relative',
+                }}
               />
             </div>
           }
@@ -323,9 +339,9 @@ export default class Gallery extends Component {
             <Picture
               src={slides[prevIndex].url}
               ratio={slides[prevIndex].ratio}
-              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
+                ...getDimensions(slides[prevIndex].ratio)
               }}
 
             />
@@ -344,9 +360,9 @@ export default class Gallery extends Component {
             <Picture
               src={slides[index].url}
               ratio={slides[index].ratio}
-              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
+                ...getDimensions(slides[index].ratio)
               }}
             />
 
@@ -363,9 +379,9 @@ export default class Gallery extends Component {
             <Picture
               src={slides[nextIndex].url}
               ratio={slides[nextIndex].ratio}
-              isInPortraitContainer={windowIsPortrait}
               style={{
                 ...IMG_STYLES,
+                ...getDimensions(slides[nextIndex].ratio)
               }}
 
             />
