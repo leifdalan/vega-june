@@ -1,5 +1,6 @@
 import Express from 'express';
 import React from 'react';
+import SocketIo from 'socket.io';
 import ReactDOM from 'react-dom/server';
 import config from 'config';
 import favicon from 'serve-favicon';
@@ -22,6 +23,9 @@ const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
+
+const io = new SocketIo(server);
+io.path('/ws');
 const proxy = httpProxy.createProxyServer({
   target: targetUrl,
   ws: true
@@ -36,14 +40,14 @@ app.use('/api', (req, res) => {
   proxy.web(req, res, { target: targetUrl });
 });
 
-app.use('/ws', (req, res) => {
-  proxy.web(req, res, { target: `${targetUrl}/ws` });
-});
+// app.use('/ws', () => {
+//   // proxy.web(req, res, { target: `${targetUrl}/ws` });
+// });
 
-server.on('upgrade', (req, socket, head) => {
-  console.log('upgrading...', req.url, req.headers.origin);
-  proxy.ws(req, socket, head);
-});
+// server.on('upgrade', (req, socket, head) => {
+//   console.log('upgrading...', req.url, req.headers.origin);
+//   //proxy.ws(req, socket, head);
+// });
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
 proxy.on('error', (error, req, res) => {
@@ -78,7 +82,7 @@ app.use((req, res) => {
     hydrateOnClient();
     return;
   }
-
+  console.error('req.originalUrl', req.originalUrl);
   match({
     history,
     routes: getRoutes(store),
@@ -118,13 +122,41 @@ app.use((req, res) => {
 });
 
 if (config.port) {
-  server.listen(config.port, (err) => {
+  const runnable = server.listen(config.port, (err) => {
     if (err) {
       console.error(err);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
     console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, config.port);
   });
+  io.on('connection', (socket) => {
+    const actionSession = [];
+    const nsp = io.of(`/${socket.conn.id}`);
+    nsp.on('connection', (nspSocket) => {
+      const client = new ApiClient();
+
+      const store = createStore(null, client);
+      console.log('disconnected...');
+      match({
+        routes: getRoutes(store),
+        location: '/'
+      }, (error, redirectLocation, renderProps) => {
+        console.error('error');
+      });
+
+      nspSocket.on('bigBrother', (action) => {
+        console.error('action', action);
+        actionSession.push(action);
+      });
+      nspSocket.on('disconnect', () => {
+
+
+
+      });
+    });
+    socket.emit('news', { msg: '\'Hello World!\' from server' });
+  });
+  io.listen(runnable);
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');
 }

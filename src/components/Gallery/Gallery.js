@@ -26,9 +26,13 @@ export default class Gallery extends Component {
 
   static propTypes = {
     history: pt.object.isRequired,
+    location: pt.object.isRequired,
     params: pt.object.isRequired,
     slides: pt.array.isRequired,
     router: pt.object.isRequired,
+    browserHeight: pt.number.isRequired,
+    browserWidth: pt.number.isRequired,
+    hasTouch: pt.bool.isRequired,
   }
 
 
@@ -57,29 +61,20 @@ export default class Gallery extends Component {
     window.removeEventListener('keydown', this.handleKeyboard);
   }
 
-  handleKeyboard = (e) => {
-    switch (e.keyCode) {
-      case 37:
-        this.goToPrev();
-        break;
-      case 39:
-        this.goToNext();
-        break;
-      default:
-        break;
-    }
-  }
-
-  handleRequestClose = () => {
-    const location = this.props.location.pathname;
-    const base = location.split('gallery')[0];
-    this.props.router.push(base);
-  }
-
-  handleSwiping = (e, abs) => {
-    e.preventDefault();
-    this.setState({
-      swipe: abs,
+  getDimensions = ratio => {
+    const {
+      browserHeight,
+      browserWidth,
+    } = this.props;
+    const windowRatio = browserHeight / browserWidth;
+    return (windowRatio < ratio ? {
+      height: '100%',
+      width: browserHeight * (1 / ratio),
+      paddingBottom: 0,
+    } : {
+      width: '100%',
+      height: browserWidth * ratio,
+      paddingBottom: 0,
     });
   }
 
@@ -136,7 +131,6 @@ export default class Gallery extends Component {
 
   handleSwiped = (e, abs) => {
     const {
-      index,
       transitionDuration,
     } = this.state;
     const timeout = transitionDuration * 1000;
@@ -160,21 +154,30 @@ export default class Gallery extends Component {
     }
   }
 
-  getDimensions = ratio => {
-    const {
-      browserHeight,
-      browserWidth,
-    } = this.props;
-    const windowRatio = browserHeight / browserWidth;
-    return (windowRatio < ratio ? {
-      height: '100%',
-      width: browserHeight * (1 / ratio),
-      paddingBottom: 0,
-    } : {
-      width: '100%',
-      height: browserWidth * ratio,
-      paddingBottom: 0,
+  handleSwiping = (e, abs) => {
+    e.preventDefault();
+    this.setState({
+      swipe: abs,
     });
+  }
+
+  handleRequestClose = () => {
+    const location = this.props.location.pathname;
+    const base = location.split('gallery')[0];
+    this.props.router.push(base);
+  }
+
+  handleKeyboard = (e) => {
+    switch (e.keyCode) {
+      case 37:
+        this.goToPrev();
+        break;
+      case 39:
+        this.goToNext();
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
@@ -387,34 +390,34 @@ export default class Gallery extends Component {
             />
 
           </div>
-            <div
-              style={{
-                ...SUMMARY_CONTAINER_STYLES,
-                ...(showExtras && slides[index].summary) ? {
-                  opacity: 1,
-                  bottom: 30,
-                } : {
-                  opacity: 0,
-                  bottom: 10
-                }
-              }}>
-              <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
-            </div>
-            <div
-              style={{
-                ...CLOSE_CONTAINER_STYLES,
-                ...(showExtras) ? {
-                  opacity: 1,
-                  right: 0,
-                } : {
-                  opacity: 0,
-                  right: -30
-                }
-              }}
-              onClick={handleRequestClose}
-            >
-              &#10005;
-            </div>
+          <div
+            style={{
+              ...SUMMARY_CONTAINER_STYLES,
+              ...(showExtras && slides[index].summary) ? {
+                opacity: 1,
+                bottom: 30,
+              } : {
+                opacity: 0,
+                bottom: 10
+              }
+            }}>
+            <p style={SUMMARY_STYLES}>{slides[index].summary}</p>
+          </div>
+          <div
+            style={{
+              ...CLOSE_CONTAINER_STYLES,
+              ...(showExtras) ? {
+                opacity: 1,
+                right: 0,
+              } : {
+                opacity: 0,
+                right: -30
+              }
+            }}
+            onClick={handleRequestClose}
+          >
+            &#10005;
+          </div>
 
 
           <Picture

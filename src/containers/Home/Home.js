@@ -43,10 +43,6 @@ export default class Home extends Component {
     }
   }
 
-  componentDidUpdate() {
-    this.calculateContainerWidth();
-  }
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
   }

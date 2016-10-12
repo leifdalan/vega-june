@@ -2,13 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 import { Link } from 'react-router';
-import isBoolean from 'lodash/isBoolean';
 import Helmet from 'react-helmet';
 import config from '../../../config/default';
-import {
-  loadRemaining,
-} from 'redux/modules/info';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+// import CSSTransitionGroup from 'react-addons-css-transition-group';
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isAuthLoaded,
@@ -27,6 +23,9 @@ import {
   APP_CONTAINER_STYLE,
   MENU_LINK_STYLES
 } from './App.styles';
+import {
+  getHistory,
+} from 'redux/middleware/bigBrother';
 
 @Radium
 @asyncConnect([{
@@ -69,7 +68,6 @@ export default class App extends Component {
         location: {
           pathname
         },
-        pageLoaded,
         children,
         content,
         sidebar
@@ -94,6 +92,14 @@ export default class App extends Component {
             }}
           >
             <Link to="/archive">ARCHIVE</Link>
+            <button
+              onClick={() => {
+                const hist = getHistory();
+                console.error('hist', hist);
+              }}
+            >
+
+            </button>
           </div>
 
           :
@@ -103,7 +109,7 @@ export default class App extends Component {
 
         }
         {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
-        {/*<CSSTransitionGroup
+        {/* <CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}

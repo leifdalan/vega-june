@@ -1,20 +1,28 @@
 import { createStore as _createStore, applyMiddleware, compose } from 'redux';
 import createMiddleware from './middleware/clientMiddleware';
+import bigBrother from './middleware/bigBrother';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import devTools from 'remote-redux-devtools';
 import createLogger from 'redux-logger';
+import bigBrotherCallback from './middleware/bigBrotherCallback';
 
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
-  const reduxRouterMiddleware = routerMiddleware(history);
-
-  const middleware = [
+  let middleware = [
     thunk,
     createMiddleware(client),
-    reduxRouterMiddleware
+    bigBrother(bigBrotherCallback),
   ];
-
+  if (history) {
+    const reduxRouterMiddleware = routerMiddleware(history);
+    middleware = [
+      thunk,
+      createMiddleware(client),
+      reduxRouterMiddleware,
+      bigBrother(bigBrotherCallback),
+    ];
+  }
 
   let finalCreateStore;
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {

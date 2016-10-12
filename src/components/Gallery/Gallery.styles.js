@@ -71,7 +71,7 @@ export const NEXT_IMG_CONTAINER_TRANSITION = {
   transitionProperty: 'transform',
   transitionDuration: '1s',
   transform: 'scale(1)'
-}
+};
 
 export const PREV_IMG_CONTAINER_TRANSITION = {
   transitionProperty: 'transform',

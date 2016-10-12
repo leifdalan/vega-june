@@ -6,7 +6,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
-import io from 'socket.io-client';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -15,6 +14,7 @@ import { AppContainer as HotEnabler } from 'react-hot-loader';
 import withScroll from 'scroll-behavior';
 import getRoutes from './routes';
 
+
 const client = new ApiClient();
 const _browserHistory = withScroll(browserHistory, (prev, loc) =>
   !loc.pathname.includes('gallery')
@@ -22,29 +22,6 @@ const _browserHistory = withScroll(browserHistory, (prev, loc) =>
 const dest = document.getElementById('content');
 export const store = createStore(_browserHistory, client, window.__data);
 const history = syncHistoryWithStore(_browserHistory, store);
-
-function initSocket() {
-  const socket = io.connect('', { path: '/ws', transports: ['websocket'] });
-  socket.on('connect', () => {
-    const nsp = io(`/${socket.id}`, {
-      path: '/ws',
-      transports: ['websocket']
-    });
-    global.nsp = nsp;
-  });
-
-  socket.on('news', (data) => {
-    console.log(data);
-    socket.emit('my other evfent', { my: 'data from client' });
-  });
-  socket.on('msg', (data) => {
-    console.log(data);
-  });
-
-  return socket;
-}
-
-global.socket = initSocket();
 
 const renderRouter = (props) => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
 const render = routes => {
@@ -74,7 +51,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-react-checksum']) {
     console.error('Server-side React render was discarded.' +
-      'Make sure that your initial render does not contain any client-side code.');
+      'Make sureaaaa that your initial render does not contain any client-side code.');
   }
 }
 

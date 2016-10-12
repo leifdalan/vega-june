@@ -62,7 +62,6 @@ export const propTypes = {
   pages: pt.object.isRequired,
   imageRatios: pt.array.isRequired,
   nextPage: pt.number.isRequired,
-  loadInfo: pt.func.isRequired,
   setWindow: pt.func.isRequired,
   setContainerWidth: pt.func.isRequired,
   user: pt.object,

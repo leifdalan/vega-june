@@ -95,7 +95,7 @@ export function setContainerWidth(payload = 0) {
 
 export function setScroll() {
   return dispatch => {
-    dispatch(setWindow());
+    // dispatch(setWindow());
     return dispatch({
       type: SET_SCROLL,
       payload: {
