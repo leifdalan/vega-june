@@ -22,5 +22,13 @@ module.exports = {
   awsBucket: 'AWS_BUCKET',
   publicAssetPath: 'PUBLIC_ASSET_PATH',
   vimeoClientId: 'VIMEO_CLIENT_ID',
-  vimeoClientSecret: 'VIMEO_CLIENT_SECRET'
+  vimeoClientSecret: 'VIMEO_CLIENT_SECRET',
+  googleAccessToken: 'GOOGLE_ACCESS_TOKEN',
+  googleRefreshToken: 'GOOGLE_REFRESH_TOKEN',
+  googleTokenType: 'GOOGLE_TOKEN_TYPE',
+  googleExpiryDate: 'GOOGLE_EXPIRY_DATE',
+  googleClientId: 'GOOGLE_CLIENT_ID',
+  googleClientSecret: 'GOOGLE_CLIENT_SECRET',
+  googleCallback: 'GOOGLE_CALLBACK',
+  youtubePlaylistId: 'YOUTUBE_PLAYLIST_ID',
 };

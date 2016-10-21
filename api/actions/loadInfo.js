@@ -1,9 +1,12 @@
 import tumblrClient from '../tumblrClient';
+import youtube from '../youtubeClient';
 import range from 'lodash/range';
 import without from 'lodash/without';
 import map from 'lodash/map';
 import toNumber from 'lodash/toNumber';
 import { redisClient } from '../api';
+import config from 'config';
+const playlist = config.youtubePlaylistId;
 // import redis from 'redis';
 
 // function getBlogPostsPromise({ limit = 20, offset }) {
@@ -64,20 +67,47 @@ export function loadInfo(req) {
 }
 
 export function loadAll(req) {
-  return new Promise((resolve) => {
-    redisClient.get('latestTumblr', (err, data) => {
-      if (data) {
-        console.log('resolving data');
-        return resolve(JSON.parse(data));
-      }
-      fetchAllPostsFromTumblr(req).then((tumblrData) => {
-        redisClient.set('latestTumblr', JSON.stringify(tumblrData), (setErr, setData) => {
-          console.log('setData', setData);
-          resolve(tumblrData);
-        });
+  console.log('loadingall!!!');
+  return new Promise((masterResolve) => {
+    const multi = redisClient.multi();
+    multi.get('latestTumblr');
+    multi.get('latestYoutube');
 
-      });
+    multi.exec( (err, [data, youtube]) => {
+
+      const tumblrPromise = new Promise((tumblrResolve, tumblrReject) => {
+        if (data) {
+          console.log('resolving data');
+          return tumblrResolve(JSON.parse(data));
+        } else {
+          fetchAllPostsFromTumblr(req).then((tumblrData) => {
+            redisClient.set('latestTumblr', JSON.stringify(tumblrData), (setErr, setData) => {
+              console.log('setData', setData);
+              tumblrResolve(tumblrData);
+            });
+          });
+        }
+      }).catch(console.log);
+      const youtubePromise = new Promise((youtubeResolve, youtubeReject) => {
+        if (youtube) {
+          console.log('resolving data');
+          return youtubeResolve(JSON.parse(youtube));
+        } else {
+          fetchAllYoutubeVideos().then((youtubeData) => {
+            redisClient.set('latestYoutube', JSON.stringify(youtubeData), (setErr, setData) => {
+              console.log('setData', setData);
+              youtubeResolve(youtubeData);
+            });
+          });
+        }
+      }).catch(console.log);
+      return Promise.all([tumblrPromise, youtubePromise]).then(([tumblr, youtube]) => {
+        masterResolve(tumblr);
+      }).catch(console.log);
     });
+      // console.error('data, youtube', youtube);
+
+    // }).catch(console.log);
   });
 }
 
@@ -126,4 +156,44 @@ export function fetchAllPostsFromTumblr(req) {
       });
     });
   }).catch(err => console.error(err));
+}
+
+export function fetchAllYoutubeVideos() {
+  return new Promise((resolve, reject) => {
+    youtube.playlistItems.list({
+      part: 'contentDetails',
+      playlistId: 'PLDxchoMUm8NhAkt6c0pkdowAunWUaq_f8',
+      mine: true,
+    }, (err, res) => {
+      if (err) {
+        reject(err);
+      }
+      const ids = [];
+      res.items.forEach((item) => ids.push(item.contentDetails.videoId));
+      console.error('ids', ids);
+      youtube.videos.list({
+        part: 'contentDetails,snippet,fileDetails,processingDetails,player',
+        id: ids.join(','),
+      }, (err, res) => {
+        if (err) {
+          reject(err);
+        }
+        console.error('err', err);
+        console.error('res', res);
+        redisClient.set('latestYoutube', JSON.stringify(res), (setErr, setData) => {
+          console.log('setData', setData);
+          resolve(res);
+        });
+
+
+        res.items.forEach(item => {
+          console.error('item.snippet', item.snippet);
+          console.error('item.contentDetails', item.contentDetails);
+          console.error('item.fileDetails', item.fileDetails);
+          console.error('item.processingDetails', item.processingDetails);
+          console.error('item.player', item.player);
+        });
+      });
+    });
+  }).catch(console.log);
 }

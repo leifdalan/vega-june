@@ -1,4 +1,7 @@
-import { fetchAllPostsFromTumblr } from './actions';
+import {
+  fetchAllPostsFromTumblr,
+  fetchAllYoutubeVideos,
+} from './actions';
 import { CronJob } from 'cron';
 
 const job = new CronJob(
@@ -8,6 +11,9 @@ const job = new CronJob(
     fetchAllPostsFromTumblr().then(() => {
       console.log('fetch complete');
     });
+    fetchAllYoutubeVideos().then(() => {
+      console.log('youtube fetch complete');
+    })
   },
   () => {
     console.log('job stopped');
