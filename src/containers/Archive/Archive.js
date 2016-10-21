@@ -5,7 +5,7 @@ import { asyncConnect } from 'redux-async-connect';
 import Helmet from 'react-helmet';
 import last from 'lodash/last';
 import { mapStateToProps } from './ArchiveSelectors';
-import { loadRemaining } from 'redux/modules/info';
+import { loadRemaining } from 'redux/modules/tumblr';
 import {
   OUTER_STYLE,
   HEADER_STYLE,

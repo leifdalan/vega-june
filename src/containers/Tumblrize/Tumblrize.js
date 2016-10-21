@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { Button } from 'react-bootstrap';
-import { updateTumblr } from 'redux/modules/info';
+import { updateTumblr } from 'redux/modules/tumblr';
 
 @connect(
   state => ({ user: state.auth.user }),

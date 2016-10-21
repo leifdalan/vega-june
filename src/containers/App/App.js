@@ -7,7 +7,7 @@ import Helmet from 'react-helmet';
 import config from '../../../config/default';
 import {
   loadRemaining,
-} from 'redux/modules/info';
+} from 'redux/modules/tumblr';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 // import Helmet from 'react-helmet';
 import {

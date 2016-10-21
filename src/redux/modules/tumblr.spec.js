@@ -12,13 +12,13 @@ import {
   LOAD_SUCCESS,
   LOAD_FAIL,
   load
-} from './info';
+} from './tumblr';
 
 test('load() calls the correct actions with correct data', t => {
   return new Promise((resolve, reject) => {
     const data = [{ id: 1 }, { id: 2 }];
     const mockStore = configureStore([thunkMiddleware, createMiddleware(client)]);
-    const store = mockStore({ auth: {}, info: {pages: {}} });
+    const store = mockStore({ auth: {}, tumblr: {pages: {}} });
     const expectedActions = [{
       page: 0,
       type: LOAD

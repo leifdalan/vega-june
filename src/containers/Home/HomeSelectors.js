@@ -10,7 +10,7 @@ import {
   getLoadingSelector,
   load as loadInfo,
   loadRemaining,
-} from 'redux/modules/info';
+} from 'redux/modules/tumblr';
 import {
   getDistanceFromBottomSelector,
   getContainerWidthSelector,

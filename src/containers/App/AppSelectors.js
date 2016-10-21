@@ -15,7 +15,7 @@ import { push } from 'react-router-redux';
 import {
   getTagsSelector,
 
-} from 'redux/modules/info';
+} from 'redux/modules/tumblr';
 
 export const mapStateToProps = createSelector(
   state => state.notifs,

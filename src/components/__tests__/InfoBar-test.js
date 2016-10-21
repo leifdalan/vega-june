@@ -11,7 +11,7 @@
 //
 // describe('InfoBar', () => {
 //   const mockStore = {
-//     info: {
+//     tumblr: {
 //       load: () => {},
 //       loaded: true,
 //       loading: false,
@@ -33,7 +33,7 @@
 //
 //   it('should render with correct value', () => {
 //     const text = dom.getElementsByTagName('strong')[0].textContent;
-//     expect(text).to.equal(mockStore.info.data.message);
+//     expect(text).to.equal(mockStore.tumblr.data.message);
 //   });
 //
 //   it('should render with a reload button', () => {
@@ -43,7 +43,7 @@
 //
 //   it('should render the correct className', () => {
 //     const styles = require('components/InfoBar/InfoBar.scss');
-//     expect(styles.infoBar).to.be.a('string');
-//     expect(dom.className).to.include(styles.infoBar);
+//     expect(styles.tumblrBar).to.be.a('string');
+//     expect(dom.className).to.include(styles.tumblrBar);
 //   });
 // });

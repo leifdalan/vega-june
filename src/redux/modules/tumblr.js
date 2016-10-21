@@ -27,7 +27,7 @@ const initialState = {
   blog: {}
 };
 
-export default function info(state = initialState, action = {}) {
+export default function tumblr(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
       return {
@@ -76,6 +76,7 @@ export default function info(state = initialState, action = {}) {
         }
       };
     case LOAD_ALL_SUCCESS:
+
       return {
         ...state,
         loading: false,
@@ -97,12 +98,12 @@ export default function info(state = initialState, action = {}) {
 }
 
 export function isLoaded(globalState) {
-  return globalState.info && globalState.info.loaded;
+  return globalState.tumblr && globalState.tumblr.loaded;
 }
 
 export function load(offset = 0) {
   return (dispatch, getState) => {
-    if (getState().info.pages[offset] || offset > 6) {
+    if (getState().tumblr.pages[offset] || offset > 6) {
       return;
     }
     return dispatch({
@@ -117,11 +118,11 @@ export function load(offset = 0) {
 
 
 export const getDataSelector = createSelector(
-  state => get(state, 'info.data'),
+  state => get(state, 'tumblr.data'),
   data => data
 );
 export const getPagesSelector = createSelector(
-  state => get(state, 'info.pages'),
+  state => get(state, 'tumblr.pages'),
   data => data
 );
 
@@ -170,7 +171,7 @@ export const getAllThumbnails = createSelector(
 );
 
 export const getLoadingSelector = createSelector(
-  state => state.info.loading,
+  state => state.tumblr.loading,
   loading => loading
 );
 
@@ -216,7 +217,7 @@ export function loadRemaining() {
   return (dispatch, getState) => {
     const state = getState();
     const pages = Object.keys(getPagesSelector(state));
-    const totalPosts = state.info.blog.total_posts;
+    const totalPosts = state.tumblr.blog.total_posts;
     if (pages.length === totalPosts % 20 - 1) return;
 
     return dispatch({

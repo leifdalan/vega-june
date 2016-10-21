@@ -4,7 +4,7 @@ import { reducer as reduxAsyncConnect } from 'redux-async-connect';
 import { reducer as form } from 'redux-form';
 import auth from './auth';
 import notifs from './notifs';
-import info from './info';
+import tumblr from './tumblr';
 import browser from './browser';
 import progress from './progress';
 import cache from './cache';
@@ -15,7 +15,7 @@ export default combineReducers({
   notifs,
   form,
   auth,
-  info,
+  tumblr,
   browser,
   progress,
   cache

@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import {
   getTagsSelector,
-} from 'redux/modules/info';
+} from 'redux/modules/tumblr';
 import {
   BURGER_STYLES
 } from 'containers/App/App.styles';
