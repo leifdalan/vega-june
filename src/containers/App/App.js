@@ -9,6 +9,7 @@ import {
   loadRemaining,
 } from 'redux/modules/tumblr';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import Swipeable from 'react-swipeable';
 // import Helmet from 'react-helmet';
 import {
   isLoaded as isAuthLoaded,
@@ -27,6 +28,7 @@ import {
   APP_CONTAINER_STYLE,
   MENU_LINK_STYLES
 } from './App.styles';
+import { Sidebar } from 'components';
 
 @Radium
 @asyncConnect([{
@@ -46,6 +48,10 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
+  state = {
+    swipeProgress: null,
+  }
+
   componentDidMount() {
     const {
       setWindow,
@@ -61,8 +67,32 @@ export default class App extends Component {
     setTouch();
   }
 
+  handleSwiping = (e, abs, y, absX, b) => {
+
+    if (this.state.swipeProgress) {
+      this.setState({
+        swipeProgress: abs,
+        stoppedSwiping: null,
+      });
+    } else if (absX < 50) {
+      this.setState({
+        swipeProgress: abs,
+        stoppedSwiping: null,
+      });
+    }
+  }
+
+  handleSwiped = (e, abs) => {
+    this.setState({
+      swipeProgress: null,
+      stoppedSwiping: abs,
+    })
+  }
+
   render() {
     const {
+      handleSwiping,
+      handleSwiped,
       props: {
         logout,
         user,
@@ -73,52 +103,51 @@ export default class App extends Component {
         children,
         content,
         sidebar
+      },
+      state: {
+        swipeProgress,
+        stoppedSwiping,
       }
     } = this;
     if (!user) return children;
     const isHome = pathname === '/';
     return (
+
       <div
         style={APP_CONTAINER_STYLE}
         ref="appContainer"
         id="outer-container"
       >
-        <Helmet {...config.app.head} />
-        {sidebar}
+        {/*<Swipeable
+          onSwiping={handleSwiping}
+          onSwiped={handleSwiped}
+        >*/}
 
-        {isHome ?
-          <div
-            style={{
-              ...MENU_LINK_STYLES,
-              textAlign: 'right'
-            }}
+          <Helmet {...config.app.head} />
+          <Sidebar
+            swipeProgress={swipeProgress}
+            isSwiping={!!swipeProgress}
+            stoppedSwiping={stoppedSwiping}
+          />
+
+          {/*{__DEVELOPMENT__ && <button onClick={logout}>logout</button>}*/}
+          {/*<CSSTransitionGroup
+            transitionName="example"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}
           >
-            <Link to="/archive">ARCHIVE</Link>
-          </div>
 
-          :
-          <div style={MENU_LINK_STYLES}>
-            <Link to="/">HOME</Link>
-          </div>
+            {(isBoolean(pageLoaded) && !pageLoaded) ? <h1>loading</h1> : <span />}
+          </CSSTransitionGroup>*/}
 
-        }
-        {__DEVELOPMENT__ && <button onClick={logout}>logout</button>}
-        {/*<CSSTransitionGroup
-          transitionName="example"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-
-          {(isBoolean(pageLoaded) && !pageLoaded) ? <h1>loading</h1> : <span />}
-        </CSSTransitionGroup>*/}
-
-        <main
-          id="page-wrap"
-          style={APP_CONTENT}
-        >
-          {user && children}
-          {user && content}
-        </main>
+          <main
+            id="page-wrap"
+            style={APP_CONTENT}
+          >
+            {user && children}
+            {user && content}
+          </main>
+        {/*</Swipeable>*/}
       </div>
     );
   }

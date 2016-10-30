@@ -1,10 +1,12 @@
 import { createSelector } from 'reselect';
 import { userSelector } from 'redux/modules/auth';
 import { PropTypes as pt } from 'react';
+import orderBy from 'lodash/orderBy';
+import omitBy from 'lodash/omitBy';
+import fMap from 'lodash/fp/map';
 import {
   getNextPageSelector,
   getPostsByDateSelector,
-  getImageRatiosSelector,
   getPagesSelector,
   getDataSelector,
   getLoadingSelector,
@@ -12,11 +14,38 @@ import {
   loadRemaining,
 } from 'redux/modules/tumblr';
 import {
+  getPostsByDateSelector as getYoutubeByDateSelector
+} from 'redux/modules/youtube';
+
+import {
   getDistanceFromBottomSelector,
   getContainerWidthSelector,
   setWindow,
   setContainerWidth,
 } from 'redux/modules/browser';
+
+const getAllPostsByDateSelector = createSelector(
+  getPostsByDateSelector,
+  getYoutubeByDateSelector, (
+    tumblr,
+    youtube,
+  ) => orderBy(omitBy({
+    ...tumblr,
+    ...youtube,
+  }, ({ type }) => type === 'video'), 'date', 'desc')
+);
+
+export const getImageRatiosSelector = createSelector(
+  getAllPostsByDateSelector,
+  /* eslint-disable */
+  fMap(post => post.type === 'photo'
+    ? post.photos[0].original_size.height / post.photos[0].original_size.width
+    // its a video post
+    : post.isPortrait ? (4 / 3) : (3 / 4)
+  )
+  /* eslint-enable */
+);
+
 
 export const mapStateToProps = createSelector(
   getPostsByDateSelector,
@@ -27,7 +56,8 @@ export const mapStateToProps = createSelector(
   userSelector,
   getDistanceFromBottomSelector,
   getLoadingSelector,
-  getContainerWidthSelector, (
+  getContainerWidthSelector,
+  getAllPostsByDateSelector, (
     posts,
     nextPage,
     imageRatios,
@@ -37,6 +67,7 @@ export const mapStateToProps = createSelector(
     distanceFromBottom,
     isLoading,
     containerWidth,
+    allPosts,
   ) => ({
     posts,
     nextPage,
@@ -46,7 +77,8 @@ export const mapStateToProps = createSelector(
     user,
     distanceFromBottom,
     isLoading,
-    containerWidth
+    containerWidth,
+    allPosts,
   })
 );
 

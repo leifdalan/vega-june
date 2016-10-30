@@ -140,7 +140,10 @@ export default store => {
   return (
     <Route path="/" component={require('./containers/App/App')}>
       {/* Home (main) route */}
-      <IndexRoute onEnter={requireLogin} component={require('./containers/Home/Home')} />
+      <IndexRoute onEnter={requireLogin} components={{
+          content: require('./containers/Home/Home'),
+          sidebar: require('./components/Sidebar')
+        }} />
       <Route onEnter={requireLogin} path="gallery" component={require('./containers/Home/Home')}>
         <Route path=":index" component={require('./components/Gallery/Gallery')} />
       </Route>
@@ -158,6 +161,15 @@ export default store => {
         </Route>
         <Route path="gallery/:index" component={require('./components/Gallery/Gallery')} />
       </Route>
+      <Route
+        onEnter={requireLogin}
+        path="/videos"
+        components={{
+          content: require('./containers/Videos/Videos'),
+          sidebar: require('./components/Sidebar')
+        }}
+      />
+
       <Route path="login" component={require('./containers/Login/Login')} />
 
       {/* Routes disallow login */}

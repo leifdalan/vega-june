@@ -7,26 +7,35 @@ import {
 // import Picture from 'components/Picture';
 /* eslint-disable camelcase */
 const VideoPost = ({
+  containerWidth,
   post: {
-    video_url,
-    thumbnail_url
+    id,
+    isPortrait,
+    thumbnails,
+
   } }) => (
   <div
     style={{
       ...POST_CONTAINER,
-      width: '100%'
+      width: '100%',
+      position: 'relative',
+      paddingBottom: isPortrait
+        ? containerWidth * 4 / 3
+        : containerWidth * 3 / 4
     }}
   >
-    <Video
-      controls
-      loop
-      poster={thumbnail_url}
+    <iframe
       style={{
+        position: 'absolute',
         width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0
       }}
-      >
-      <source src={video_url} type="video/mp4" />
-    </Video>
+      width={'100%'}
+      height="100%"
+      src={`//www.youtube.com/embed/${id}`}
+    />
   </div>
 );
 /* eslint-enable camelcase */

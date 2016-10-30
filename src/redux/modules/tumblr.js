@@ -3,7 +3,6 @@ import keyBy from 'lodash/keyBy';
 import map from 'lodash/map';
 import get from 'lodash/get';
 import fOrderBy from 'lodash/fp/orderBy';
-import fMap from 'lodash/fp/map';
 import fKeys from 'lodash/fp/keys';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
@@ -49,17 +48,17 @@ export default function tumblr(state = initialState, action = {}) {
           ...state.pages,
           [action.page]: {
             loading: false,
-            data: map(action.result.posts, 'id'),
+            data: map(action.result.tumblr.posts, 'id'),
             loaded: true,
           }
         },
         data: {
           ...state.data,
-          ...keyBy(action.result.posts, 'id')
+          ...keyBy(action.result.tumblrposts, 'id')
         },
         blog: {
           ...state.blog,
-          ...action.result.blog,
+          ...action.result.tumblr.blog,
         }
       };
     case LOAD_FAIL:
@@ -76,22 +75,23 @@ export default function tumblr(state = initialState, action = {}) {
         }
       };
     case LOAD_ALL_SUCCESS:
-
-      return {
+      console.error('load all success');
+      const something = {
         ...state,
         loading: false,
-        pages: reduce(action.result, (out, page, index) => ({
+        pages: reduce(action.result.tumblr, (out, page, index) => ({
           ...out,
           [index]: map(page.posts, 'id')
         }), state.pages),
         data: {
           ...state.data,
-          ...reduce(action.result, (out, page) => ({
+          ...reduce(action.result.tumblr, (out, page) => ({
             ...out,
             ...keyBy(page.posts, 'id')
           }), state.data)
         }
       };
+      return something
     default:
       return state;
   }
@@ -173,17 +173,6 @@ export const getAllThumbnails = createSelector(
 export const getLoadingSelector = createSelector(
   state => state.tumblr.loading,
   loading => loading
-);
-
-export const getImageRatiosSelector = createSelector(
-  getPostsByDateSelector,
-  /* eslint-disable */
-  fMap(post => post.type === 'photo'
-    ? post.photos[0].original_size.height / post.photos[0].original_size.width
-    // its a video post
-    : post.thumbnail_height / post.thumbnail_width
-  )
-  /* eslint-enable */
 );
 
 export const getPostsByTagSelector = createSelector(

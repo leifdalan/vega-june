@@ -102,7 +102,7 @@ export function loadAll(req) {
         }
       }).catch(console.log);
       return Promise.all([tumblrPromise, youtubePromise]).then(([tumblr, youtube]) => {
-        masterResolve(tumblr);
+        masterResolve({tumblr, youtube});
       }).catch(console.log);
     });
       // console.error('data, youtube', youtube);

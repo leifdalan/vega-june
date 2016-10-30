@@ -34,17 +34,8 @@ export default class Home extends Component {
     this.calculateContainerWidth();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {
-      nextPage,
-    } = nextProps;
-    if (nextPage !== this.props.nextPage) {
-      return this.props.setWindow();
-    }
-  }
-
   componentDidUpdate() {
-    this.calculateContainerWidth();
+    // this.calculateContainerWidth();
   }
 
   componentWillUnmount() {
@@ -65,7 +56,6 @@ export default class Home extends Component {
       loadInfo,
       nextPage
     } = this.props;
-    if (!isLoading) loadInfo(nextPage);
   }
 
   loadingSpinner = () => (
@@ -113,19 +103,22 @@ export default class Home extends Component {
         isLoading,
         children,
         imageRatios,
-        containerWidth
+        containerWidth,
+        allPosts,
       },
     } = this;
-
 
     const {
       postElements,
       elementHeights
-    } = reduce(posts, (out, post, index) => ({
+    } = reduce(allPosts, (out, post, index) => ({
       postElements: [
         ...out.postElements,
-        post.type === 'video'
-          ? <VideoPost post={post} />
+        post.type === 'youtube'
+          ? <VideoPost
+              post={post}
+              containerWidth={containerWidth}
+            />
           : <Post
             post={post}
             key={index}
@@ -155,6 +148,7 @@ export default class Home extends Component {
         >
           {postElements}
         </Infinite>
+
       );
     } else {
       feed = (

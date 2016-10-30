@@ -23,27 +23,158 @@ export default class Sidebar extends Component {
 
   toggleMenu = () => this.setState({ menuOpen: !this.state.menuOpen })
 
+  determineLeft = () => {
+    const {
+      props: {
+        swipeProgress,
+        isSwiping,
+        stoppedSwiping,
+      },
+      state: {
+        menuOpen,
+      }
+    } = this;
+    return menuOpen
+      ? 0
+      : '-100%'
+    switch (true) {
+      case (isSwiping):
+        return `${-(swipeProgress / 300) * 100}%`;
+      case (stoppedSwiping):
+        return (swipeProgress > 150)
+          ? 0
+          : '-100%';
+      default:
+        return;
+
+    }
+  }
+
   render() {
     const {
+      determineLeft,
       toggleMenu,
       state: {
         menuOpen
       },
       props: {
         tags,
+        swipeProgress,
+        isSwiping,
+        stoppedSwiping,
       }
     } = this;
+
+    const left = determineLeft();
+    const leftPosition = isSwiping
+      ? `${-(swipeProgress / 300) * 100}%`
+      : menuOpen
+        ? '-100%' : 0;
+
     return (
       <aside>
-        <Menu
-          isOpen={menuOpen}
-          right
-          customBurgerIcon={false}
-          styles={BURGER_STYLES}
-          pageWrapId={"page-wrap"}
-          outerContainerId={"outer-container"}
+        <a
+          onClick={toggleMenu}
+          style={{
+            ...MENU_LINK_STYLES,
+            float: 'right',
+            position: 'fixed',
+            zIndex: 10,
+            display: 'block',
+            boxShadow: '0px 0px 30px white',
+            padding: 10,
+            marginLeft: 15,
+            marginTop: 5,
+            top: 0,
+            textDecoration: 'none',
+          }}
+        >
+          MENU
+        </a>
+        <div
+          style={{
+            zIndex: 10,
+            position: 'fixed',
+            left,
+            transition: isSwiping ? undefined : 'left 1s',
+            backgroundColor: 'rgba(225, 225, 255, 0.95)',
+            height: '100%',
+            padding: '0 40px',
+            overflow: 'scroll',
+          }}
+
+        >
+          <a
+            onClick={toggleMenu}
+            style={{
+              ...MENU_LINK_STYLES,
+              zIndex: 10,
+              display: 'flex',
+              top: 0,
+              justifyContent: 'space-between',
+              width: 150
+            }}
           >
-          <ul>
+            <span>
+              CLOSE
+            </span>
+            <span>
+              ✖
+            </span>
+          </a>
+          <ul
+            style={{ padding: 0 }}
+          >
+            <li
+              style={{
+                listStyle: 'none',
+                ...MENU_LINK_STYLES,
+              }}
+            >
+              <Link
+                to="/"
+                onClick={toggleMenu}
+              >
+                HOME
+              </Link>
+            </li>
+            <li
+              style={{
+                listStyle: 'none',
+                ...MENU_LINK_STYLES,
+              }}
+            >
+              <Link
+                to="/archive"
+                onClick={toggleMenu}
+              >
+                ARCHIVE
+              </Link>
+            </li>
+            <li
+              style={{
+                listStyle: 'none',
+                ...MENU_LINK_STYLES,
+              }}
+
+            >
+              <Link
+                to="/videos"
+                onClick={toggleMenu}
+              >
+                VIDEOS
+              </Link>
+            </li>
+            <li
+              style={{
+                listStyle: 'none',
+                ...MENU_LINK_STYLES,
+                textDecoration: 'underline',
+              }}
+
+            >
+              TAGS:
+            </li>
             {tags.map(tag =>
               <li
                 key={tag}
@@ -51,7 +182,7 @@ export default class Sidebar extends Component {
                   listStyle: 'none',
                   ...MENU_LINK_STYLES,
                 }}
-              >
+                >
                 <Link
                   to={`/archive/tag/${tag}`}
                   onClick={toggleMenu}
@@ -61,16 +192,7 @@ export default class Sidebar extends Component {
               </li>
             )}
           </ul>
-        </Menu>
-        <a
-          onClick={toggleMenu}
-          style={{
-            ...MENU_LINK_STYLES,
-            float: 'right'
-          }}
-        >
-          TAGS
-        </a>
+        </div>
       </aside>
     );
   }

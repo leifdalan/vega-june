@@ -8,6 +8,7 @@ import tumblr from './tumblr';
 import browser from './browser';
 import progress from './progress';
 import cache from './cache';
+import youtube from './youtube';
 
 export default combineReducers({
   routing: routerReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   tumblr,
   browser,
   progress,
-  cache
+  cache,
+  youtube,
 });
