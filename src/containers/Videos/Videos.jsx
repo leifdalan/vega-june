@@ -23,7 +23,6 @@ export default class Videos extends Component {
   static propTypes = propTypes
 
   render() {
-    console.error('this.props', this.props);
     return (
       <div>
         <h1 style={CENTER_STYLE}>Videos</h1>

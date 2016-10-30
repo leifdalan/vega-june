@@ -22,8 +22,6 @@ class VideoPost extends Component {
         }
       }
     } = this;
-    console.error('thumbnails', thumbnails);
-    console.error('containerWidth', containerWidth);
     return (
       <div
         style={{

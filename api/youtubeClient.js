@@ -31,6 +31,4 @@ const youtube = google.youtube({
   version: 'v3',
 });
 
-console.error('youtube.auth', youtube._options.auth);
-
 export default youtube;
