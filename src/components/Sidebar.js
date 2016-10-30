@@ -72,7 +72,7 @@ export default class Sidebar extends Component {
         ? '-100%' : 0;
 
     return (
-      <aside>
+      <aside style={{position: 'absolute', top: 0}}>
         <a
           onClick={toggleMenu}
           style={{
@@ -91,6 +91,22 @@ export default class Sidebar extends Component {
         >
           MENU
         </a>
+        <div
+          style={{
+            zIndex: menuOpen ? 9 : -1,
+            position: 'fixed',
+            background: menuOpen
+              ? 'rgba(0,0,0,0.5)'
+              : 'rgba(0,0,0,0)',
+            transition: 'background 1s',
+            width: '100%',
+            height: '100%',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+          }}
+          onClick={toggleMenu}
+        />
         <div
           style={{
             zIndex: 10,

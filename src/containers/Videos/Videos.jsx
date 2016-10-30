@@ -7,6 +7,12 @@ import {
 import VideoPost from 'components/VideoPost/VideoPost';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-async-connect';
+import { CENTER_STYLE } from '../Home/Home.styles';
+import {
+  DATE_STYLE,
+  POST_CONTAINER,
+ } from '../../components/Post/Post.styles';
+import fecha from 'fecha'
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => dispatch(actions.loadRemaining()),
@@ -20,11 +26,23 @@ export default class Videos extends Component {
     console.error('this.props', this.props);
     return (
       <div>
+        <h1 style={CENTER_STYLE}>Videos</h1>
         {this.props.videos.map(video =>
-          <VideoPost
-            post={video}
-            containerWidth={this.props.containerWidth}
-          />
+          <div style={POST_CONTAINER}>
+            <VideoPost
+              key={video.id}
+              post={video}
+              containerWidth={this.props.containerWidth}
+            />
+            <figcaption>
+              <div style={DATE_STYLE}>
+                <div>
+                  {fecha.format(new Date(video.date), 'MMM DD')}
+                </div>
+              </div>
+
+            </figcaption>
+          </div>
         )}
       </div>
     )

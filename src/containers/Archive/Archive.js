@@ -12,6 +12,7 @@ import {
   MONTH_STYLE,
 } from './Archive.styles';
 import { Picture } from 'components';
+import { CENTER_STYLE } from '../Home/Home.styles';
 
 const MONTH_MAP = {
   0: 'January',
@@ -130,7 +131,12 @@ export default class Archive extends Component {
         >
           <Helmet title="Archive" />
           {tagParam
-            ? this.renderPosts(galleryPosts)
+            ? <div>
+              <h1 style={CENTER_STYLE}>
+                {tagParam}
+              </h1>
+              {this.renderPosts(galleryPosts)}
+            </div>
             : Object.keys(postsByMonth).reverse().map((monthKey) => (
               <div key={monthKey} style={MONTH_STYLE}>
                 <h1 style={HEADER_STYLE}>{MONTH_MAP[monthKey]}</h1>
