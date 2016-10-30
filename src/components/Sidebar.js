@@ -73,6 +73,7 @@ export default class Sidebar extends Component {
           onClick={toggleMenu}
           style={{
             ...MENU_LINK_STYLES,
+            color: 'black',
             float: 'right',
             position: 'fixed',
             zIndex: 10,
@@ -84,7 +85,8 @@ export default class Sidebar extends Component {
             top: 0,
             textDecoration: 'none',
             borderRadius: 20,
-            background: 'rgba(255,255,255,0.2)'
+            background: 'rgba(255,255,255,0.85)',
+            mixBlendMode: 'lighten',
           }}
         >
           MENU

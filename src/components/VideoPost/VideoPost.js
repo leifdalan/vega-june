@@ -2,11 +2,12 @@ import React, {
   PropTypes as pt,
   Component,
 } from 'react';
-import Video from 'react-html5video';
 import {
+  DATE_STYLE,
   POST_CONTAINER,
-  PICTURE_STYLE,
-} from 'components/Post/Post.styles'
+ } from '../../components/Post/Post.styles';
+import fecha from 'fecha';
+
 // import Picture from 'components/Picture';
 /* eslint-disable camelcase */
 class VideoPost extends Component {
@@ -15,35 +16,45 @@ class VideoPost extends Component {
       props: {
         containerWidth,
         post: {
+          date,
           id,
           isPortrait,
           thumbnails,
-
         }
       }
     } = this;
     return (
-      <div
-        style={{
-          width: '100%',
-          position: 'relative',
-          paddingBottom: isPortrait
-            ? containerWidth * 4 / 3
-            : containerWidth * 3 / 4
-        }}
-        >
-        <iframe
+      <div style={POST_CONTAINER}>
+        <div
           style={{
-            position: 'absolute',
             width: '100%',
-            height: '100%',
-            top: 0,
-            left: 0
+            position: 'relative',
+            paddingBottom: isPortrait
+              ? containerWidth * 4 / 3
+              : containerWidth * 3 / 4
           }}
-          width={'100%'}
-          height="100%"
-          src={`//www.youtube.com/embed/${id}`}
-        />
+          >
+          <iframe
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0
+            }}
+            width={'100%'}
+            height="100%"
+            src={`//www.youtube.com/embed/${id}`}
+          />
+        </div>
+        <figcaption>
+          <div style={DATE_STYLE}>
+            <div>
+              {fecha.format(new Date(date), 'MMM DD')}
+            </div>
+          </div>
+
+        </figcaption>
       </div>
     );
   }
