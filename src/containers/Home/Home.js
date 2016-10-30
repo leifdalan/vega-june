@@ -42,33 +42,6 @@ export default class Home extends Component {
     window.removeEventListener('resize', this.throttledCalculateContainerWidth);
   }
 
-  calculateContainerWidth = () => this
-  .props
-  .setContainerWidth(
-    this.container.getBoundingClientRect().width
-  )
-
-  throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
-
-  handleInfiniteLoad = () => {
-    const {
-      isLoading,
-      loadInfo,
-      nextPage
-    } = this.props;
-  }
-
-  loadingSpinner = () => (
-    <h1 style={{
-        letterSpacing: 4,
-        textAlign: 'center'
-      }}>
-      LOADING...
-    </h1>
-  )
-
-  containerRef = el => this.container = el // eslint-disable-line no-return-assign
-
   getPostHeight = index => {
     const {
       posts,
@@ -93,14 +66,22 @@ export default class Home extends Component {
       PICTURE_STYLE.marginBottom;
   }
 
+  calculateContainerWidth = () => this
+    .props
+    .setContainerWidth(
+      this.container.getBoundingClientRect().width
+    )
+
+  throttledCalculateContainerWidth = () => throttle(this.calculateContainerWidth, 500)()
+
+  containerRef = el => this.container = el // eslint-disable-line no-return-assign
+
   render() {
     const {
       getPostHeight,
       containerRef,
-      loadingSpinner,
       props: {
         posts,
-        isLoading,
         children,
         imageRatios,
         containerWidth,
@@ -116,8 +97,8 @@ export default class Home extends Component {
         ...out.postElements,
         post.type === 'youtube'
           ? <VideoPost
-              post={post}
-              containerWidth={containerWidth}
+            post={post}
+            containerWidth={containerWidth}
             />
           : <Post
             post={post}
@@ -143,8 +124,6 @@ export default class Home extends Component {
         <Infinite
           useWindowAsScrollContainer
           elementHeight={elementHeights}
-          infiniteLoadBeginEdgeOffset={200}
-          onInfiniteLoad={this.handleInfiniteLoad}
         >
           {postElements}
         </Infinite>
@@ -171,9 +150,15 @@ export default class Home extends Component {
 
         <div>
           <h1 style={CENTER_STYLE}>VEGA JUNE</h1>
-          <p style={CENTER_STYLE}>I'm a baby</p>
+          <p
+            style={{
+              ...CENTER_STYLE,
+              textTransform: 'none',
+            }}
+          >
+            I'm a baby
+          </p>
           {feed}
-          {isLoading && loadingSpinner()}
 
           {/* This is for the gallery */}
           {children && React.cloneElement(children, {

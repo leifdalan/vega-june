@@ -12,7 +12,8 @@ import {
   DATE_STYLE,
   POST_CONTAINER,
  } from '../../components/Post/Post.styles';
-import fecha from 'fecha'
+import fecha from 'fecha';
+import ContainerQuery from 'components/ContainerQuery';
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => dispatch(actions.loadRemaining()),
@@ -24,26 +25,32 @@ export default class Videos extends Component {
 
   render() {
     return (
-      <div>
-        <h1 style={CENTER_STYLE}>Videos</h1>
-        {this.props.videos.map(video =>
-          <div style={POST_CONTAINER}>
-            <VideoPost
-              key={video.id}
-              post={video}
-              containerWidth={this.props.containerWidth}
-            />
-            <figcaption>
-              <div style={DATE_STYLE}>
-                <div>
-                  {fecha.format(new Date(video.date), 'MMM DD')}
-                </div>
-              </div>
+      <ContainerQuery>
+        {({ containerWidth }) => (
+          <div>
+            <h1 style={CENTER_STYLE}>Videos</h1>
+            {this.props.videos.map(video =>
+              <div style={POST_CONTAINER}>
+                <VideoPost
+                  key={video.id}
+                  post={video}
+                  containerWidth={containerWidth}
+                />
+                <figcaption>
+                  <div style={DATE_STYLE}>
+                    <div>
+                      {fecha.format(new Date(video.date), 'MMM DD')}
+                    </div>
+                  </div>
 
-            </figcaption>
+                </figcaption>
+              </div>
+            )}
+
           </div>
         )}
-      </div>
+      </ContainerQuery>
+
     )
   }
 }

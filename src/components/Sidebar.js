@@ -4,10 +4,6 @@ import { connect } from 'react-redux';
 import {
   getTagsSelector,
 } from 'redux/modules/tumblr';
-import {
-  BURGER_STYLES
-} from 'containers/App/App.styles';
-import { scaleRotate as Menu } from 'react-burger-menu';
 import { Link } from 'react-router';
 import { MENU_LINK_STYLES } from '../containers/App/App.styles';
 
@@ -87,6 +83,8 @@ export default class Sidebar extends Component {
             marginTop: 5,
             top: 0,
             textDecoration: 'none',
+            borderRadius: 20,
+            background: 'rgba(255,255,255,0.2)'
           }}
         >
           MENU
