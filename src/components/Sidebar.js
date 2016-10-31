@@ -86,7 +86,6 @@ export default class Sidebar extends Component {
             textDecoration: 'none',
             borderRadius: 20,
             background: 'rgba(255,255,255,0.85)',
-            mixBlendMode: 'lighten',
           }}
         >
           MENU
