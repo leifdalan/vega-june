@@ -20,22 +20,30 @@ export default class Videos extends Component {
 
   render() {
     return (
-      <ContainerQuery>
-        {({ containerWidth }) => (
-          <div>
-            <h1 style={CENTER_STYLE}>Videos</h1>
-            {this.props.videos.map(video =>
-              <VideoPost
-                key={video.id}
-                post={video}
-                containerWidth={containerWidth}
-              />
-            )}
+      <div
+        className="container"
+        style={{
+          padding: 15,
+          maxWidth: '600px'
+        }}
+      >
 
-          </div>
-        )}
-      </ContainerQuery>
+        <ContainerQuery>
+          {({ containerWidth }) => (
+            <div>
+              <h1 style={CENTER_STYLE}>Videos</h1>
+              {this.props.videos.map(video =>
+                <VideoPost
+                  key={video.id}
+                  post={video}
+                  containerWidth={containerWidth}
+                />
+              )}
 
-    )
+            </div>
+          )}
+        </ContainerQuery>
+      </div>
+    );
   }
 }

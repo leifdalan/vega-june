@@ -20,9 +20,11 @@ class VideoPost extends Component {
           id,
           isPortrait,
           thumbnails,
+          description
         }
       }
     } = this;
+
     return (
       <div style={POST_CONTAINER}>
         <div
@@ -33,14 +35,15 @@ class VideoPost extends Component {
               ? containerWidth * 4 / 3
               : containerWidth * 3 / 4
           }}
-          >
+        >
           <iframe
             style={{
               position: 'absolute',
               width: '100%',
               height: '100%',
               top: 0,
-              left: 0
+              left: 0,
+              marginBottom: 15
             }}
             width={'100%'}
             height="100%"
@@ -53,7 +56,7 @@ class VideoPost extends Component {
               {fecha.format(new Date(date), 'MMM DD')}
             </div>
           </div>
-
+          {description && description}
         </figcaption>
       </div>
     );
