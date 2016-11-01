@@ -172,7 +172,7 @@ export function fetchAllYoutubeVideos() {
       res.items.forEach((item) => ids.push(item.contentDetails.videoId));
       console.error('ids', ids);
       youtube.videos.list({
-        part: 'contentDetails,snippet,fileDetails,processingDetails,player',
+        part: 'contentDetails,snippet,player',
         id: ids.join(','),
       }, (err, res) => {
         if (err) {
@@ -189,8 +189,6 @@ export function fetchAllYoutubeVideos() {
         res.items.forEach(item => {
           console.error('item.snippet', item.snippet);
           console.error('item.contentDetails', item.contentDetails);
-          console.error('item.fileDetails', item.fileDetails);
-          console.error('item.processingDetails', item.processingDetails);
           console.error('item.player', item.player);
         });
       });
