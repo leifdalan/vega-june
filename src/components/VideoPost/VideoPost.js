@@ -24,7 +24,6 @@ class VideoPost extends Component {
         }
       }
     } = this;
-
     return (
       <div style={POST_CONTAINER}>
         <div
@@ -32,8 +31,8 @@ class VideoPost extends Component {
             width: '100%',
             position: 'relative',
             paddingBottom: isPortrait
-              ? containerWidth * 4 / 3
-              : containerWidth * 3 / 4
+              ? containerWidth * 16 / 9
+              : containerWidth * 9 / 16
           }}
         >
           <iframe

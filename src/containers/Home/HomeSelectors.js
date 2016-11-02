@@ -1,9 +1,11 @@
 import { createSelector } from 'reselect';
 import { userSelector } from 'redux/modules/auth';
 import { PropTypes as pt } from 'react';
-import orderBy from 'lodash/orderBy';
-import omitBy from 'lodash/omitBy';
 import fMap from 'lodash/fp/map';
+import fOrderBy from 'lodash/fp/orderBy';
+import fFilter from 'lodash/fp/filter';
+import flow from 'lodash/flow';
+import map from 'lodash/map';
 import {
   getNextPageSelector,
   getPostsByDateSelector,
@@ -29,10 +31,11 @@ const getAllPostsByDateSelector = createSelector(
   getYoutubeByDateSelector, (
     tumblr,
     youtube,
-  ) => orderBy(omitBy({
-    ...tumblr,
-    ...youtube,
-  }, ({ type }) => type === 'video'), 'date', 'desc')
+  ) => flow(
+    fFilter(({ type }) => type !== 'video'), // filter tumblr type: video
+    fOrderBy('date', 'desc') // order by date
+  )([...map(tumblr), ...map(youtube)]) // map array-like object to array and mix the two as an imput
+
 );
 
 export const getImageRatiosSelector = createSelector(
@@ -41,7 +44,7 @@ export const getImageRatiosSelector = createSelector(
   fMap(post => post.type === 'photo'
     ? post.photos[0].original_size.height / post.photos[0].original_size.width
     // its a video post
-    : post.isPortrait ? (4 / 3) : (3 / 4)
+    : post.isPortrait ? (16 / 9) : (9 / 16)
   )
   /* eslint-enable */
 );
