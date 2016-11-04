@@ -175,7 +175,7 @@ export function fetchAllYoutubeVideos() {
         part: 'contentDetails,snippet,player',
         id: ids.join(','),
       }, (err, res) => {
-        if (err) {
+        if (err || !res) {
           reject(err);
         }
         console.error('err', err);
@@ -183,13 +183,6 @@ export function fetchAllYoutubeVideos() {
         redisClient.set('latestYoutube', JSON.stringify(res), (setErr, setData) => {
           console.log('setData', setData);
           resolve(res);
-        });
-
-
-        res.items.forEach(item => {
-          console.error('item.snippet', item.snippet);
-          console.error('item.contentDetails', item.contentDetails);
-          console.error('item.player', item.player);
         });
       });
     });
