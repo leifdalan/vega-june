@@ -164,6 +164,7 @@ export function fetchAllYoutubeVideos() {
       part: 'contentDetails',
       playlistId: 'PLDxchoMUm8NhAkt6c0pkdowAunWUaq_f8',
       mine: true,
+      maxResults: 50,
     }, (err, res) => {
       if (err || !res.items.length) {
         reject(err);
