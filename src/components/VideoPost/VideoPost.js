@@ -44,6 +44,8 @@ class VideoPost extends Component {
               left: 0,
               marginBottom: 15
             }}
+            allowFullScreen
+            frameBorder="0"
             width={'100%'}
             height="100%"
             src={`//www.youtube.com/embed/${id}`}

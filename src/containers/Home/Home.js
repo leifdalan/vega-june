@@ -44,13 +44,11 @@ export default class Home extends Component {
 
   getPostHeight = index => {
     const {
-      posts,
+      allPosts,
       imageRatios,
       containerWidth
     } = this.props;
-    const post = posts[index];
-    // wtf?
-    if (!post) return 0;
+    const post = allPosts[index];
     let photoHeight = imageRatios[index] * containerWidth;
     if (post.type === 'photo' && post.photos.length === 2) {
       photoHeight = photoHeight / 2;
@@ -60,7 +58,7 @@ export default class Home extends Component {
       post.summary ? 20 : 0
     ) + (
       // Add 20 for tags
-      !!post.tags.length ? 20 : 0
+      !!(post.tags && post.tags.length) ? 20 : 0
     ) +
       // and all the padding/margin
       POST_CONTAINER.marginBottom +
