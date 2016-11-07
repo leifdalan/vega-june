@@ -49,6 +49,8 @@ export default class Home extends Component {
       containerWidth
     } = this.props;
     const post = posts[index];
+    // wtf?
+    if (!post) return 0;
     let photoHeight = imageRatios[index] * containerWidth;
     if (post.type === 'photo' && post.photos.length === 2) {
       photoHeight = photoHeight / 2;
