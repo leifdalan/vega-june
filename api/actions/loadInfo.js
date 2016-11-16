@@ -166,12 +166,15 @@ export function fetchAllYoutubeVideos() {
       mine: true,
       maxResults: 50,
     }, (err, res) => {
-      if (err || !res.items.length) {
+      if (err || !res) {
         reject(err);
       }
+      console.error('res', res);
       const ids = [];
-      res.items.forEach((item) => ids.push(item.contentDetails.videoId));
-      console.error('ids', ids);
+      if (res.items && res.items.length) {
+        res.items.forEach((item) => ids.push(item.contentDetails.videoId));
+      }
+
       youtube.videos.list({
         part: 'contentDetails,snippet,player',
         id: ids.join(','),
