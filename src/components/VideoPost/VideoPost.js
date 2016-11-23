@@ -11,8 +11,18 @@ import fecha from 'fecha';
 // import Picture from 'components/Picture';
 /* eslint-disable camelcase */
 class VideoPost extends Component {
+  formatDate = date => {
+    let formattedDate = null;
+    try {
+      formattedDate = fecha.format(new Date(date), 'MMM DD');
+    } catch(e) {
+      console.error(e);
+    }
+    return formattedDate;
+  }
   render() {
     const {
+      formatDate,
       props: {
         containerWidth,
         post: {
@@ -54,7 +64,7 @@ class VideoPost extends Component {
         <figcaption>
           <div style={DATE_STYLE}>
             <div>
-              {fecha.format(new Date(date), 'MMM DD')}
+              {formatDate(date)}
             </div>
           </div>
           {description && description}

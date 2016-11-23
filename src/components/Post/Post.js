@@ -15,6 +15,17 @@ import {
 } from 'helpers/radium';
 import fecha from 'fecha';
 
+const formatDate = date => {
+  let formattedDate = null;
+  try {
+    formattedDate = fecha.format(new Date(date), 'MMM DD');
+  } catch(e) {
+    console.error(e);
+  }
+  return formattedDate;
+}
+
+
 const Post = ({ post, containerWidth, imageRatio, index }) => (
   <div
     key={post.id}
@@ -72,7 +83,7 @@ const Post = ({ post, containerWidth, imageRatio, index }) => (
     <figcaption>
       <div style={DATE_STYLE}>
         <div>
-          {fecha.format(new Date(post.date), 'MMM DD')}
+          {formatDate(post.date)}
         </div>
         <div>
           <a
