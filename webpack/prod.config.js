@@ -23,8 +23,8 @@ module.exports = {
   context: path.resolve(__dirname, '..'),
   entry: {
     'main': [
-      'bootstrap-sass!./src/theme/bootstrap.config.prod.js',
-      'font-awesome-webpack!./src/theme/font-awesome.config.prod.js',
+      // 'bootstrap-sass!./src/theme/bootstrap.config.prod.js',
+      // 'font-awesome-webpack!./src/theme/font-awesome.config.prod.js',
       './src/client.js'
     ]
   },
@@ -38,14 +38,14 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.json$/, loader: 'json-loader' },
-      {
-        test: /\.less$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
-      },
-      {
-        test: /(\.scss$|\.css$)/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
-      },
+      // {
+      //   test: /\.less$/,
+      //   loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
+      // },
+      // {
+      //   test: /(\.scss$|\.css$)/,
+      //   loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
+      // },
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [strip.loader('debug'), 'babel'] },
       { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
@@ -63,20 +63,20 @@ module.exports = {
     extensions: ['', '.json', '.js', '.jsx']
   },
   plugins: [
-    new CleanPlugin([assetsPath], { root: projectRootPath }),
+    // new CleanPlugin([assetsPath], { root: projectRootPath }),
 
     // css files from the extract-text-plugin loader
-    new ExtractTextPlugin('[name]-[chunkhash].css', { allChunks: true }),
-    new purify({
-      basePath: __dirname,
-      paths: [
-        'static/dist/**/*',
-      ],
-      purifyOptions: {
-        minify: true,
-        info: true,
-      }
-    }),
+    // new ExtractTextPlugin('[name]-[chunkhash].css', { allChunks: true }),
+    // new purify({
+    //   basePath: __dirname,
+    //   paths: [
+    //     'static/dist/**/*',
+    //   ],
+    //   purifyOptions: {
+    //     minify: true,
+    //     info: true,
+    //   }
+    // }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'

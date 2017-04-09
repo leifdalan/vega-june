@@ -3,8 +3,8 @@ import React from 'react';
 export default function NotFound() {
   return (
     <div className="container">
-      <h1>Doh! 404!</h1>
-      <p>These are <em>not</em> the droids you are looking for!</p>
+      <h1>Leif is working on the site.</h1>
+      <p>Check back again later!</p>
     </div>
   );
 }

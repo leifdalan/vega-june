@@ -45,8 +45,8 @@ var webpackConfig = module.exports = {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
       'react-hot-loader/patch',
-      'bootstrap-sass!./src/theme/bootstrap.config.js',
-      'font-awesome-webpack!./src/theme/font-awesome.config.js',
+      // 'bootstrap-sass!./src/theme/bootstrap.config.js',
+      // 'font-awesome-webpack!./src/theme/font-awesome.config.js',
       './src/client.js'
     ]
   },
@@ -68,21 +68,21 @@ var webpackConfig = module.exports = {
         test: /\.json$/,
         loader: 'json-loader',
       }),
-      helpers.createSourceLoader({
-        happy: { id: 'less' },
-        test: /\.less$/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
-      }),
-      helpers.createSourceLoader({
-        happy: { id: 'css' },
-        test: /\.css$/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
-      }),
-      helpers.createSourceLoader({
-        happy: { id: 'sass' },
-        test: /(\.scss$|\.css$)/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap',
-      }),
+      // helpers.createSourceLoader({
+      //   happy: { id: 'less' },
+      //   test: /\.less$/,
+      //   loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
+      // }),
+      // helpers.createSourceLoader({
+      //   happy: { id: 'css' },
+      //   test: /\.css$/,
+      //   loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap',
+      // }),
+      // helpers.createSourceLoader({
+      //   happy: { id: 'sass' },
+      //   test: /(\.scss$|\.css$)/,
+      //   loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap',
+      // }),
       { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
@@ -117,9 +117,9 @@ var webpackConfig = module.exports = {
 
     helpers.createHappyPlugin('jsx'),
     helpers.createHappyPlugin('json'),
-    helpers.createHappyPlugin('less'),
-    helpers.createHappyPlugin('sass'),
-    helpers.createHappyPlugin('css'),
+    // helpers.createHappyPlugin('less'),
+    // helpers.createHappyPlugin('sass'),
+    // helpers.createHappyPlugin('css'),
   ]
 };
 
