@@ -138,8 +138,8 @@ export default store => {
 // };
 //
   return (
-    <Route path="/" component={require('./containers/App/App')}>
-      {/* Home (main) route */}
+    <Route path="*" component={require('./containers/NotFound/NotFound')} status={404}>
+      {/* Home (main) route 
       <IndexRoute onEnter={requireLogin} components={{
           content: require('./containers/Home/Home'),
           sidebar: require('./components/Sidebar')
@@ -171,9 +171,9 @@ export default store => {
       />
 
       <Route path="login" component={require('./containers/Login/Login')} />
-
-      {/* Routes disallow login */}
       <Route path="*" component={require('./containers/NotFound/NotFound')} status={404} />
+      */}
+      
     </Route>
   );
 };
