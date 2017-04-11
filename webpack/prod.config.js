@@ -64,7 +64,7 @@ module.exports = {
     extensions: ['', '.json', '.js', '.jsx']
   },
   plugins: [
-    // new CleanPlugin([assetsPath], { root: projectRootPath }),
+    new CleanPlugin([assetsPath], { root: projectRootPath }),
 
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin('[name]-[chunkhash].css', { allChunks: true }),
@@ -140,7 +140,7 @@ module.exports = {
         //     return 'image/svg+xml'
         // },
         ContentEncoding: function(fileName) {
-          if (/.*\.(css|js|ttf|eot|svg)/.test(fileName))
+          if (/.*\.(js|ttf|eot|svg)/.test(fileName))
             return 'gzip'
         }
       }
