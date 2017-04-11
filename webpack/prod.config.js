@@ -44,8 +44,8 @@ module.exports = {
       //   loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
       // },
       {
-        test: /(\.scss$|\.css$)/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true')
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=3&sourceMap!autoprefixer?browsers=last 2 version')
       },
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: [strip.loader('debug'), 'babel'] },
       { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
