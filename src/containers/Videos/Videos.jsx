@@ -21,10 +21,12 @@ export default class Videos extends Component {
   render() {
     return (
       <div
-        className="container"
+        className="center"
         style={{
           padding: 15,
-          maxWidth: '600px'
+          maxWidth: '600px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
         }}
       >
 

@@ -138,11 +138,13 @@ export default class Home extends Component {
     }
     return (
       <div
-        className="container"
+        className="center"
         ref={containerRef}
         style={{
           padding: 15,
-          maxWidth: '600px'
+          maxWidth: '600px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}
       >
 
