@@ -6,6 +6,8 @@ import map from 'lodash/map';
 import toNumber from 'lodash/toNumber';
 import { redisClient } from '../api';
 import config from 'config';
+import fs from 'fs';
+import path from 'path';
 const playlist = config.youtubePlaylistId;
 // import redis from 'redis';
 
@@ -77,7 +79,8 @@ export function loadAll(req) {
 
       const tumblrPromise = new Promise((tumblrResolve, tumblrReject) => {
         if (data) {
-          console.log('resolving data');
+          // fs.writeFile(path.join(__dirname, '..', '..', 'dumpp.json'), data);
+          // console.log('resolving data', data);
           return tumblrResolve(JSON.parse(data));
         } else {
           fetchAllPostsFromTumblr(req).then((tumblrData) => {
@@ -102,7 +105,7 @@ export function loadAll(req) {
         }
       }).catch(console.log);
       return Promise.all([tumblrPromise, youtubePromise]).then(([tumblr, youtube]) => {
-        masterResolve({tumblr, youtube});
+        masterResolve({ tumblr, youtube });
       }).catch(console.log);
     });
       // console.error('data, youtube', youtube);
@@ -136,7 +139,6 @@ export function fetchAllPostsFromTumblr(req) {
         allPagesNeededFetch.reduce((out, page) => [
           ...out,
           new Promise((resolve, reject) => {
-            console.log('getting page', page);
             tumblrClient.blogPosts('vega-june.tumblr.com', {
               limit: 20,
               offset: 20 * page
@@ -147,11 +149,17 @@ export function fetchAllPostsFromTumblr(req) {
           })
         ], [])
       ).then(resultArray => {
+        console.log('okay....');
+        // fs.writeFile(path.join(__dirname, '..', '..', 'latestpage.json'), resultArray[0]);
         redisClient.set('latestTumblr', JSON.stringify(resultArray), (setErr, setData) => {
-          console.log('setData', setData);
+          console.log('setErr', setErr);
+          if (setErr) {
+            return masterReject(setErr);
+          }
           masterResolve(resultArray);
         });
       }).catch((err) => {
+        console.log('rejecting!', err);
         masterReject(err);
       });
     });
@@ -166,7 +174,6 @@ export function fetchAllYoutubeVideos() {
       mine: true,
       maxResults: 50,
     }, (err, res) => {
-            console.error('res', res);
       if (err || !res) {
         return reject(err);
       }
@@ -183,10 +190,7 @@ export function fetchAllYoutubeVideos() {
         if (err || !res) {
           reject(err);
         }
-        console.error('err', err);
-        console.error('res', res);
         redisClient.set('latestYoutube', JSON.stringify(res), (setErr, setData) => {
-          console.log('setData', setData);
           resolve(res);
         });
       });
