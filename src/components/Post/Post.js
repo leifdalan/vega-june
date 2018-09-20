@@ -19,15 +19,15 @@ const formatDate = date => {
   let formattedDate = null;
   try {
     formattedDate = fecha.format(new Date(date), 'MMM DD');
-  } catch(e) {
+  } catch (e) {
     console.error(e);
   }
   return formattedDate;
-}
+};
 
 
 const Post = ({ post, containerWidth, imageRatio, index }) => (
-  <div
+  post.photos ? <div
     key={post.id}
     style={POST_CONTAINER}
   >
@@ -68,7 +68,7 @@ const Post = ({ post, containerWidth, imageRatio, index }) => (
         {post.photos.length === 4 && <span style={BOTTOM_BORDER} />}
       </div>
     }
-    {/*{post.photos.length === 4 &&
+    {/* {post.photos.length === 4 &&
     post.photos.map((photo, photoIndex) =>
       <Link key={`${index}${photoIndex}`} to={`/gallery/${index}`}>
         <Picture
@@ -108,7 +108,7 @@ const Post = ({ post, containerWidth, imageRatio, index }) => (
         </div>
       }
     </figcaption>
-  </div>
+  </div> : null
 );
 
 Post.propTypes = {
